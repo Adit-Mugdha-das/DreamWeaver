@@ -83,6 +83,14 @@
     pointer-events: auto;
   }
 
+  #resultText {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.6;
+}
+
+
 
     @keyframes typing {
       to {
@@ -151,15 +159,31 @@
       border-color: #a855f7;
     }
 
-    #successPopup.show {
-      display: block;
-      opacity: 1;
-    }
+    #successPopup {
+    display: none;
+    background-color: rgba(34, 197, 94, 0.15); /* subtle emerald glow */
+    color: #d1fae5; /* soft mint text */
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    text-align: center;
+  }
 
-    #successPopup.hide {
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-    }
+
+  #successPopup.show {
+    display: block;
+    opacity: 1;
+  }
+
+  #successPopup.hide {
+    opacity: 0;
+  }
+
 
     #loadingSpinner {
     display: none;
@@ -331,12 +355,17 @@
     resultBox.classList.add('slide-in');
 
     const popup = document.getElementById('successPopup');
+    popup.style.display = 'block';
     popup.classList.add('show');
-    popup.classList.remove('hide');
+
     setTimeout(() => {
+      popup.classList.remove('show');
       popup.classList.add('hide');
-      setTimeout(() => popup.classList.remove('show'), 500);
-    }, 2000);
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 500); // Wait for fade-out transition to finish
+    }, 2500);
+
   } catch (err) {
     alert('Error: ' + err.message);
   } finally {
@@ -358,6 +387,7 @@ saveDreamForm.addEventListener('submit', async (e) => {
 
   const title = document.getElementById('saveTitle').value;
   const content = document.getElementById('saveContent').value;
+  document.getElementById('loadingSpinner').style.display = 'flex';
 
   try {
     const response = await fetch(saveDreamForm.action, {
@@ -394,6 +424,10 @@ saveDreamForm.addEventListener('submit', async (e) => {
 
   } catch (err) {
     alert('Error: ' + err.message);
+  }
+  finally {
+    // ✅ Always hide spinner after request finishes
+    document.getElementById('loadingSpinner').style.display = 'none';
   }
 });
 
