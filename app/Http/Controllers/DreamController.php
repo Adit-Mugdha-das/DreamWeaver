@@ -14,44 +14,43 @@ class DreamController extends Controller
     }
 
     public function store(Request $request)
-{
-    if ($request->expectsJson()) {
-        // Handle AJAX request
-        $data = $request->validate([
+    {
+        if ($request->expectsJson()) {
+            // Handle AJAX request
+            $data = $request->validate([
+                'title' => 'required|string|max:255',
+                'content' => 'required|string',
+            ]);
+
+            // Gemini API emotion analysis
+            $emotion = GeminiHelper::analyzeEmotion($data['content']);
+
+            $dream = Dream::create([
+                'title' => $data['title'],
+                'content' => $data['content'],
+                'emotion_summary' => $emotion
+            ]);
+
+            return response()->json(['status' => 'success', 'dream' => $dream]);
+        }
+
+        // Handle normal POST request
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
 
         // Gemini API emotion analysis
-        $emotion = GeminiHelper::analyzeEmotion($data['content']);
+        $emotion = GeminiHelper::analyzeEmotion($validated['content']);
 
-        $dream = Dream::create([
-            'title' => $data['title'],
-            'content' => $data['content'],
+        Dream::create([
+            'title' => $validated['title'],
+            'content' => $validated['content'],
             'emotion_summary' => $emotion
         ]);
 
-        return response()->json(['status' => 'success', 'dream' => $dream]);
+        return redirect()->route('dreams.index')->with('success', 'Dream saved with emotion summary!');
     }
-
-    // Handle normal POST request
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'content' => 'required|string',
-    ]);
-
-    // Gemini API emotion analysis
-    $emotion = GeminiHelper::analyzeEmotion($validated['content']);
-
-    Dream::create([
-        'title' => $validated['title'],
-        'content' => $validated['content'],
-        'emotion_summary' => $emotion
-    ]);
-
-    return redirect()->route('dreams.index')->with('success', 'Dream saved with emotion summary!');
-}
-
 
     public function index()
     {
@@ -59,7 +58,7 @@ class DreamController extends Controller
         return view('dreams.index', compact('dreams'));
     }
 
-    // ✅ API endpoint for emotion/story/etc.
+    // ✅ API endpoint for emotion and short interpretation
     public function interpret(Request $request)
     {
         $validated = $request->validate([
@@ -71,6 +70,11 @@ class DreamController extends Controller
         if ($validated['type'] === 'emotion') {
             $emotion = GeminiHelper::analyzeEmotion($validated['content']);
             return response()->json(['result' => $emotion]);
+        }
+
+        if ($validated['type'] === 'short') {
+            $short = GeminiHelper::analyzeShort($validated['content']);
+            return response()->json(['result' => $short]);
         }
 
         return response()->json(['result' => 'Interpretation type not supported.']);

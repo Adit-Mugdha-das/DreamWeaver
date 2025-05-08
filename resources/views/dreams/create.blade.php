@@ -48,8 +48,8 @@
     min-width: 320px;
     padding: 2rem;
     border-radius: 1rem;
-    background-color: rgba(17, 24, 39, 0.92);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6); /* transparent black */
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); /* soft purple glow */
     color: #ffffff;
     transform: translateX(0); /* initially center */
     transition: transform 0.8s ease, opacity 0.8s ease;
@@ -118,20 +118,23 @@
     }
 
     button {
-      background: linear-gradient(to right, #6366f1, #a855f7);
-      color: #ffffff;
-      padding: 0.75rem;
-      width: 100%;
-      border: none;
-      border-radius: 0.5rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
+    background-color: #D1D5DB; /* light silver */
+    color: #000000;            /* black text */
+    padding: 0.75rem;
+    width: 100%;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
 
-    button:hover {
-      filter: brightness(1.1);
-    }
+  button:hover {
+  background-color: #a78bfa; /* soft purple (Tailwind violet-400) */
+  color: #000; /* keep black text or change to white if needed */
+}
+
+
 
     .card {
       background-color: rgba(255, 255, 255, 0.08);
