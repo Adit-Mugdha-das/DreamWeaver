@@ -192,14 +192,22 @@
     margin-top: 1rem;
   }
 
-    #loadingSpinner .spinner {
-      border: 4px solid rgba(255, 255, 255, 0.1);
-      border-left-color: #a855f7;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      animation: spin 1s linear infinite;
-    }
+  .spinner-wrapper {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+  .spinner {
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left-color: #a855f7;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 1s linear infinite;
+  }
+
 
     @keyframes spin {
       to {
@@ -245,9 +253,11 @@
         <input type="hidden" id="interpretationType" name="interpretationType" required>
         <button type="submit">Submit</button>
       </form>
-      <div id="loadingSpinner">
-      <div class="spinner"></div>
+      <!-- Place under dreamForm -->
+<div id="interpretLoadingSpinner" class="spinner-wrapper">
+  <div class="spinner"></div>
 </div>
+
     </div>
 
     <div class="result-box" id="resultBox">
@@ -258,12 +268,22 @@
         @csrf
         <input type="hidden" name="title" id="saveTitle">
         <input type="hidden" name="content" id="saveContent">
-        <button class="mt-4">Save This Dream</button>
+        <button class="mt-4" type="submit">Save This Dream</button>
+
       </form>
       <button class="mt-4" onclick="goBack()">← Back to Form</button>
       <div id="saveAnimation" class="mt-4 hidden animate-pulse text-sm text-green-400 text-center">
         ✨ Dream saved!
       </div>
+      <!-- Place under dreamForm -->
+    <!-- Place under dreamForm -->
+  <!-- Place after Back to Form button -->
+    <div id="saveLoadingSpinner" class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+
+
 
     </div>
   </div>
@@ -311,7 +331,7 @@
   }
 
   // Show spinner
-  document.getElementById('loadingSpinner').style.display = 'flex';
+  document.getElementById('interpretLoadingSpinner').style.display = 'flex';
 
   try {
     const response = await fetch('/dreams/interpret', {
@@ -370,7 +390,7 @@
     alert('Error: ' + err.message);
   } finally {
     // Hide spinner in all cases
-    document.getElementById('loadingSpinner').style.display = 'none';
+    document.getElementById('interpretLoadingSpinner').style.display = 'none';
   }
 });
 
@@ -387,7 +407,7 @@ saveDreamForm.addEventListener('submit', async (e) => {
 
   const title = document.getElementById('saveTitle').value;
   const content = document.getElementById('saveContent').value;
-  document.getElementById('loadingSpinner').style.display = 'flex';
+  document.getElementById('saveLoadingSpinner').style.display = 'flex';
 
   try {
     const response = await fetch(saveDreamForm.action, {
@@ -409,6 +429,7 @@ saveDreamForm.addEventListener('submit', async (e) => {
 
     // Show success popup
     popup.innerText = '✅ Dream saved successfully!';
+    popup.style.display = 'block'
     popup.classList.add('show');
     popup.classList.remove('hide');
 
@@ -427,7 +448,7 @@ saveDreamForm.addEventListener('submit', async (e) => {
   }
   finally {
     // ✅ Always hide spinner after request finishes
-    document.getElementById('loadingSpinner').style.display = 'none';
+    document.getElementById('saveLoadingSpinner').style.display = 'none';
   }
 });
 
