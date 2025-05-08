@@ -22,13 +22,15 @@ class DreamController extends Controller
                 'content' => 'required|string',
             ]);
 
-            // Gemini API emotion analysis
+            // Analyze both emotion and short interpretation
             $emotion = GeminiHelper::analyzeEmotion($data['content']);
+            $short = GeminiHelper::analyzeShort($data['content']);
 
             $dream = Dream::create([
                 'title' => $data['title'],
                 'content' => $data['content'],
-                'emotion_summary' => $emotion
+                'emotion_summary' => $emotion,
+                'short_interpretation' => $short,
             ]);
 
             return response()->json(['status' => 'success', 'dream' => $dream]);
@@ -40,16 +42,18 @@ class DreamController extends Controller
             'content' => 'required|string',
         ]);
 
-        // Gemini API emotion analysis
+        // Analyze both emotion and short interpretation
         $emotion = GeminiHelper::analyzeEmotion($validated['content']);
+        $short = GeminiHelper::analyzeShort($validated['content']);
 
         Dream::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
-            'emotion_summary' => $emotion
+            'emotion_summary' => $emotion,
+            'short_interpretation' => $short,
         ]);
 
-        return redirect()->route('dreams.index')->with('success', 'Dream saved with emotion summary!');
+        return redirect()->route('dreams.index')->with('success', 'Dream saved with emotion and short interpretation!');
     }
 
     public function index()
