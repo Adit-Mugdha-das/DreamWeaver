@@ -55,14 +55,6 @@
     transition: transform 0.8s ease, opacity 0.8s ease;
   }
 
-  .result-card {
-    background-color: rgba(0, 0, 0, 0.55); /* transparent black */
-    border: 1px solid rgba(168, 85, 247, 0.3); /* soft purple glow */
-    padding: 1rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
-  }
-
 
 
     .form-box {
@@ -418,7 +410,7 @@
     async function fetchAndAppendResult(title, content, type) {
       if (usedTypes.has(type)) return;
       usedTypes.add(type);
-      document.querySelectorAll(`#extraOptions .card[data-type="${type}"]`)
+      document.querySelectorAll(#extraOptions .card[data-type="${type}"])
       .forEach(card => card.classList.add('card-disabled'));
 
 
@@ -441,11 +433,11 @@
 
         // Create result block and elements
         const resultBlock = document.createElement('div');
-        resultBlock.classList.add('result-card'); // Add this instead of bg-gray etc.
+        resultBlock.classList.add('bg-gray-900', 'p-4', 'rounded', 'border', 'border-purple-400');
 
-                const heading = document.createElement('h3');
+        const heading = document.createElement('h3');
         heading.className = 'text-sm font-bold text-purple-300 mb-2';
-        heading.textContent = `🔹 ${type.toUpperCase()}`;
+        heading.textContent = 🔹 ${type.toUpperCase()};
 
         const resultPara = document.createElement('p');
         resultPara.className = 'whitespace-pre-wrap leading-relaxed text-white';
@@ -592,7 +584,7 @@ saveDreamForm.addEventListener('submit', async (e) => {
           ctx.beginPath();
           ctx.moveTo(ax, ay);
           ctx.lineTo(bx, by);
-          ctx.strokeStyle = `rgba(255,255,255,${1 - dist / 90})`;
+          ctx.strokeStyle = rgba(255,255,255,${1 - dist / 90});
           ctx.lineWidth = 0.3;
           ctx.stroke();
         }
@@ -609,7 +601,7 @@ saveDreamForm.addEventListener('submit', async (e) => {
 
       ctx.beginPath();
       ctx.arc(x, y, size, 0, Math.PI * 2);
-      const color = `hsla(${star.hue}, 100%, 70%, 0.8)`;
+      const color = hsla(${star.hue}, 100%, 70%, 0.8);
       ctx.fillStyle = color;
       ctx.shadowColor = color;
       ctx.shadowBlur = 10;
@@ -631,4 +623,3 @@ saveDreamForm.addEventListener('submit', async (e) => {
 </script>
 </body>
 </html>
-

@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>All Dreams</title>
   @vite('resources/css/app.css')
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <style>
     html, body {
       margin: 0;
@@ -52,9 +53,6 @@
       box-shadow: 0 0 8px rgba(138, 92, 246, 0.08);
       transition: box-shadow 0.4s ease, transform 0.3s ease;
       cursor: pointer;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeInUp 0.8s ease forwards;
     }
 
     .dream-card:hover {
@@ -79,36 +77,47 @@
     }
 
     .emotion-badge {
-  display: inline-block;
-  font-size: 0.875rem;
-  font-weight: 700; /* stronger weight */
-  padding: 0.35rem 0.85rem;
-  border-radius: 9999px;
-  background-color: rgba(109, 40, 217, 0.3); /* deeper indigo base */
-  color: #f5f3ff; /* near-white bright text */
-  border: 1px solid rgba(165, 180, 252, 0.5); /* lavender border */
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
-  transition: all 0.3s ease;
-  letter-spacing: 0.2px;
-}
+      display: inline-block;
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      background-color: rgba(109, 40, 217, 0.3);
+      color: #f5f3ff;
+      border: 1px solid rgba(165, 180, 252, 0.5);
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+      transition: all 0.3s ease;
+      letter-spacing: 0.2px;
+    }
 
-.emotion-badge:hover {
-  background-color: rgba(139, 92, 246, 0.5);
-  color: #fff;
-  box-shadow: 0 0 14px rgba(139, 92, 246, 0.6);
-  cursor: pointer;
-}
+    .emotion-badge:hover {
+      background-color: rgba(139, 92, 246, 0.5);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(139, 92, 246, 0.6);
+      cursor: pointer;
+    }
 
+    .back-button {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 10;
+      background: rgba(109, 40, 217, 0.2);
+      color: #e0e7ff;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 1px solid rgba(109, 40, 217, 0.4);
+      box-shadow: 0 0 6px rgba(139, 92, 246, 0.4);
+      transition: all 0.3s ease;
+    }
 
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .back-button:hover {
+      background: rgba(139, 92, 246, 0.4);
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+      color: #fff;
     }
   </style>
 </head>
@@ -116,6 +125,9 @@
 
 <!-- Starfield Canvas -->
 <canvas id="starfield"></canvas>
+
+<!-- Back to Home Button -->
+<a href="/" class="back-button">← Home</a>
 
 <!-- Dreams Wrapper -->
 <div class="wrapper">
@@ -127,10 +139,8 @@
     </div>
   @endif
 
-  @php $delay = 0; @endphp
   @foreach ($dreams as $dream)
-    <<div class="dream-card" style="animation-delay: {{ $delay }}s;">
-
+    <div class="dream-card" data-aos="fade-up" data-aos-duration="800">
       <h3>{{ $dream->title }}</h3>
       <p>{{ $dream->content }}</p>
 
@@ -139,13 +149,13 @@
       @else
         <span class="text-gray-400 text-sm">No emotion detected</span>
       @endif
-    </>
-    @php $delay += 0.1; @endphp
+    </div>
   @endforeach
 </div>
 
-<!-- Three.js Starfield Script -->
+<!-- JS Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   let scene, camera, renderer, stars;
 
@@ -190,6 +200,7 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
+  AOS.init({ once: true });
   initStars();
 </script>
 </body>
