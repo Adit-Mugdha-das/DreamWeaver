@@ -55,6 +55,14 @@
     transition: transform 0.8s ease, opacity 0.8s ease;
   }
 
+  .result-card {
+    background-color: rgba(0, 0, 0, 0.55); /* transparent black */
+    border: 1px solid rgba(168, 85, 247, 0.3); /* soft purple glow */
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
+  }
+
 
 
     .form-box {
@@ -433,9 +441,9 @@
 
         // Create result block and elements
         const resultBlock = document.createElement('div');
-        resultBlock.classList.add('bg-gray-900', 'p-4', 'rounded', 'border', 'border-purple-400');
+        resultBlock.classList.add('result-card'); // Add this instead of bg-gray etc.
 
-        const heading = document.createElement('h3');
+                const heading = document.createElement('h3');
         heading.className = 'text-sm font-bold text-purple-300 mb-2';
         heading.textContent = `🔹 ${type.toUpperCase()}`;
 
