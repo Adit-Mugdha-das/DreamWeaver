@@ -230,7 +230,15 @@
     }
     #saveAnimation {
     opacity: 0;
-    transition: opacity 0.4s ease-in-out;
+    transition: opacity 0.8s ease-in-out;
+    background-color: rgba(168, 85, 247, 0.1); /* subtle purple glow */
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: #d8b4fe; /* soft violet text */
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+    margin-top: 1rem;
   }
 
 
@@ -239,10 +247,6 @@
   </style>
 </head>
 <body>
-
-<div id="successPopup" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 text-sm hidden transition-opacity duration-500 ease-in-out">
-  ✅ Dream submitted successfully!
-</div>
 
 <canvas id="galaxyCanvas"></canvas>
 
@@ -514,14 +518,7 @@ saveDreamForm.addEventListener('submit', async (e) => {
     if (!response.ok) throw new Error('Failed to save dream.');
 
     // Optional: Show a toast, reset, etc.
-    const popup = document.getElementById('successPopup');
     const anim = document.getElementById('saveAnimation');
-
-    // Show success popup
-    popup.innerText = '✅ Dream saved successfully!';
-    popup.style.display = 'block'
-    popup.classList.add('show');
-    popup.classList.remove('hide');
 
     // Animate save feedback text with fade-out
     anim.classList.remove('hidden');
@@ -529,7 +526,7 @@ saveDreamForm.addEventListener('submit', async (e) => {
     setTimeout(() => {
       anim.style.opacity = 0;
       setTimeout(() => anim.classList.add('hidden'), 400);
-    }, 1000);
+    }, 2500);
 
 
 
