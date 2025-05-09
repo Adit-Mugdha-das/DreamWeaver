@@ -31,7 +31,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      transform: translateY(-90px); /* ✅ Move everything up */
+      transform: translateY(-90px);
     }
 
     .text-group {
@@ -41,7 +41,7 @@
     h1 {
       font-size: 2.5rem;
       font-weight: bold;
-      background: linear-gradient(to right, #a855f7, #38bdf8);
+      background: linear-gradient(to right, #c084fc, #38bdf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.3rem;
@@ -50,7 +50,7 @@
 
     .subtitle {
       font-size: 1.25rem;
-      color: #c084fc;
+      color: #9f8cff; /* Updated to a cooler violet-blue tone */
       opacity: 0;
       font-weight: 500;
       margin-bottom: 2rem;
@@ -93,7 +93,6 @@
       transform: translateY(-0.3px);
     }
 
-    /* Animations */
     @keyframes fadeSlideDown {
       0% {
         opacity: 0;
@@ -138,12 +137,11 @@
     <p class="subtitle">The magical World of Dreams</p>
   </div>
   <div class="button-group">
-    <a href="{{ route('dreams.create') }}" class="button"> Analyze a Dream</a>
-    <a href="{{ route('dreams.index') }}" class="button"> View Saved Dreams</a>
+    <a href="{{ route('dreams.create') }}" class="button">Analyze a Dream</a>
+    <a href="{{ route('dreams.index') }}" class="button">View Saved Dreams</a>
   </div>
 </div>
 
-<!-- Three.js + Nebula Background -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script>
   let scene, camera, renderer, particles;
