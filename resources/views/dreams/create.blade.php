@@ -261,31 +261,37 @@
     </div>
 
     <div class="result-box" id="resultBox">
-      <h2 class="text-lg font-semibold mb-2">💭 Interpretation Result</h2>
-      <p id="resultText"></p>
-      <form id="saveDreamForm" method="POST" action="{{ route('dreams.store') }}">
+    <h2 class="text-lg font-semibold mb-2">💭 Interpretation Result</h2>
 
-        @csrf
-        <input type="hidden" name="title" id="saveTitle">
-        <input type="hidden" name="content" id="saveContent">
-        <button class="mt-4" type="submit">Save This Dream</button>
+    <!-- This container will hold all stacked results -->
+    <div id="allResults" class="space-y-4 mb-4"></div>
 
-      </form>
-      <button class="mt-4" onclick="goBack()">← Back to Form</button>
-      <div id="saveAnimation" class="mt-4 hidden animate-pulse text-sm text-green-400 text-center">
-        ✨ Dream saved!
-      </div>
-      <!-- Place under dreamForm -->
-    <!-- Place under dreamForm -->
-  <!-- Place after Back to Form button -->
+    <!-- Buttons to add more interpretations -->
+    <div id="extraOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+      <div class="card" data-type="emotion">🧠 Emotion Detection (Gemini)</div>
+      <div class="card" data-type="story">📖 Story Generation (GPT-3.5)</div>
+      <div class="card" data-type="short">✍️ Short Interpretation (Gemini)</div>
+      <div class="card" data-type="long">🪄 Long Narrative (GPT-4)</div>
+    </div>
+
+    <form id="saveDreamForm" method="POST" action="{{ route('dreams.store') }}">
+      @csrf
+      <input type="hidden" name="title" id="saveTitle">
+      <input type="hidden" name="content" id="saveContent">
+      <button class="mt-4" type="submit">Save This Dream</button>
+    </form>
+
+    <button class="mt-4" onclick="goBack()">← Back to Form</button>
+
+    <div id="saveAnimation" class="mt-4 hidden animate-pulse text-sm text-green-400 text-center">
+      ✨ Dream saved!
+    </div>
+
     <div id="saveLoadingSpinner" class="spinner-wrapper">
       <div class="spinner"></div>
     </div>
+  </div>
 
-
-
-
-    </div>
   </div>
 </div>
 
@@ -295,6 +301,7 @@
   const dreamForm = document.getElementById('dreamForm');
   const formBox = document.getElementById('dreamFormBox');
   const resultBox = document.getElementById('resultBox');
+  const usedTypes = new Set();
   const resultText = document.getElementById('resultText');
   const titleInput = document.getElementById('title');
   const contentInput = document.getElementById('content');
@@ -351,24 +358,10 @@
     document.getElementById('saveTitle').value = title;
     document.getElementById('saveContent').value = content + "\n\nInterpretation: " + data.result;
 
-    resultText.innerText = '';              // Clear previous text
-    resultText.classList.remove('typing');  // Reset animation class
-
-    let i = 0;
-    const text = data.result;
-    const typingSpeed = 15; // milliseconds per character
-
-    function typeChar() {
-      if (i < text.length) {
-        resultText.innerText += text.charAt(i);
-        i++;
-        setTimeout(typeChar, typingSpeed);
-      } else {
-        resultText.classList.remove('typing');
-      }
-    }
-
-    typeChar(); // Start typing
+    usedTypes.clear(); // Clear previous types
+    document.getElementById('allResults').innerHTML = ''; // Clear old stacked results
+    await fetchAndAppendResult(title, content, type); // Fetch and show first interpretation
+    // Start typing
 
 
     formBox.classList.add('shift-left');
@@ -393,6 +386,84 @@
     document.getElementById('interpretLoadingSpinner').style.display = 'none';
   }
 });
+
+    async function fetchAndAppendResult(title, content, type) {
+      if (usedTypes.has(type)) return;
+      usedTypes.add(type);
+
+      const spinner = document.getElementById('interpretLoadingSpinner');
+      spinner.style.display = 'flex';
+
+      try {
+        const response = await fetch('/dreams/interpret', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({ title, content, type })
+        });
+
+        if (!response.ok) throw new Error('Failed to interpret dream.');
+        const data = await response.json();
+
+        // Create result block and elements
+        const resultBlock = document.createElement('div');
+        resultBlock.classList.add('bg-gray-900', 'p-4', 'rounded', 'border', 'border-purple-400');
+
+        const heading = document.createElement('h3');
+        heading.className = 'text-sm font-bold text-purple-300 mb-2';
+        heading.textContent = `🔹 ${type.toUpperCase()}`;
+
+        const resultPara = document.createElement('p');
+        resultPara.className = 'whitespace-pre-wrap leading-relaxed text-white';
+
+        // Typing animation logic
+        let i = 0;
+        const text = data.result;
+        const speed = 15;
+
+        function typeChar() {
+          if (i < text.length) {
+            resultPara.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeChar, speed);
+          }
+        }
+        typeChar();
+
+        // Append result
+        resultBlock.appendChild(heading);
+        resultBlock.appendChild(resultPara);
+        document.getElementById('allResults').appendChild(resultBlock);
+        resultBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Update hidden fields for saving
+        document.getElementById('saveTitle').value = title;
+        const allTextBlocks = document.querySelectorAll('#allResults p');
+        const fullInterpretation = [...allTextBlocks].map(p => p.textContent).join('\n\n');
+        document.getElementById('saveContent').value = content + "\n\n" + fullInterpretation;
+
+        formBox.classList.add('shift-left');
+        resultBox.classList.add('slide-in');
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        spinner.style.display = 'none';
+      }
+    }
+
+
+document.querySelectorAll('#extraOptions .card').forEach(card => {
+  card.addEventListener('click', () => {
+    const type = card.dataset.type;
+    const title = titleInput.value;
+    const content = contentInput.value;
+    fetchAndAppendResult(title, content, type);
+  });
+});
+
 
   formBox.addEventListener('click', () => {
   if (formBox.classList.contains('shift-left')) {
