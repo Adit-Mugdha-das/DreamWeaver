@@ -31,6 +31,11 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      transform: translateY(-90px); /* ✅ Move everything up */
+    }
+
+    .text-group {
+      margin-bottom: 2.5rem;
     }
 
     h1 {
@@ -40,16 +45,18 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.3rem;
-      transform: translateY(-120px);
+      animation: fadeSlideDown 1s ease-out forwards;
     }
 
     .subtitle {
       font-size: 1.25rem;
       color: #c084fc;
-      opacity: 0.85;
+      opacity: 0;
       font-weight: 500;
       margin-bottom: 2rem;
-      transform: translateY(-120px);
+      transform: translateX(-60px);
+      animation: fadeSlideLeft 1.2s ease-out forwards;
+      animation-delay: 0.3s;
     }
 
     .button-group {
@@ -58,31 +65,67 @@
       gap: 1rem;
       align-items: center;
       width: 100%;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out forwards;
+      animation-delay: 0.5s;
     }
 
     .button {
-  padding: 0.85rem 2rem;
-  border-radius: 0.75rem;
-  font-size: 1.05rem;
-  font-weight: 600;
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-  width: 260px;
-  text-align: center;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 0 8px rgba(0, 255, 255, 0.15); /* changed to match stars */
-}
+      padding: 0.85rem 2rem;
+      border-radius: 0.75rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      background-color: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      width: 260px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 8px rgba(0, 255, 255, 0.15);
+    }
 
-.button:hover {
-  background-color: rgba(0, 255, 255, 0.08); /* soft glow color */
-  color: #e0f7ff;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
-  transform: translateY(-2px); /* slight lift */
-}
+    .button:hover {
+      background-color: rgba(0, 255, 255, 0.08);
+      color: #e0f7ff;
+      box-shadow: 0 0 12px rgba(0, 255, 255, 0.35);
+      transform: translateY(-0.3px);
+    }
 
+    /* Animations */
+    @keyframes fadeSlideDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-120px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
+    @keyframes fadeSlideLeft {
+      0% {
+        opacity: 0;
+        transform: translateX(-60px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -90,11 +133,13 @@
 <canvas id="nebula"></canvas>
 
 <div class="container">
-  <h1>🌌 Welcome to DreamWeaver</h1>
-  <p class="subtitle">The magical World of Dreams</p>
+  <div class="text-group">
+    <h1>🌌 Welcome to DreamWeaver</h1>
+    <p class="subtitle">The magical World of Dreams</p>
+  </div>
   <div class="button-group">
-    <a href="{{ route('dreams.create') }}" class="button">📝 Submit a Dream</a>
-    <a href="{{ route('dreams.index') }}" class="button">📂 View Saved Dreams</a>
+    <a href="{{ route('dreams.create') }}" class="button"> Analyze a Dream</a>
+    <a href="{{ route('dreams.index') }}" class="button"> View Saved Dreams</a>
   </div>
 </div>
 
