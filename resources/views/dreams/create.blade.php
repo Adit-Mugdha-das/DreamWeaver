@@ -142,6 +142,12 @@
   color: #000; /* keep black text or change to white if needed */
 }
 
+/* Make result-box buttons smaller */
+.small-buttons .card {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  border-radius: 0.4rem;
+}
 
 
     .card {
@@ -158,6 +164,14 @@
       background-color: rgba(255, 255, 255, 0.2);
       border-color: #a855f7;
     }
+
+    .card-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
 
     #successPopup {
     display: none;
@@ -220,6 +234,8 @@
   }
 
 
+
+
   </style>
 </head>
 <body>
@@ -267,7 +283,7 @@
     <div id="allResults" class="space-y-4 mb-4"></div>
 
     <!-- Buttons to add more interpretations -->
-    <div id="extraOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+    <div id="extraOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 small-buttons">
       <div class="card" data-type="emotion">🧠 Emotion Detection (Gemini)</div>
       <div class="card" data-type="story">📖 Story Generation (GPT-3.5)</div>
       <div class="card" data-type="short">✍️ Short Interpretation (Gemini)</div>
@@ -390,6 +406,9 @@
     async function fetchAndAppendResult(title, content, type) {
       if (usedTypes.has(type)) return;
       usedTypes.add(type);
+      document.querySelectorAll(`#extraOptions .card[data-type="${type}"]`)
+      .forEach(card => card.classList.add('card-disabled'));
+
 
       const spinner = document.getElementById('interpretLoadingSpinner');
       spinner.style.display = 'flex';
@@ -607,3 +626,4 @@ saveDreamForm.addEventListener('submit', async (e) => {
 </script>
 </body>
 </html>
+
