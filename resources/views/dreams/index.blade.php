@@ -129,7 +129,8 @@
 
   @php $delay = 0; @endphp
   @foreach ($dreams as $dream)
-    <div class="dream-card" style="animation-delay: {{ $delay }}s;">
+    <<div class="dream-card" style="animation-delay: {{ $delay }}s;">
+
       <h3>{{ $dream->title }}</h3>
       <p>{{ $dream->content }}</p>
 
@@ -138,7 +139,7 @@
       @else
         <span class="text-gray-400 text-sm">No emotion detected</span>
       @endif
-    </div>
+    </>
     @php $delay += 0.1; @endphp
   @endforeach
 </div>
