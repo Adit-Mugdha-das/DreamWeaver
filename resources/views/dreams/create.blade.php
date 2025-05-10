@@ -71,9 +71,10 @@
     }
 
     .form-box.shift-left {
-      transform: translateX(-30%);
-      opacity: 0.6;
-    }
+  transform: scale(0.95) translateX(-20px);
+  opacity: 0.5;
+}
+
 
     .result-box {
     position: absolute;
@@ -325,8 +326,6 @@
   function goBack() {
     formBox.classList.remove('shift-left');
     resultBox.classList.remove('slide-in');
-    resultText.classList.remove('typing');
-    resultText.innerText = '';
     titleInput.value = '';
     contentInput.value = '';
     hiddenField.value = '';
