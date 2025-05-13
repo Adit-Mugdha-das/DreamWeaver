@@ -8,37 +8,38 @@
     html, body {
       margin: 0;
       padding: 0;
+      height: 100vh;
+      width: 100vw;
       overflow: hidden;
-      height: 100%;
       font-family: 'Inter', sans-serif;
       background-color: #0a0c1b;
       color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     canvas {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
+      width: 100vw;
+      height: 100vh;
       z-index: 0;
     }
 
     .container {
-      position: relative;
       z-index: 1;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
       text-align: center;
-      transform: translateY(-90px);
+      max-width: 700px;
+      width: 100%;
     }
 
-    .text-group {
+    header {
       margin-bottom: 2.5rem;
     }
 
-    h1 {
+    header h1 {
       font-size: 2.5rem;
       font-weight: bold;
       background: linear-gradient(to right, #c084fc, #38bdf8);
@@ -48,15 +49,15 @@
       animation: fadeSlideDown 1s ease-out forwards;
     }
 
-    .subtitle {
+    header p {
       font-size: 1.25rem;
-      color: #9f8cff; /* Updated to a cooler violet-blue tone */
-      opacity: 0;
+      color: #9f8cff;
       font-weight: 500;
+      opacity: 0;
       margin-bottom: 2rem;
-      transform: translateX(-60px);
       animation: fadeSlideLeft 1.2s ease-out forwards;
       animation-delay: 0.3s;
+      transform: translateX(-60px);
     }
 
     .button-group {
@@ -132,10 +133,11 @@
 <canvas id="nebula"></canvas>
 
 <div class="container">
-  <div class="text-group">
+  <header>
     <h1>🌌 Welcome to DreamWeaver</h1>
-    <p class="subtitle">The magical World of Dreams</p>
-  </div>
+    <p>The magical World of Dreams</p>
+  </header>
+
   <div class="button-group">
     <a href="{{ route('dreams.create') }}" class="button">Analyze a Dream</a>
     <a href="{{ route('dreams.index') }}" class="button">View Saved Dreams</a>
