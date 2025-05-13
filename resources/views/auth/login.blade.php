@@ -38,8 +38,8 @@
             padding: 10px;
             margin-top: 12px;
             background: black;
-            color: white !important;              /* ✅ force visible text */
-            caret-color: white !important;         /* ✅ force visible cursor */
+            color: white !important;
+            caret-color: white !important;
             border: 1px solid #c084fc;
             border-radius: 8px;
             font-size: 1rem;
@@ -61,11 +61,36 @@
             text-align: center;
             margin-bottom: 1rem;
         }
+
+        .success-message {
+            color: #4ade80;
+            font-size: 0.875rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .register-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #c084fc;
+            text-decoration: none;
+        }
+
+        .register-link:hover {
+            color: #e879f9;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="form-box">
         <h2>Login to DreamWeaver</h2>
+
+        @if(session('success'))
+            <div class="success-message">{{ session('success') }}</div>
+        @endif
 
         @if($errors->any())
             <div class="error-message">{{ $errors->first() }}</div>
@@ -79,6 +104,7 @@
                 placeholder="Email"
                 required
                 autocomplete="email"
+                value="{{ old('email') }}"
             >
             <input
                 type="password"
@@ -89,6 +115,8 @@
             >
             <button type="submit">Login</button>
         </form>
+
+        <a href="{{ route('register') }}" class="register-link">Don't have an account? Register</a>
     </div>
 </body>
 </html>
