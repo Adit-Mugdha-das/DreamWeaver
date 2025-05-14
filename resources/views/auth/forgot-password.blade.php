@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dreamy Night Login</title>
+  <title>Forgot Password - DreamWeaver</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Playfair+Display:wght@700&display=swap');
 
@@ -10,8 +10,8 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      font-family: 'Playfair Display', serif;
       overflow: hidden;
+      font-family: 'Playfair Display', serif;
       background-color: #0b0f1a;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
@@ -37,17 +37,17 @@
       background: rgba(5, 8, 20, 0.96);
       border: 2px solid #00bcd4;
       box-shadow: 0 0 40px rgba(0, 188, 212, 0.3);
-      animation: fadeInUp 1.2s ease-out;
+      animation: fadeInUp 1s ease-out;
       opacity: 0;
       animation-fill-mode: forwards;
     }
 
     @keyframes fadeInUp {
-      0% {
+      from {
         opacity: 0;
         transform: translateY(-40%) scale(0.95);
       }
-      100% {
+      to {
         opacity: 1;
         transform: translateY(-50%) scale(1);
       }
@@ -85,52 +85,12 @@
       box-shadow: 0 0 10px #4cc9f099;
     }
 
-    .input-wrapper,
-    .password-wrapper {
-      position: relative;
-    }
-
-    .input-wrapper input,
-    .password-wrapper input {
-      width: calc(100% - 40px);
-      padding-right: 40px;
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 1.1rem;
-      color: #ddd;
-    }
-
-    .remember-me {
-  display: flex;
-  justify-content: flex-end;
-  align-items: baseline;  /* 🔧 changed from center to baseline */
-  gap: 8px;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #ccc;
-  width: 100%;
-}
-
-.remember-me input[type="checkbox"] {
-  width: auto;
-  accent-color: #ffe066;
-  transform: scale(1.1) translateY(2px); /* 👈 move down just a bit */
-}
-
-
     button {
       background: linear-gradient(to right, #2196f3, #ffe066);
       color: #000;
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 0 15px #ffe06655;
-      margin-top: 20px;
     }
 
     button:hover {
@@ -138,32 +98,33 @@
       box-shadow: 0 0 25px #ffe066cc;
     }
 
-    .register-link, .forgot-link {
-      display: block;
+    .link {
       text-align: center;
       margin-top: 1rem;
       font-size: 0.9rem;
-      color: #fbc4ab;
-      text-decoration: none;
-      transition: 0.3s;
     }
 
-    .register-link:hover, .forgot-link:hover {
-      color: #ffffff;
+    .link a {
+      color: #fbc4ab;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      color: #fff;
       text-shadow: 0 0 10px #ffd6ff;
     }
 
-    .error-message, .success-message {
+    .error-message, .status-message {
       text-align: center;
-      margin-bottom: 1rem;
       font-size: 0.875rem;
+      margin-bottom: 1rem;
     }
 
     .error-message {
       color: #ff6b6b;
     }
 
-    .success-message {
+    .status-message {
       color: #06d6a0;
     }
   </style>
@@ -173,38 +134,25 @@
   <div id="background"></div>
 
   <div class="form-box">
-    <h2>Dreamy Night Login</h2>
+    <h2>Reset Password</h2>
 
-    @if(session('success'))
-      <div class="success-message">{{ session('success') }}</div>
+    @if (session('status'))
+      <div class="status-message">{{ session('status') }}</div>
     @endif
 
-    @if($errors->any())
+    @if ($errors->any())
       <div class="error-message">{{ $errors->first() }}</div>
     @endif
 
-    <form method="POST" action="{{ route('login') }}" onsubmit="return validateEmail()">
+    <form method="POST" action="{{ route('password.email') }}">
       @csrf
-
-      <div class="input-wrapper">
-        <input type="email" name="email" id="email" placeholder="Email (must end with @dream.com)" required autocomplete="email" value="{{ old('email') }}">
-      </div>
-
-      <div class="password-wrapper">
-        <input type="password" name="password" id="password" placeholder="Password" required autocomplete="current-password">
-        <span class="password-toggle" onclick="togglePassword()">👁️</span>
-      </div>
-
-      <button type="submit">Login</button>
-
-      <a href="{{ route('password.request') }}" class="forgot-link">Forgot your password?</a>
-      <a href="{{ route('register') }}" class="register-link">Don't have an account? Register</a>
-
-      <div class="remember-me">
-        <input type="checkbox" name="remember" id="remember">
-        <label for="remember">Remember Me</label>
-      </div>
+      <input type="email" name="email" placeholder="Your email (must be @dream.com)" required>
+      <button type="submit">Send Reset Link</button>
     </form>
+
+    <div class="link">
+      <a href="{{ route('login') }}">← Back to Login</a>
+    </div>
   </div>
 
   <!-- Vanta Fog Background -->
@@ -221,24 +169,9 @@
       lowlightColor: 0x0b0f1a,
       baseColor: 0x000000,
       blurFactor: 0.5,
-      speed: 1.5,
-      zoom: 1.1
-    });
-
-    function togglePassword() {
-      const passField = document.getElementById('password');
-      passField.type = passField.type === 'password' ? 'text' : 'password';
-    }
-
-    function validateEmail() {
-      const email = document.getElementById("email").value;
-      const pattern = /^[a-zA-Z0-9._%+-]+@dream\.com$/;
-      if (!pattern.test(email)) {
-        alert("Only @dream.com emails are allowed.");
-        return false;
-      }
-      return true;
-    }
+      speed: 1.2,
+      zoom: 1.0
+    })
   </script>
 </body>
 </html>

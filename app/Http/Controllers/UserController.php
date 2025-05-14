@@ -22,9 +22,15 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+            'email' => ['required', 'email', 'regex:/@dream\.com$/i'],
+            'password' => 'required',
+        ]);
 
-        if (Auth::attempt($credentials)) {
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             return redirect('/welcome'); // ✅ Redirect to welcome page
         }
@@ -60,7 +66,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name'     => 'required|string|max:255',
-            'email'    => 'required|email|max:255|unique:users',
+            'email'    => ['required', 'email', 'regex:/@dream\.com$/i', 'max:255', 'unique:users'],
             'password' => 'required|string|min:6',
         ]);
 
