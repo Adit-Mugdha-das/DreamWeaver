@@ -37,7 +37,20 @@
       background: rgba(5, 8, 20, 0.96);
       border: 2px solid #00bcd4;
       box-shadow: 0 0 40px rgba(0, 188, 212, 0.3);
-      /* animation removed for font clarity */
+      animation: fadeInUp 1.2s ease-out;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(-40%) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+      }
     }
 
     h2 {

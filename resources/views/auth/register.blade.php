@@ -38,6 +38,20 @@
       background: rgba(15, 15, 25, 0.85);
       border: 1px solid rgba(100, 200, 255, 0.2);
       box-shadow: 0 0 20px rgba(0, 150, 200, 0.15);
+      animation: fadeInUp 1.2s ease-out;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(-40%) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+      }
     }
 
     h2 {
