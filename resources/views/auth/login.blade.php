@@ -191,7 +191,7 @@
       </div>
 
       <div class="password-wrapper">
-        <input type="password" name="password" id="password" placeholder="Password" required autocomplete="current-password">
+        <input type="password" name="password" id="password" placeholder="Password" required minlength="6" autocomplete="current-password">
         <span class="password-toggle" onclick="togglePassword()">👁️</span>
       </div>
 
