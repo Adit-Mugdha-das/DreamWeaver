@@ -26,24 +26,22 @@
     }
 
     .form-box {
-  position: relative;
-  z-index: 1;
-  width: 95%;
-  max-width: 500px;
-  padding: 2.5rem 2rem;
-  margin: auto;
-  top: 50%;
-  transform: translateY(-50%);
-  border-radius: 1.2rem;
-  background: linear-gradient(135deg, rgba(40, 15, 30, 0.9), rgba(10, 5, 15, 0.85));
-  border: 1px solid rgba(255, 192, 203, 0.15);
-  box-shadow: 0 0 35px rgba(255, 105, 180, 0.15), 0 0 70px rgba(255, 182, 193, 0.05);
-  animation: fadeInUp 1.2s ease-out;
-  opacity: 0;
-  animation-fill-mode: forwards;
-}
-
-
+      position: relative;
+      z-index: 1;
+      width: 95%;
+      max-width: 500px;
+      padding: 2.5rem 2rem;
+      margin: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 1.2rem;
+      background: linear-gradient(135deg, rgba(40, 15, 30, 0.9), rgba(10, 5, 15, 0.85));
+      border: 1px solid rgba(255, 192, 203, 0.15);
+      box-shadow: 0 0 35px rgba(255, 105, 180, 0.15), 0 0 70px rgba(255, 182, 193, 0.05);
+      animation: fadeInUp 1.2s ease-out;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
 
     @keyframes fadeInUp {
       0% { opacity: 0; transform: translateY(-40%) scale(0.95); }
@@ -56,12 +54,12 @@
       font-size: 2.2rem;
       color: #ffe066;
       text-shadow: 2px 2px 10px #ff85b3;
-
       margin-bottom: 1.5rem;
     }
 
     input, button {
       width: 100%;
+      height: 48px;
       padding: 12px;
       margin-top: 14px;
       font-size: 1rem;
@@ -69,8 +67,8 @@
       border: 1px solid #ff99cc;
       background: rgba(5, 5, 10, 0.6);
       color: #fff;
-      transition: all 0.3s ease;
       box-sizing: border-box;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     input::placeholder {
@@ -79,38 +77,34 @@
     }
 
     input:focus {
-    outline: none;
-    border-color: #ff4f91;
-    box-shadow: 0 0 10px #ff4f9188;
-  }
-
+      outline: none;
+      border-color: #ff4f91;
+      box-shadow: 0 0 5px #ff4f9170;
+    }
 
     .password-wrapper {
-  width: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
+      width: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
 
-.password-wrapper input {
-  width: 100%;
-  box-sizing: border-box;
-  padding-right: 40px;
-  height: 48px; /* Ensures alignment works well */
-}
+    .password-wrapper input {
+      width: 100%;
+      box-sizing: border-box;
+      padding-right: 40px;
+    }
 
-.password-toggle {
-  position: absolute;
-  right: 12px;
-  cursor: pointer;
-  font-size: 1.1rem;
-  color: #ddd;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #ddd;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
 
     .strength-bar {
       height: 6px;
@@ -128,20 +122,18 @@
     }
 
     button {
-  background: linear-gradient(to right, #ff4f91, #ffc6b3);
-  color: #1a001a;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 0 12px #ff7faa88;
-  border: 1px solid #ff7faa;
-  transition: all 0.3s ease;
-}
+      background: linear-gradient(to right, #ff4f91, #ffc6b3);
+      color: #1a001a;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 12px #ff7faa88;
+      border: 1px solid #ff7faa;
+    }
 
-button:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 18px #ff99ccaa;
-}
-
+    button:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 14px #ff99ccaa;
+    }
 
     .login-link {
       display: block;
@@ -180,7 +172,6 @@ button:hover {
     <form method="POST" action="{{ route('register.submit') }}" onsubmit="return validateEmail()">
       @csrf
       <input type="text" name="name" placeholder="Full Name" value="{{ old('name') }}" autocomplete="name" required>
-
       <input type="email" name="email" id="email" placeholder="Email (must end with @dream.com)" value="{{ old('email') }}" autocomplete="email" required>
 
       <div class="password-wrapper">
@@ -202,19 +193,18 @@ button:hover {
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
   <script>
     VANTA.FOG({
-    el: "#background",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    highlightColor: 0xff85b3,  // Soft rose highlight
-    midtoneColor: 0x3a0a1e,    // Dark reddish-purple midtone
-    lowlightColor: 0x1e0a14,   // Subtle dark rose
-    baseColor: 0x12010a,       // Almost black with warm tint
-    blurFactor: 0.7,
-    speed: 1.0,
-    zoom: 1.2
-  });
-
+      el: "#background",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      highlightColor: 0xff85b3,
+      midtoneColor: 0x3a0a1e,
+      lowlightColor: 0x1e0a14,
+      baseColor: 0x12010a,
+      blurFactor: 0.7,
+      speed: 1.0,
+      zoom: 1.2
+    });
 
     function togglePassword() {
       const passField = document.getElementById('password');
