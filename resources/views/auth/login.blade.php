@@ -25,22 +25,23 @@
     }
 
     .form-box {
-      position: relative;
-      z-index: 1;
-      width: 90%;
-      max-width: 420px;
-      padding: 2rem;
-      margin: auto;
-      top: 50%;
-      transform: translateY(-50%);
-      border-radius: 1.2rem;
-      background: rgba(5, 8, 20, 0.96);
-      border: 2px solid #00bcd4;
-      box-shadow: 0 0 40px rgba(0, 188, 212, 0.3);
-      animation: fadeInUp 1.2s ease-out;
-      opacity: 0;
-      animation-fill-mode: forwards;
+    position: relative;
+    z-index: 1;
+    width: 95%;
+    max-width: 500px; /* Increased from 420px */
+    padding: 2.5rem 2rem; /* More space inside */
+    margin: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 1.2rem;
+    background: rgba(5, 8, 20, 0.96);
+    border: 2px solid #00bcd4;
+    box-shadow: 0 0 40px rgba(0, 188, 212, 0.3);
+    animation: fadeInUp 1.2s ease-out;
+    opacity: 0;
+    animation-fill-mode: forwards;
     }
+
 
     @keyframes fadeInUp {
       0% {
@@ -91,10 +92,11 @@
     }
 
     .input-wrapper input,
-    .password-wrapper input {
-      width: calc(100% - 40px);
-      padding-right: 40px;
-    }
+.password-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 40px;
+}
 
     .password-toggle {
       position: absolute;
@@ -125,18 +127,26 @@
 
 
     button {
-      background: linear-gradient(to right, #2196f3, #ffe066);
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 15px #ffe06655;
-      margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    background: linear-gradient(to right, #2196f3, #ffe066); /* Restore this */
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 0 15px #ffe06655;
+    margin-top: 20px;
+    transition: all 0.3s ease;
     }
 
+
     button:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 25px #ffe066cc;
-    }
+  transform: scale(1.02); /* Slightly smaller scale */
+  box-shadow: 0 0 12px #ffe066aa; /* Softer, subtler aura */
+}
+
 
     .register-link, .forgot-link {
       display: block;
