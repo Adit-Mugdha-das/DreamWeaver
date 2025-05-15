@@ -145,7 +145,7 @@
     </div>
   @endif
 
-  @foreach ($dreams as $dream)
+    @foreach ($dreams as $dream)
   <div class="dream-card" data-aos="fade-up" data-aos-duration="800">
     <h3>{{ $dream->title }}</h3>
     <p>{{ $dream->content }}</p>
@@ -161,8 +161,33 @@
         <strong class="text-indigo-400">Short Interpretation:</strong> {{ $dream->short_interpretation }}
       </p>
     @endif
+
+    {{-- 🗑️ Delete Button --}}
+    <form action="{{ route('dreams.destroy', $dream->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this dream?');" class="mt-4">
+      @csrf
+      @method('DELETE')
+      <button type="submit" style="
+  background: rgba(168, 85, 247, 0.15); /* dreamy purple */
+  color: #f5f3ff;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+"
+onmouseover="this.style.background='rgba(168, 85, 247, 0.35)'; this.style.boxShadow='0 0 12px rgba(168, 85, 247, 0.7)'"
+onmouseout="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.boxShadow='0 0 8px rgba(168, 85, 247, 0.4)'"
+>
+  🗑️ Delete
+</button>
+
+    </form>
   </div>
-@endforeach
+  @endforeach
+
 
 </div>
 
@@ -215,6 +240,22 @@
 
   AOS.init({ once: true });
   initStars();
+
 </script>
+
+<!-- ✅ Separate script tag for auto-hide -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const alert = document.querySelector('.bg-green-100');
+    if (alert) {
+      setTimeout(() => {
+        alert.style.transition = 'opacity 0.5s ease-out';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+      }, 2000);
+    }
+  });
+</script>
+
 </body>
 </html>

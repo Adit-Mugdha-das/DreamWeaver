@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
 use App\Models\Dream;
 use App\Helpers\GeminiHelper;
 
@@ -90,5 +89,12 @@ class DreamController extends Controller
             Log::error('Interpretation failed: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to interpret dream.'], 500);
         }
+    }
+
+    // ✅ New method to delete a dream
+    public function destroy(Dream $dream)
+    {
+        $dream->delete();
+        return redirect()->route('dreams.index')->with('success', 'Dream deleted successfully.');
     }
 }

@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/dreams', [DreamController::class, 'store'])->name('dreams.store');
     Route::get('/dreams', [DreamController::class, 'index'])->name('dreams.index');
     Route::post('/dreams/interpret', [DreamController::class, 'interpret']);
+    Route::delete('/dreams/{dream}', [DreamController::class, 'destroy'])->name('dreams.destroy');
+
 });
 
 /**
