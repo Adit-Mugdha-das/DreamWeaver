@@ -134,7 +134,7 @@
 
 <div class="container">
   <header>
-    <h1>🌌 Welcome to DreamWeaver</h1>
+    <h1>🌌 Welcome {{ Auth::user()->name }} to DreamWeaver</h1>
     <p>The magical World of Dreams</p>
   </header>
 

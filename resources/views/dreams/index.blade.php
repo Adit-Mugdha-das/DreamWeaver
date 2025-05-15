@@ -127,7 +127,13 @@
 <canvas id="starfield"></canvas>
 
 <!-- Back to Home Button -->
-<a href="/" class="back-button">← Home</a>
+<a href="{{ route('welcome') }}" class="back-button">← Home</a>
+<!-- Analyze Dream Button -->
+<a href="{{ route('dreams.create') }}" class="back-button" style="top: 4.5rem;">
+  📝 Analyze a Dream
+</a>
+
+
 
 <!-- Dreams Wrapper -->
 <div class="wrapper">
@@ -140,17 +146,24 @@
   @endif
 
   @foreach ($dreams as $dream)
-    <div class="dream-card" data-aos="fade-up" data-aos-duration="800">
-      <h3>{{ $dream->title }}</h3>
-      <p>{{ $dream->content }}</p>
+  <div class="dream-card" data-aos="fade-up" data-aos-duration="800">
+    <h3>{{ $dream->title }}</h3>
+    <p>{{ $dream->content }}</p>
 
-      @if ($dream->emotion_summary)
-        <span class="emotion-badge">Emotion: {{ $dream->emotion_summary }}</span>
-      @else
-        <span class="text-gray-400 text-sm">No emotion detected</span>
-      @endif
-    </div>
-  @endforeach
+    @if ($dream->emotion_summary)
+      <span class="emotion-badge">Emotion: {{ $dream->emotion_summary }}</span>
+    @else
+      <span class="text-gray-400 text-sm">No emotion detected</span>
+    @endif
+
+    @if ($dream->short_interpretation)
+      <p class="mt-3 text-sm text-indigo-200">
+        <strong class="text-indigo-400">Short Interpretation:</strong> {{ $dream->short_interpretation }}
+      </p>
+    @endif
+  </div>
+@endforeach
+
 </div>
 
 <!-- JS Scripts -->

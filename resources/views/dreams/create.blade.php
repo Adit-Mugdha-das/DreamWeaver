@@ -73,7 +73,10 @@
     .form-box.shift-left {
   transform: scale(0.95) translateX(-20px);
   opacity: 0.5;
+  filter: blur(1.2px); /* ⬅️ Add this line */
+  pointer-events: none;
 }
+
 
 
     .result-box {
@@ -228,6 +231,52 @@
   }
 
 
+    @keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.form-box.animate-in {
+  animation: fadeInUp 1.2s ease-out forwards;
+  opacity: 0; /* Start transparent */
+}
+
+.top-buttons {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 100;
+}
+
+.nav-button {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.85); /* deep black */
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: rgba(15, 15, 15, 0.95); /* slightly deeper on hover */
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
 
 
   </style>
@@ -235,10 +284,17 @@
 <body>
 
 <canvas id="galaxyCanvas"></canvas>
+<!-- Top Navigation Buttons -->
+<div class="top-buttons">
+  <a href="{{ route('welcome') }}" class="nav-button">🏠 Home</a>
+  <a href="{{ route('dreams.index') }}" class="nav-button">📂 View Saved</a>
+</div>
+
 
 <div class="form-wrapper">
   <div class="form-container" id="formContainer">
-    <div class="form-box" id="dreamFormBox">
+    <div class="form-box animate-in" id="dreamFormBox">
+
       <h1 class="text-2xl font-bold text-center mb-6">💫 Submit Your Dream</h1>
       <form id="dreamForm">
         @csrf
@@ -325,6 +381,7 @@
 
   function goBack() {
     formBox.classList.remove('shift-left');
+    formBox.style.filter = 'none';
     resultBox.classList.remove('slide-in');
     titleInput.value = '';
     contentInput.value = '';
@@ -465,11 +522,16 @@ document.querySelectorAll('#extraOptions .card').forEach(card => {
 });
 
 
-  formBox.addEventListener('click', () => {
-  if (formBox.classList.contains('shift-left')) {
+  document.addEventListener('click', (e) => {
+  if (
+    formBox.classList.contains('shift-left') &&
+    !formBox.contains(e.target) &&
+    !resultBox.contains(e.target)
+  ) {
     goBack();
   }
 });
+
 
 const saveDreamForm = document.getElementById('saveDreamForm');
 

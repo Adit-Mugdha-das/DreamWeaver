@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 use App\Models\Dream;
 use App\Helpers\GeminiHelper;
 
@@ -62,25 +64,31 @@ class DreamController extends Controller
         return view('dreams.index', compact('dreams'));
     }
 
-    // ✅ API endpoint for emotion and short interpretation
+    // ✅ Fixed JSON-safe dream interpretation
     public function interpret(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'type' => 'required|string'
-        ]);
+        try {
+            $data = $request->json()->all(); // Get JSON payload
 
-        if ($validated['type'] === 'emotion') {
-            $emotion = GeminiHelper::analyzeEmotion($validated['content']);
-            return response()->json(['result' => $emotion]);
+            if (!isset($data['title'], $data['content'], $data['type'])) {
+                return response()->json(['error' => 'Missing fields.'], 422);
+            }
+
+            $type = $data['type'];
+
+            if ($type === 'emotion') {
+                $result = GeminiHelper::analyzeEmotion($data['content']);
+            } elseif ($type === 'short') {
+                $result = GeminiHelper::analyzeShort($data['content']);
+            } else {
+                return response()->json(['error' => 'Invalid interpretation type.'], 400);
+            }
+
+            return response()->json(['result' => $result]);
+
+        } catch (\Throwable $e) {
+            Log::error('Interpretation failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to interpret dream.'], 500);
         }
-
-        if ($validated['type'] === 'short') {
-            $short = GeminiHelper::analyzeShort($validated['content']);
-            return response()->json(['result' => $short]);
-        }
-
-        return response()->json(['result' => 'Interpretation type not supported.']);
     }
 }
