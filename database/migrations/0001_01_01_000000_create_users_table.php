@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->unique(); // @dream.com login email
+            $table->string('recovery_email')->unique()->nullable(); // ✅ added for valid Gmail recovery
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

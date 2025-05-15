@@ -27,16 +27,17 @@
     .form-box {
       position: relative;
       z-index: 1;
-      width: 90%;
-      max-width: 420px;
-      padding: 2rem;
+      width: 95%;
+      max-width: 500px;
+      padding: 3.5rem 2.5rem;
       margin: auto;
       top: 50%;
       transform: translateY(-50%);
       border-radius: 1.2rem;
-      background: rgba(5, 8, 20, 0.96);
-      border: 2px solid #00bcd4;
-      box-shadow: 0 0 40px rgba(0, 188, 212, 0.3);
+      background: rgba(18, 24, 42, 0.6);
+      backdrop-filter: blur(10px);
+      border: 2px solid #4f46e5;
+      box-shadow: 0 0 40px rgba(79, 70, 229, 0.35);
       animation: fadeInUp 1s ease-out;
       opacity: 0;
       animation-fill-mode: forwards;
@@ -57,12 +58,13 @@
       text-align: center;
       font-family: 'UnifrakturCook', cursive;
       font-size: 2.2rem;
-      color: #ffe066;
-      text-shadow: 2px 2px 10px #000;
+      color: #b3bcf5;
+      text-shadow: 2px 2px 10px #1e1b4b;
       margin-bottom: 1.5rem;
     }
 
-    input, button {
+    input {
+      display: block;
       width: 100%;
       padding: 12px;
       margin-top: 14px;
@@ -72,6 +74,7 @@
       background: rgba(0, 0, 0, 0.6);
       color: #fff;
       transition: all 0.3s ease;
+      box-sizing: border-box;
     }
 
     input::placeholder {
@@ -86,11 +89,20 @@
     }
 
     button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 14px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
       background: linear-gradient(to right, #2196f3, #ffe066);
       color: #000;
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 0 15px #ffe06655;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
     }
 
     button:hover {
@@ -146,7 +158,7 @@
 
     <form method="POST" action="{{ route('password.email') }}">
       @csrf
-      <input type="email" name="email" placeholder="Your email (must be @dream.com)" required>
+      <input type="email" name="email" placeholder="Your recovery email (must be Gmail)" required>
       <button type="submit">Send Reset Link</button>
     </form>
 

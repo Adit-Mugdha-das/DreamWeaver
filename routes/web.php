@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DreamController;
 use App\Http\Controllers\UserController;
@@ -46,20 +48,19 @@ Route::middleware('auth')->group(function () {
 });
 
 /**
- * ✉️ Forgot Password Flow (for @dream.com only)
+ * ✉️ Forgot Password Flow using recovery Gmail
  */
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->middleware('guest')->name('password.request');
 
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate([
-        'email' => ['required', 'email', 'regex:/@dream\.com$/i'],
-    ]);
+// Send reset link based on recovery email
+Route::post('/forgot-password', [UserController::class, 'sendResetLink'])->name('password.email');
 
-    $status = Password::sendResetLink($request->only('email'));
+// ✅ Reset Password Form (the one user opens via Gmail link)
+Route::get('/reset-password/{token}', function (string $token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
 
-    return $status === Password::RESET_LINK_SENT
-        ? back()->with(['status' => __($status)])
-        : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
+// ✅ Handle actual password reset submission (moved to controller)
+Route::post('/reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.update');

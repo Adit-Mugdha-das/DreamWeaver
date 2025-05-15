@@ -169,21 +169,28 @@
       <div class="error-message">{{ $errors->first() }}</div>
     @endif
 
+    <!-- Inside the <form> block -->
     <form method="POST" action="{{ route('register.submit') }}" onsubmit="return validateEmail()">
       @csrf
       <input type="text" name="name" placeholder="Full Name" value="{{ old('name') }}" autocomplete="name" required>
+
       <input type="email" name="email" id="email" placeholder="Email (must end with @dream.com)" value="{{ old('email') }}" autocomplete="email" required>
+
+      <!-- ✅ New Recovery Email field -->
+      <input type="email" name="recovery_email" placeholder="Recovery Email (must be Gmail)" value="{{ old('recovery_email') }}" required>
 
       <div class="password-wrapper">
         <input type="password" name="password" id="password" placeholder="Password" autocomplete="new-password" required>
         <span class="password-toggle" onclick="togglePassword()">👁️</span>
       </div>
+
       <div class="strength-bar"><div id="strengthFill" class="strength-bar-fill"></div></div>
 
       <input type="password" name="password_confirmation" placeholder="Confirm Password" autocomplete="new-password" required>
 
       <button type="submit">Register</button>
     </form>
+
 
     <a href="{{ route('login') }}" class="login-link">Already have an account? Login</a>
   </div>
