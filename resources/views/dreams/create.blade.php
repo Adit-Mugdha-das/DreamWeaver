@@ -73,7 +73,7 @@
     .form-box.shift-left {
   transform: scale(0.95) translateX(-20px);
   opacity: 0.5;
-  filter: blur(1.2px); /* ⬅️ Add this line */
+  filter: blur(1.1px); /* ⬅️ Add this line */
   pointer-events: none;
 }
 
@@ -544,15 +544,20 @@ saveDreamForm.addEventListener('submit', async (e) => {
 
   try {
     const response = await fetch(saveDreamForm.action, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: JSON.stringify({ title, content })
-    });
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: JSON.stringify({
+      title,
+      content,
+      used_types: Array.from(usedTypes)
+    })
+  });
+
 
     if (!response.ok) throw new Error('Failed to save dream.');
 
