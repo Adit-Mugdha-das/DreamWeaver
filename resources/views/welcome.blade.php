@@ -94,6 +94,8 @@
       transform: translateY(-0.3px);
     }
 
+    
+
     @keyframes fadeSlideDown {
       0% {
         opacity: 0;
@@ -126,11 +128,34 @@
         transform: translateY(0);
       }
     }
+
+    .top-left-logout {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 10;
+}
+
+.top-left-logout .button {
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  width: auto;
+  min-width: unset;
+  border-radius: 0.6rem;
+}
+
+
   </style>
 </head>
 <body>
 
 <canvas id="nebula"></canvas>
+
+<form method="POST" action="{{ route('logout') }}" class="top-left-logout">
+  @csrf
+  <button type="submit" class="button">🚪 Logout</button>
+</form>
+
 
 <div class="container">
   <header>
