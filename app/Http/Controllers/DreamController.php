@@ -101,8 +101,14 @@ class DreamController extends Controller
 
     // ✅ New method to delete a dream
     public function destroy(Dream $dream)
-    {
-        $dream->delete();
-        return redirect()->route('dreams.index')->with('success', 'Dream deleted successfully.');
+{
+    $dream->delete();
+
+    if (request()->expectsJson()) {
+        return response()->json(['status' => 'success']);
     }
+
+    return redirect()->route('dreams.index')->with('success', 'Dream deleted successfully.');
+}
+
 }

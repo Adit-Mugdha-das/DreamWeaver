@@ -146,7 +146,8 @@
   @endif
 
     @foreach ($dreams as $dream)
-  <div class="dream-card" data-aos="fade-up" data-aos-duration="800">
+  <div class="dream-card" id="dream-{{ $dream->id }}" data-aos="fade-up" data-aos-duration="800">
+
     <h3>{{ $dream->title }}</h3>
     <p>{{ $dream->content }}</p>
 
@@ -162,29 +163,25 @@
       </p>
     @endif
 
-    {{-- 🗑️ Delete Button --}}
-    <form action="{{ route('dreams.destroy', $dream->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this dream?');" class="mt-4">
-      @csrf
-      @method('DELETE')
-      <button type="submit" style="
-  background: rgba(168, 85, 247, 0.15); /* dreamy purple */
-  color: #f5f3ff;
-  padding: 0.35rem 0.85rem;
-  font-size: 0.85rem;
-  border-radius: 9999px;
-  font-weight: 600;
-  border: 1px solid rgba(168, 85, 247, 0.4);
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
-  cursor: pointer;
-  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-"
-onmouseover="this.style.background='rgba(168, 85, 247, 0.35)'; this.style.boxShadow='0 0 12px rgba(168, 85, 247, 0.7)'"
-onmouseout="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.boxShadow='0 0 8px rgba(168, 85, 247, 0.4)'"
->
-  🗑️ Delete
-</button>
+    <form class="delete-form mt-4" data-id="{{ $dream->id }}">
+  <button type="button" class="delete-btn" style="
+    background: rgba(168, 85, 247, 0.15);
+    color: #f5f3ff;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.85rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  "
+  onmouseover="this.style.background='rgba(168, 85, 247, 0.35)'; this.style.boxShadow='0 0 12px rgba(168, 85, 247, 0.7)'"
+  onmouseout="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.boxShadow='0 0 8px rgba(168, 85, 247, 0.4)'">
+    🗑️ Delete
+  </button>
+</form>
 
-    </form>
   </div>
   @endforeach
 
@@ -256,6 +253,37 @@ onmouseout="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.boxShad
     }
   });
 </script>
+
+<script>
+  document.querySelectorAll('.delete-form').forEach(form => {
+    const btn = form.querySelector('.delete-btn');
+    const dreamId = form.dataset.id;
+    const card = document.getElementById(`dream-${dreamId}`);
+
+    btn.addEventListener('click', async () => {
+      if (!confirm('Are you sure you want to delete this dream?')) return;
+
+      try {
+        const res = await fetch(`/dreams/${dreamId}`, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+
+        if (!res.ok) throw new Error('Deletion failed');
+
+        card.style.transition = 'opacity 0.5s ease-out';
+        card.style.opacity = 0;
+        setTimeout(() => card.remove(), 500);
+      } catch (err) {
+        alert('Error deleting the dream.');
+      }
+    });
+  });
+</script>
+
 
 </body>
 </html>
