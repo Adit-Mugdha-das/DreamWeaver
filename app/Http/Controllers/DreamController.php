@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Dream;
 use App\Helpers\GeminiHelper;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DreamController extends Controller
 {
@@ -14,7 +16,7 @@ class DreamController extends Controller
         return view('dreams.create');
     }
 
-    public function store(Request $request)
+   public function store(Request $request)
 {
     if ($request->expectsJson()) {
         // Handle AJAX request
@@ -37,11 +39,15 @@ class DreamController extends Controller
             $short = GeminiHelper::analyzeShort($data['content']);
         }
 
+        // ✅ Log the current user ID before saving
+        Log::info('Current Auth ID for dream save:', ['user_id' => Auth::id()]);
+
         $dream = Dream::create([
             'title' => $data['title'],
             'content' => $data['content'],
             'emotion_summary' => $emotion,
             'short_interpretation' => $short,
+            'user_id' => Auth::id(), // ✅ Assign current user
         ]);
 
         return response()->json(['status' => 'success', 'dream' => $dream]);
@@ -56,13 +62,15 @@ class DreamController extends Controller
     Dream::create([
         'title' => $validated['title'],
         'content' => $validated['content'],
-        // Fallback: if coming from normal form, still analyze both
         'emotion_summary' => GeminiHelper::analyzeEmotion($validated['content']),
         'short_interpretation' => GeminiHelper::analyzeShort($validated['content']),
+        'user_id' => Auth::id(), // ✅ Assign current user
     ]);
 
     return redirect()->route('dreams.index')->with('success', 'Dream saved with emotion and short interpretation!');
 }
+
+
 
 
     public function index()
@@ -111,4 +119,33 @@ class DreamController extends Controller
     return redirect()->route('dreams.index')->with('success', 'Dream deleted successfully.');
 }
 
+    public function showDashboard()
+{
+    // Get all dreams for the logged-in user
+    $dreams = Dream::where('user_id', Auth::id())->get();
+
+    // Emotion Count for Pie Chart
+    $emotionCounts = $dreams->groupBy('emotion_summary')->map->count();
+
+    // Dreams Per Week for Line Chart
+    $weeklyCounts = $dreams->groupBy(function ($dream) {
+        return Carbon::parse($dream->created_at)->startOfWeek()->format('Y-m-d');
+    })->map->count();
+
+    // Keyword Extraction (Simple NLP)
+    $keywords = collect();
+    foreach ($dreams as $dream) {
+        $words = str_word_count(strtolower(strip_tags($dream->content)), 1);
+        $filtered = array_filter($words, fn($w) => strlen($w) > 3 && !in_array($w, ['this', 'that', 'with', 'have', 'just']));
+        $keywords = $keywords->merge($filtered);
+    }
+    $topKeywords = $keywords->countBy()->sortDesc()->take(10);
+
+    // Pass to view
+    return view('dreams.dashboard', compact('emotionCounts', 'weeklyCounts', 'topKeywords'));
 }
+
+
+
+}
+

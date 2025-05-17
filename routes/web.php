@@ -70,3 +70,4 @@ Route::post('/reset-password', [UserController::class, 'resetPassword'])->middle
 
 Route::get('/support', [SupportController::class, 'showNearbySupport'])->name('support');
 Route::post('/get-nearby', [SupportController::class, 'getNearby'])->name('support.nearby');
+Route::get('/dashboard', [DreamController::class, 'showDashboard'])->name('dashboard');

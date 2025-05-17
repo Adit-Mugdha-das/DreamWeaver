@@ -169,6 +169,9 @@
     <a href="{{ route('support') }}" class="button">
    Psychological Support
 </a>
+  <a href="{{ route('dashboard') }}" class="button">
+   Dream Patterns
+</a>
 
 
   </div>
