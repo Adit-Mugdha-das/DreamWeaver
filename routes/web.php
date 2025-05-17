@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DreamController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SupportController;
 
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
@@ -66,3 +67,6 @@ Route::get('/reset-password/{token}', function (string $token) {
 
 // ✅ Handle actual password reset submission (moved to controller)
 Route::post('/reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+
+Route::get('/support', [SupportController::class, 'showNearbySupport'])->name('support');
+Route::post('/get-nearby', [SupportController::class, 'getNearby'])->name('support.nearby');

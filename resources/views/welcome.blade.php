@@ -166,6 +166,11 @@
   <div class="button-group">
     <a href="{{ route('dreams.create') }}" class="button">Analyze a Dream</a>
     <a href="{{ route('dreams.index') }}" class="button">View Saved Dreams</a>
+    <a href="{{ route('support') }}" class="button">
+   Psychological Support
+</a>
+
+
   </div>
 </div>
 
