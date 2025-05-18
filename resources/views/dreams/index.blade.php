@@ -27,7 +27,7 @@
     .wrapper {
       position: relative;
       z-index: 1;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 3rem 1rem;
     }
@@ -71,10 +71,12 @@
     }
 
     .dream-card p {
-      color: #d1d5db;
-      margin-bottom: 0.75rem;
-      line-height: 1.6;
-    }
+  color: #d1d5db;
+  font-size: 1.05rem;     /* ← Increased font size */
+  margin-bottom: 0.85rem;
+  line-height: 1.8;        /* ← More spacing for readability */
+}
+
 
     .emotion-badge {
       display: inline-block;
@@ -153,6 +155,75 @@
   }
 }
 
+.download-btn {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: rgba(109, 40, 217, 0.15);
+  color: #f5f3ff;
+  border-radius: 9999px;
+  text-decoration: none;
+  border: 1px solid rgba(147, 51, 234, 0.4);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 6px rgba(147, 51, 234, 0.2);
+}
+
+.download-btn:hover {
+  background: rgba(147, 51, 234, 0.25);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+}
+
+
+.button-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end; /* ⬅ helps align bottoms */
+}
+
+.button-group form {
+  margin: 0;
+}
+
+.delete-btn,
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.2rem; /* ensure exact same values */
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  text-decoration: none;
+  color: #f5f3ff;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  line-height: 1; /* fix height mismatch */
+}
+
+
+.delete-btn {
+  background: rgba(168, 85, 247, 0.15);
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: rgba(168, 85, 247, 0.35);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+  transform: scale(1.03);
+}
+
+.download-btn {
+  background: rgba(109, 40, 217, 0.15);
+}
+
+.download-btn:hover {
+  background: rgba(147, 51, 234, 0.25);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+  transform: scale(1.03);
+}
 
   </style>
 </head>
@@ -200,29 +271,24 @@
     @endif
 
     @if ($dream->short_interpretation)
-      <p class="mt-3 text-sm text-indigo-200">
-        <strong class="text-indigo-400">Short Interpretation:</strong> {{ $dream->short_interpretation }}
-      </p>
+      <p class="mt-3 text-base text-indigo-200">
+  <strong class="text-indigo-400">Short Interpretation:</strong> {{ $dream->short_interpretation }}
+</p>
+
     @endif
 
-    <form class="delete-form mt-4" data-id="{{ $dream->id }}">
-  <button type="button" class="delete-btn" style="
-    background: rgba(168, 85, 247, 0.15);
-    color: #f5f3ff;
-    padding: 0.35rem 0.85rem;
-    font-size: 0.85rem;
-    border-radius: 9999px;
-    font-weight: 600;
-    border: 1px solid rgba(168, 85, 247, 0.4);
-    box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
-    cursor: pointer;
-    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-  "
-  onmouseover="this.style.background='rgba(168, 85, 247, 0.35)'; this.style.boxShadow='0 0 12px rgba(168, 85, 247, 0.7)'"
-  onmouseout="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.boxShadow='0 0 8px rgba(168, 85, 247, 0.4)'">
-    🗑️ Delete
-  </button>
-</form>
+   <div class="button-group mt-4">
+  <form class="delete-form" data-id="{{ $dream->id }}">
+    <button type="button" class="delete-btn">🗑️ Delete</button>
+  </form>
+
+  <a href="{{ route('dreams.download', $dream->id) }}" class="download-btn">
+    📄 Download
+  </a>
+</div>
+
+
+
 
   </div>
   @endforeach

@@ -72,3 +72,4 @@ Route::get('/support', [SupportController::class, 'showNearbySupport'])->name('s
 Route::post('/get-nearby', [SupportController::class, 'getNearby'])->name('support.nearby');
 Route::get('/dashboard', [DreamController::class, 'showDashboard'])->name('dashboard');
 Route::get('/dreams/export/pdf', [DreamController::class, 'exportPdf'])->name('dreams.export.pdf');
+Route::get('/dreams/{dream}/download', [DreamController::class, 'downloadSingle'])->name('dreams.download');

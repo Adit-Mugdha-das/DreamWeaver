@@ -157,5 +157,17 @@ public function exportPdf()
     return $pdf->download('my_dreams.pdf');
 }
 
+public function downloadSingle(Dream $dream)
+{
+    $user = Auth::user();
+
+    if ($dream->user_id !== $user->id) {
+        abort(403); // Prevent others from downloading your dreams
+    }
+
+    $pdf = Pdf::loadView('dreams.single_pdf', compact('dream', 'user'));
+    return $pdf->download($dream->title . '.pdf');
+}
+
 }
 
