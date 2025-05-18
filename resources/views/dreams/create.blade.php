@@ -341,6 +341,9 @@
       @csrf
       <input type="hidden" name="title" id="saveTitle">
       <input type="hidden" name="content" id="saveContent">
+      <input type="hidden" name="short_interpretation" id="shortInterpretation">
+      <input type="hidden" name="emotion_summary" id="emotionSummary">
+
       <button class="mt-4" type="submit">Save This Dream</button>
     </form>
 
@@ -501,6 +504,13 @@
         const allTextBlocks = document.querySelectorAll('#allResults p');
         const fullInterpretation = [...allTextBlocks].map(p => p.textContent).join('\n\n');
         document.getElementById('saveContent').value = content + "\n\n" + fullInterpretation;
+        if (type === 'short') {
+          document.getElementById('shortInterpretation').value = text;
+        }
+        if (type === 'emotion') {
+          document.getElementById('emotionSummary').value = text;
+        }
+
 
         formBox.classList.add('shift-left');
         resultBox.classList.add('slide-in');
@@ -540,31 +550,32 @@ saveDreamForm.addEventListener('submit', async (e) => {
 
   const title = document.getElementById('saveTitle').value;
   const content = document.getElementById('saveContent').value;
+  const short = document.getElementById('shortInterpretation').value;
+  const emotion = document.getElementById('emotionSummary').value;
+
   document.getElementById('saveLoadingSpinner').style.display = 'flex';
 
   try {
     const response = await fetch(saveDreamForm.action, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-      'X-Requested-With': 'XMLHttpRequest'
-    },
-    body: JSON.stringify({
-      title,
-      content,
-      used_types: Array.from(usedTypes)
-    })
-  });
-
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({
+        title,
+        content,
+        used_types: Array.from(usedTypes),
+        short_interpretation: short || null,
+        emotion_summary: emotion || null
+      })
+    });
 
     if (!response.ok) throw new Error('Failed to save dream.');
 
-    // Optional: Show a toast, reset, etc.
     const anim = document.getElementById('saveAnimation');
-
-    // Animate save feedback text with fade-out
     anim.classList.remove('hidden');
     anim.style.opacity = 1;
     setTimeout(() => {
@@ -572,13 +583,9 @@ saveDreamForm.addEventListener('submit', async (e) => {
       setTimeout(() => anim.classList.add('hidden'), 400);
     }, 2500);
 
-
-
   } catch (err) {
     alert('Error: ' + err.message);
-  }
-  finally {
-    // ✅ Always hide spinner after request finishes
+  } finally {
     document.getElementById('saveLoadingSpinner').style.display = 'none';
   }
 });
