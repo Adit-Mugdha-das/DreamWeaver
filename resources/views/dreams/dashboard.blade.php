@@ -188,9 +188,10 @@
 
   <!-- Weekly Line Chart -->
   <div class="chart-box">
-    <h2 class="text-lg mb-2 text-center">Dreams Per Week</h2>
-    <div style="height: 300px; position: relative;">
-      <canvas id="weeklyChart" class="chart-canvas"></canvas>
+    <h2 class="text-lg mb-2 text-center">Dreams Per Day</h2>
+    <div style="height: 300px; position: relative; padding-bottom: 2rem;">
+
+      <canvas id="dailyChart" class="chart-canvas"></canvas>
       <button onclick="downloadChart('weeklyChart')" class="download-btn">📥 Download Chart</button>
     </div>
   </div>
@@ -242,18 +243,18 @@
 });
 
 
-  const ctx = document.getElementById('weeklyChart').getContext('2d');
-  const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-  gradient.addColorStop(0, 'rgba(20, 184, 166, 0.4)');
-  gradient.addColorStop(1, 'rgba(20, 184, 166, 0)');
+const ctx = document.getElementById('dailyChart').getContext('2d');
+const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+gradient.addColorStop(0, 'rgba(20, 184, 166, 0.4)');
+gradient.addColorStop(1, 'rgba(20, 184, 166, 0)');
 
-  const weeklyChart = new Chart(ctx, {
+const dailyChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: {!! json_encode($weeklyCounts->keys()) !!},
+    labels: {!! json_encode($dailyCounts->keys()) !!},
     datasets: [{
-      label: 'Dreams per Week',
-      data: {!! json_encode($weeklyCounts->values()) !!},
+      label: 'Dreams per Day',
+      data: {!! json_encode($dailyCounts->values()) !!},
       borderColor: '#14b8a6',
       backgroundColor: gradient,
       tension: 0.4,

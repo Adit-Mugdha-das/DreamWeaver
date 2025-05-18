@@ -110,25 +110,28 @@ class DreamController extends Controller
     }
 
     public function showDashboard()
-    {
-        $dreams = Dream::where('user_id', Auth::id())->get();
+{
+    $dreams = Dream::where('user_id', Auth::id())->get();
 
-        $emotionCounts = $dreams->groupBy('emotion_summary')->map->count();
+    $emotionCounts = $dreams->groupBy('emotion_summary')->map->count();
 
-        $weeklyCounts = $dreams->groupBy(function ($dream) {
-            return Carbon::parse($dream->created_at)->startOfWeek()->format('Y-m-d');
-        })->map->count();
+    // Group dreams by exact day
+    $dailyCounts = $dreams->groupBy(function ($dream) {
+        return Carbon::parse($dream->created_at)->format('Y-m-d');
+    })->map->count();
 
-        $keywords = collect();
-        foreach ($dreams as $dream) {
-            $words = str_word_count(strtolower(strip_tags($dream->content)), 1);
-            $filtered = array_filter($words, fn($w) => strlen($w) > 3 && !in_array($w, ['this', 'that', 'with', 'have', 'just']));
-            $keywords = $keywords->merge($filtered);
-        }
-        $topKeywords = $keywords->countBy()->sortDesc()->take(10);
-
-        return view('dreams.dashboard', compact('emotionCounts', 'weeklyCounts', 'topKeywords'));
+    // Extract keywords
+    $keywords = collect();
+    foreach ($dreams as $dream) {
+        $words = str_word_count(strtolower(strip_tags($dream->content)), 1);
+        $filtered = array_filter($words, fn($w) => strlen($w) > 3 && !in_array($w, ['this', 'that', 'with', 'have', 'just']));
+        $keywords = $keywords->merge($filtered);
     }
+    $topKeywords = $keywords->countBy()->sortDesc()->take(10);
+
+    return view('dreams.dashboard', compact('emotionCounts', 'dailyCounts', 'topKeywords'));
+}
+
 
     public function exportPdf()
     {
