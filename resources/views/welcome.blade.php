@@ -172,7 +172,7 @@
   <a href="{{ route('dashboard') }}" class="button">
    Dream Patterns
 </a>
-
+<a href="{{ route('dreams.audio') }}" class="button">Guided Audio</a>
 
   </div>
 </div>

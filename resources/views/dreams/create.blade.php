@@ -383,14 +383,23 @@
   });
 
   function goBack() {
-    formBox.classList.remove('shift-left');
-    formBox.style.filter = 'none';
-    resultBox.classList.remove('slide-in');
-    titleInput.value = '';
-    contentInput.value = '';
-    hiddenField.value = '';
-    cards.forEach(c => c.classList.remove('selected'));
-  }
+  formBox.classList.remove('shift-left');
+  formBox.style.filter = 'none';
+  resultBox.classList.remove('slide-in');
+
+  titleInput.value = '';
+  contentInput.value = '';
+  hiddenField.value = '';
+  document.getElementById('saveTitle').value = '';
+  document.getElementById('saveContent').value = '';
+  document.getElementById('shortInterpretation').value = '';
+  document.getElementById('emotionSummary').value = '';
+
+  usedTypes.clear();
+  document.getElementById('allResults').innerHTML = '';
+  cards.forEach(c => c.classList.remove('selected'));
+}
+
 
   dreamForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -423,7 +432,6 @@
     const data = await response.json();
 
     document.getElementById('saveTitle').value = title;
-    document.getElementById('saveContent').value = content + "\n\nInterpretation: " + data.result;
 
     usedTypes.clear(); // Clear previous types
     document.getElementById('allResults').innerHTML = ''; // Clear old stacked results
@@ -500,15 +508,15 @@
         resultBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         // Update hidden fields for saving
-        document.getElementById('saveTitle').value = title;
+        document.getElementById('saveTitle').value = title.trim();
         const allTextBlocks = document.querySelectorAll('#allResults p');
         const fullInterpretation = [...allTextBlocks].map(p => p.textContent).join('\n\n');
-        document.getElementById('saveContent').value = content + "\n\n" + fullInterpretation;
+        document.getElementById('saveContent').value = content.trim() + "\n\n" + fullInterpretation.trim();
         if (type === 'short') {
-          document.getElementById('shortInterpretation').value = text;
+          document.getElementById('shortInterpretation').value = text.trim();
         }
         if (type === 'emotion') {
-          document.getElementById('emotionSummary').value = text;
+          document.getElementById('emotionSummary').value = text.trim();
         }
 
 
