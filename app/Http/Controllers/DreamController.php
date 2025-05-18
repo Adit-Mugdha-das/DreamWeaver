@@ -8,6 +8,8 @@ use App\Models\Dream;
 use App\Helpers\GeminiHelper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class DreamController extends Controller
 {
@@ -146,6 +148,14 @@ class DreamController extends Controller
 }
 
 
+public function exportPdf()
+{
+    $user = Auth::user(); // ✅ Use Auth facade
+    $dreams = $user->dreams;
+
+    $pdf = Pdf::loadView('dreams.export_pdf', compact('dreams', 'user'));
+    return $pdf->download('my_dreams.pdf');
+}
 
 }
 

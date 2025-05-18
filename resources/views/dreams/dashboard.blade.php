@@ -44,6 +44,7 @@
   }
 
   .chart-box {
+  position: relative;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 2rem;
@@ -145,8 +146,8 @@
 
 .download-btn {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 2px;
+  right: 2px;
   padding: 0.4rem 0.8rem;
   background-color: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);

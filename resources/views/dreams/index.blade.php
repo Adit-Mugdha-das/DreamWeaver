@@ -119,6 +119,41 @@
       box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
       color: #fff;
     }
+
+  .export-btn {
+  display: inline-block;
+  padding: 0.7rem 1.6rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f5f3ff;
+  backdrop-filter: blur(10px);
+  background: rgba(147, 51, 234, 0.1); /* light purple glass */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(147, 51, 234, 0.12);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+  background: rgba(147, 51, 234, 0.25);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.25), 0 0 24px rgba(147, 51, 234, 0.1);
+  transform: scale(1.03);
+}
+
+
+
+/* Futuristic glowing pulse */
+@keyframes pulse-glow {
+  from {
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.4);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(233, 121, 249, 0.7);
+  }
+}
+
+
   </style>
 </head>
 <body>
@@ -144,6 +179,13 @@
       {{ session('success') }}
     </div>
   @endif
+
+   <!-- ✅ Export PDF Button -->
+  <div class="text-center mb-6">
+    <a href="{{ route('dreams.export.pdf') }}" class="export-btn">
+      📤 Download My Dreams (PDF)
+    </a>
+  </div>
 
     @foreach ($dreams as $dream)
   <div class="dream-card" id="dream-{{ $dream->id }}" data-aos="fade-up" data-aos-duration="800">
