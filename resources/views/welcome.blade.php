@@ -174,6 +174,9 @@
 </a>
 <a href="{{ route('dreams.audio') }}" class="button">Guided Audio</a>
 
+
+
+<a href="{{ route('imagine.portal') }}" class="button">Enter Dream World</a>
   </div>
 </div>
 

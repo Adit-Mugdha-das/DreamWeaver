@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\DreamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\AvatarController;
 
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
@@ -76,3 +77,28 @@ Route::get('/dreams/{dream}/download', [DreamController::class, 'downloadSingle'
 Route::get('/audio', function () {
     return view('dreams.audio');
 })->name('dreams.audio');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/avatar', [AvatarController::class, 'show'])->name('avatar.show');
+    Route::post('/avatar/generate', [AvatarController::class, 'generate'])->name('avatar.generate');
+});
+
+Route::get('/dream-map', function () {
+    $emotion = session('last_emotion') ?? 'neutral';
+    $emotion = strtolower(session('last_emotion') ?? 'neutral');
+    $unlocked = [
+        'fear' => in_array($emotion, ['fear']),
+        'joy' => in_array($emotion, ['joy']),
+        'calm' => in_array($emotion, ['calm']),
+    ];
+    return view('dreams.dream_map', ['unlocked' => $unlocked]);
+})->middleware('auth')->name('dream.map');
+
+Route::get('/totems', function () {
+    $tokens = Auth::user()->dream_tokens ?? [];
+    return view('dreams.totems', compact('tokens'));
+})->middleware('auth')->name('totems');
+
+Route::get('/imagine', function () {
+    return view('dreams.portal');
+})->name('imagine.portal')->middleware('auth');

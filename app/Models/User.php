@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Dream;
+use App\Models\Avatar;
 
 class User extends Authenticatable
 {
@@ -45,13 +46,20 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'dream_tokens' => 'array',
+            'avatar_config' => 'array', // ✅ added this line
         ];
     }
-
 
     public function dreams()
     {
         return $this->hasMany(Dream::class);
     }
     
+    public function avatars()
+{
+    
+    return $this->hasMany(\App\Models\Avatar::class);
+}
+
 }

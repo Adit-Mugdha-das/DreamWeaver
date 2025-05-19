@@ -18,51 +18,97 @@ class DreamController extends Controller
     }
 
     public function store(Request $request)
-    {
-        if ($request->expectsJson()) {
-            // ✅ Handle AJAX request and use already-generated interpretations
-            $data = $request->validate([
-                'title' => 'required|string|max:255',
-                'content' => 'required|string',
-                'used_types' => 'nullable|array',
-                'short_interpretation' => 'nullable|string',
-                'emotion_summary' => 'nullable|string',
-            ]);
-
-            $usedTypes = $data['used_types'] ?? [];
-
-            $emotion = $data['emotion_summary'] ?? null;
-            $short = $data['short_interpretation'] ?? null;
-
-            Log::info('Current Auth ID for dream save:', ['user_id' => Auth::id()]);
-
-            $dream = Dream::create([
-                'title' => $data['title'],
-                'content' => $data['content'],
-                'emotion_summary' => $emotion,
-                'short_interpretation' => $short,
-                'user_id' => Auth::id(),
-            ]);
-
-            return response()->json(['status' => 'success', 'dream' => $dream]);
-        }
-
-        // ✅ Handle non-AJAX fallback
-        $validated = $request->validate([
+{
+    if ($request->expectsJson()) {
+        // ✅ Handle AJAX request and use already-generated interpretations
+        $data = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'used_types' => 'nullable|array',
+            'short_interpretation' => 'nullable|string',
+            'emotion_summary' => 'nullable|string',
         ]);
 
-        Dream::create([
-            'title' => $validated['title'],
-            'content' => $validated['content'],
-            'emotion_summary' => GeminiHelper::analyzeEmotion($validated['content']),
-            'short_interpretation' => GeminiHelper::analyzeShort($validated['content']),
+        $usedTypes = $data['used_types'] ?? [];
+
+        $emotion = $data['emotion_summary'] ?? null;
+        $short = $data['short_interpretation'] ?? null;
+
+        if ($emotion) {
+            session(['last_emotion' => $emotion]);
+            $emotion = strtolower($emotion); // ✅ normalize case
+
+            // ✅ Map emotion to token and save
+            $token = match($emotion) {
+                'joy' => 'wings',
+                'fear' => 'mask',
+                'calm' => 'cloud',
+                'confused' => 'swirl',
+                'anger' => 'fire',
+                default => 'mirror',
+            };
+
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            $currentTokens = $user->dream_tokens ?? [];
+            $currentTokens[] = $token;
+            $user->dream_tokens = array_values(array_unique($currentTokens));
+            $user->save();
+        }
+
+        Log::info('Current Auth ID for dream save:', ['user_id' => Auth::id()]);
+
+        $dream = Dream::create([
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'emotion_summary' => $emotion,
+            'short_interpretation' => $short,
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('dreams.index')->with('success', 'Dream saved with emotion and short interpretation!');
+        return response()->json(['status' => 'success', 'dream' => $dream]);
     }
+
+    // ✅ Handle non-AJAX fallback
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+    ]);
+
+    $emotion = GeminiHelper::analyzeEmotion($validated['content']);
+    $short = GeminiHelper::analyzeShort($validated['content']);
+
+    session(['last_emotion' => $emotion]);
+    $emotion = strtolower($emotion); // ✅ normalize case
+
+    // ✅ Map emotion to token and save
+    $token = match($emotion) {
+        'joy' => 'wings',
+        'fear' => 'mask',
+        'calm' => 'cloud',
+        'confused' => 'swirl',
+        'anger' => 'fire',
+        default => 'mirror',
+    };
+
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+    $currentTokens = $user->dream_tokens ?? [];
+    $currentTokens[] = $token;
+    $user->dream_tokens = array_values(array_unique($currentTokens));
+    $user->save();
+
+    Dream::create([
+        'title' => $validated['title'],
+        'content' => $validated['content'],
+        'emotion_summary' => $emotion,
+        'short_interpretation' => $short,
+        'user_id' => Auth::id(),
+    ]);
+
+    return redirect()->route('dreams.index')->with('success', 'Dream saved with emotion and short interpretation!');
+}
+
 
     public function index()
     {
@@ -110,28 +156,27 @@ class DreamController extends Controller
     }
 
     public function showDashboard()
-{
-    $dreams = Dream::where('user_id', Auth::id())->get();
+    {
+        $dreams = Dream::where('user_id', Auth::id())->get();
 
-    $emotionCounts = $dreams->groupBy('emotion_summary')->map->count();
+        $emotionCounts = $dreams->groupBy('emotion_summary')->map->count();
 
-    // Group dreams by exact day
-    $dailyCounts = $dreams->groupBy(function ($dream) {
-        return Carbon::parse($dream->created_at)->format('Y-m-d');
-    })->map->count();
+        // Group dreams by exact day
+        $dailyCounts = $dreams->groupBy(function ($dream) {
+            return Carbon::parse($dream->created_at)->format('Y-m-d');
+        })->map->count();
 
-    // Extract keywords
-    $keywords = collect();
-    foreach ($dreams as $dream) {
-        $words = str_word_count(strtolower(strip_tags($dream->content)), 1);
-        $filtered = array_filter($words, fn($w) => strlen($w) > 3 && !in_array($w, ['this', 'that', 'with', 'have', 'just']));
-        $keywords = $keywords->merge($filtered);
+        // Extract keywords
+        $keywords = collect();
+        foreach ($dreams as $dream) {
+            $words = str_word_count(strtolower(strip_tags($dream->content)), 1);
+            $filtered = array_filter($words, fn($w) => strlen($w) > 3 && !in_array($w, ['this', 'that', 'with', 'have', 'just']));
+            $keywords = $keywords->merge($filtered);
+        }
+        $topKeywords = $keywords->countBy()->sortDesc()->take(10);
+
+        return view('dreams.dashboard', compact('emotionCounts', 'dailyCounts', 'topKeywords'));
     }
-    $topKeywords = $keywords->countBy()->sortDesc()->take(10);
-
-    return view('dreams.dashboard', compact('emotionCounts', 'dailyCounts', 'topKeywords'));
-}
-
 
     public function exportPdf()
     {
