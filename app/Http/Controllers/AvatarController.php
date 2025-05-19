@@ -57,7 +57,7 @@ class AvatarController extends Controller
             'item' => $avatar['item'],
         ]);
 
-        return redirect()->route('avatar.show')
+        return redirect('/test-avatar')
                          ->with('message', 'Avatar generated based on your last dream emotion.');
     }
 }

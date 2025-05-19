@@ -158,7 +158,8 @@
     <p class="text-gray-400">No avatar generated yet.</p>
   @endif
 
-  <form method="POST" action="{{ route('avatar.generate') }}">
+  <form method="POST" action="{{ url('/avatar/generate') }}">
+
     @csrf
     <button class="generate-btn">🔄 Generate Avatar From Dream Emotion</button>
   </form>
