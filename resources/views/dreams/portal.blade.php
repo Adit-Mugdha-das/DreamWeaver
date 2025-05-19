@@ -107,7 +107,8 @@
   <div class="portal-subtext">Wander through the magical realm your dreams have shaped...</div>
 
   <div class="button-row">
-    <a href="{{ route('avatar.show') }}" class="portal-btn">🎭 Your Dream Avatar</a>
+    <a href="http://127.0.0.1:8000/test-avatar" class="portal-btn">🎭 Your Dream Avatar</a>
+
     <a href="{{ route('totems') }}" class="portal-btn">🔮 Dream Totems</a>
     <a href="{{ route('dream.map') }}" class="portal-btn">🗺️ Dream Map</a>
   </div>

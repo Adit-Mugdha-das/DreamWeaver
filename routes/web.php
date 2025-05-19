@@ -2,9 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DreamController;
 use App\Http\Controllers\UserController;
@@ -40,15 +37,54 @@ Route::get('/welcome', function () {
 })->middleware('auth')->name('welcome');
 
 /**
- * 💤 Dream routes - Accessible only after login
+ * 💤 Dream features - all require login
  */
 Route::middleware('auth')->group(function () {
+
+    // Dream routes
     Route::get('/dreams/create', [DreamController::class, 'create'])->name('dreams.create');
     Route::post('/dreams', [DreamController::class, 'store'])->name('dreams.store');
     Route::get('/dreams', [DreamController::class, 'index'])->name('dreams.index');
     Route::post('/dreams/interpret', [DreamController::class, 'interpret']);
     Route::delete('/dreams/{dream}', [DreamController::class, 'destroy'])->name('dreams.destroy');
+    Route::get('/dashboard', [DreamController::class, 'showDashboard'])->name('dashboard');
+    Route::get('/dreams/export/pdf', [DreamController::class, 'exportPdf'])->name('dreams.export.pdf');
+    Route::get('/dreams/{dream}/download', [DreamController::class, 'downloadSingle'])->name('dreams.download');
 
+    // Avatar routes
+    Route::get('/avatar', [AvatarController::class, 'show'])->name('avatar.show');
+    Route::post('/avatar/generate', [AvatarController::class, 'generate'])->name('avatar.generate');
+
+    // Totems
+    Route::get('/totems', function () {
+        $tokens = Auth::user()->dream_tokens ?? [];
+        return view('dreams.totems', compact('tokens'));
+    })->name('totems');
+
+    // Dream Map
+    Route::get('/dream-map', function () {
+        $emotion = strtolower(session('last_emotion') ?? 'neutral');
+        $unlocked = [
+            'fear' => in_array($emotion, ['fear']),
+            'joy' => in_array($emotion, ['joy']),
+            'calm' => in_array($emotion, ['calm']),
+        ];
+        return view('dreams.dream_map', ['unlocked' => $unlocked]);
+    })->name('dream.map');
+
+    // Portal page
+    Route::get('/imagine', function () {
+        return view('dreams.portal');
+    })->name('imagine.portal');
+
+    // Audio
+    Route::get('/audio', function () {
+        return view('dreams.audio');
+    })->name('dreams.audio');
+
+    // Support
+    Route::get('/support', [SupportController::class, 'showNearbySupport'])->name('support');
+    Route::post('/get-nearby', [SupportController::class, 'getNearby'])->name('support.nearby');
 });
 
 /**
@@ -58,47 +94,12 @@ Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->middleware('guest')->name('password.request');
 
-// Send reset link based on recovery email
 Route::post('/forgot-password', [UserController::class, 'sendResetLink'])->name('password.email');
-
-// ✅ Reset Password Form (the one user opens via Gmail link)
 Route::get('/reset-password/{token}', function (string $token) {
     return view('auth.reset-password', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
-
-// ✅ Handle actual password reset submission (moved to controller)
 Route::post('/reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.update');
 
-Route::get('/support', [SupportController::class, 'showNearbySupport'])->name('support');
-Route::post('/get-nearby', [SupportController::class, 'getNearby'])->name('support.nearby');
-Route::get('/dashboard', [DreamController::class, 'showDashboard'])->name('dashboard');
-Route::get('/dreams/export/pdf', [DreamController::class, 'exportPdf'])->name('dreams.export.pdf');
-Route::get('/dreams/{dream}/download', [DreamController::class, 'downloadSingle'])->name('dreams.download');
-Route::get('/audio', function () {
-    return view('dreams.audio');
-})->name('dreams.audio');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/avatar', [AvatarController::class, 'show'])->name('avatar.show');
-    Route::post('/avatar/generate', [AvatarController::class, 'generate'])->name('avatar.generate');
+Route::get('/test-avatar', function () {
+    return app(AvatarController::class)->show();
 });
-
-Route::get('/dream-map', function () {
-    $emotion = session('last_emotion') ?? 'neutral';
-    $emotion = strtolower(session('last_emotion') ?? 'neutral');
-    $unlocked = [
-        'fear' => in_array($emotion, ['fear']),
-        'joy' => in_array($emotion, ['joy']),
-        'calm' => in_array($emotion, ['calm']),
-    ];
-    return view('dreams.dream_map', ['unlocked' => $unlocked]);
-})->middleware('auth')->name('dream.map');
-
-Route::get('/totems', function () {
-    $tokens = Auth::user()->dream_tokens ?? [];
-    return view('dreams.totems', compact('tokens'));
-})->middleware('auth')->name('totems');
-
-Route::get('/imagine', function () {
-    return view('dreams.portal');
-})->name('imagine.portal')->middleware('auth');
