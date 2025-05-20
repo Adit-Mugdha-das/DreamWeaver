@@ -27,8 +27,7 @@
       position: fixed;
       top: 1.5rem;
       left: 1.5rem;
-      background: linear-gradient(135deg, #0f172a, #1e1b4b, #0a0f1c);
-
+      background: linear-gradient(135deg, #14b8a6, #ec4899);
       padding: 0.5rem 1rem;
       font-size: 0.875rem;
       color: white;
@@ -214,14 +213,70 @@
   left: 1.5rem;
   z-index: 10;
 }
+.page-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: 0.3s; /* Increase this value to delay more */
+}
 
 
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.blur-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(18px);
+  animation: blurReveal 1.8s ease-out forwards;
+  z-index: 2;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+  border: none;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes blurReveal {
+  0% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+ 
 
   </style>
 </head>
 <body>
 
-<div class="content">
+<div class="content page-fade-in">
+
   @php
     $imageMap = [
         'wings' => 'wings.png',
@@ -251,9 +306,11 @@
 
   @if($avatar)
     @php $image = $imageMap[$avatar['item']] ?? $imageMap['default']; @endphp
-    <div class="avatar-img-wrapper" onclick="openModal('{{ asset('avatar/' . $image) }}')">
-      <img src="{{ asset('avatar/' . $image) }}" alt="{{ $avatar['item'] }}" class="avatar-image">
-    </div>
+    <div class="avatar-img-wrapper reveal-container">
+  <img src="{{ asset('avatar/' . $image) }}" alt="{{ $avatar['item'] }}" class="avatar-image">
+  <div class="blur-overlay"></div>
+</div>
+
     <p class="meta-text">Color: {{ ucfirst($avatar['color']) }}</p>
     <p class="meta-text">Item: {{ ucfirst($avatar['item']) }}</p>
   @else
