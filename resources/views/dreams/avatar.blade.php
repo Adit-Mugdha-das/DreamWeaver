@@ -244,7 +244,7 @@
   width: 100%;
   height: 100%;
   backdrop-filter: blur(18px);
-  animation: blurReveal 1.8s ease-out forwards;
+  animation: blurReveal 3.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
   z-index: 2;
 }
 
