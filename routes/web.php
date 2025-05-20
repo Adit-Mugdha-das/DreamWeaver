@@ -7,6 +7,8 @@ use App\Http\Controllers\DreamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\AvatarController;
+use Illuminate\Support\Str;
+use App\Models\Dream;
 
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
@@ -52,14 +54,32 @@ Route::middleware('auth')->group(function () {
     Route::get('/dreams/{dream}/download', [DreamController::class, 'downloadSingle'])->name('dreams.download');
 
     // Avatar routes
-    Route::get('/avatar', [AvatarController::class, 'show'])->name('avatar.show');
     Route::post('/avatar/generate', [AvatarController::class, 'generate'])->name('avatar.generate');
 
-    // Totems
-    Route::get('/totems', function () {
-        $tokens = Auth::user()->dream_tokens ?? [];
-        return view('dreams.totems', compact('tokens'));
-    })->name('totems');
+Route::get('/totems', function () {
+    $tokens = ['mirror', 'wings', 'fire', 'mask'];
+
+    $meanings = [
+        'mirror' => '🪞 Reflection & self-awareness',
+        'wings' => '🪽 Freedom or ambition',
+        'fire' => '🔥 Transformation or passion',
+        'mask' => '🎭 Hidden emotions or identity',
+    ];
+
+    $allDreams = Dream::where('user_id', Auth::id())->get();
+
+    $dreamSnippets = [];
+    foreach ($tokens as $token) {
+        $matched = $allDreams->first(function ($dream) use ($token) {
+            return str_contains(strtolower($dream->content), strtolower($token));
+        });
+        $dreamSnippets[$token] = $matched ? Str::limit($matched->content, 120) : 'No related dream found.';
+    }
+
+    return view('dreams.totems', compact('tokens', 'meanings', 'dreamSnippets'));
+})->name('totems'); // ✅ this was missing
+
+    
 
     // Dream Map
     Route::get('/dream-map', function () {
