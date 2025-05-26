@@ -57,40 +57,50 @@ Route::middleware('auth')->group(function () {
     Route::post('/avatar/generate', [AvatarController::class, 'generate'])->name('avatar.generate');
 
 Route::get('/totems', function () {
-    $tokens = ['mirror', 'wings', 'fire', 'mask'];
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    // Read tokens directly from saved user field
+    $tokens = $user->dream_tokens ?? [];
 
     $meanings = [
-        'mirror' => '🪞 Reflection & self-awareness',
-        'wings' => '🪽 Freedom or ambition',
-        'fire' => '🔥 Transformation or passion',
-        'mask' => '🎭 Hidden emotions or identity',
+        'mirror' => ['🪞 Reflection & self-awareness', 'You looked into a mirror and saw your younger self.'],
+        'wings'  => ['🪽 Freedom or ambition', 'You flew above mountains, free from all fears.'],
+        'fire'   => ['🔥 Transformation or passion', 'You stood in a burning house but felt no pain.'],
+        'mask'   => ['🎭 Hidden emotions or identity', 'You wore a mask in a crowded room and no one noticed.'],
+        'cloud'  => ['☁️ Calm & clarity', 'You walked through mist and felt peace.'],
+        'swirl'  => ['🌀 Confusion or mystery', 'You spun endlessly in a dream maze.'],
     ];
 
-    $allDreams = Dream::where('user_id', Auth::id())->get();
-
+    // Get dream snippets for unlocked tokens
+    $allDreams = $user->dreams;
     $dreamSnippets = [];
     foreach ($tokens as $token) {
-        $matched = $allDreams->first(function ($dream) use ($token) {
-            return str_contains(strtolower($dream->content), strtolower($token));
+        $match = $allDreams->first(function ($dream) use ($token, $meanings) {
+            $emotionMap = [
+                'wings' => 'joy',
+                'mask' => 'fear',
+                'cloud' => 'calm',
+                'swirl' => 'confused',
+                'fire' => 'anger',
+                'mirror' => 'neutral',
+            ];
+            $expectedEmotion = $emotionMap[$token] ?? '';
+            return strtolower($dream->emotion_summary) === $expectedEmotion;
         });
-        $dreamSnippets[$token] = $matched ? Str::limit($matched->content, 120) : 'No related dream found.';
+
+        $dreamSnippets[$token] = $match ? \Illuminate\Support\Str::limit($match->content, 120) : 'No related dream found.';
     }
 
     return view('dreams.totems', compact('tokens', 'meanings', 'dreamSnippets'));
-})->name('totems'); // ✅ this was missing
-
-    
+})->name('totems');
+  
 
     // Dream Map
-    Route::get('/dream-map', function () {
-        $emotion = strtolower(session('last_emotion') ?? 'neutral');
-        $unlocked = [
-            'fear' => in_array($emotion, ['fear']),
-            'joy' => in_array($emotion, ['joy']),
-            'calm' => in_array($emotion, ['calm']),
-        ];
-        return view('dreams.dream_map', ['unlocked' => $unlocked]);
-    })->name('dream.map');
+    
+    Route::get('/dream-map', [DreamController::class, 'showDreamMap'])->middleware('auth')->name('dream.map');
+
+
 
     // Portal page
     Route::get('/imagine', function () {
@@ -123,3 +133,4 @@ Route::post('/reset-password', [UserController::class, 'resetPassword'])->middle
 Route::get('/test-avatar', function () {
     return app(AvatarController::class)->show();
 });
+

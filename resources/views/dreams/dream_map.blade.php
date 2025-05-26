@@ -40,20 +40,27 @@
 
     @php
       $areas = [
-          'Forest of Forgotten Thoughts' => 'fear',
-          'Sky Temple of Light' => 'joy',
-          'Cloud of Lucid Realms' => 'calm',
+          'Forest of Forgotten Thoughts' => 'forest',
+          'Sky Temple of Light' => 'sky',
+          'Cloud of Lucid Realms' => 'cloud',
+      ];
+
+      $requirements = [
+          'forest' => 'Fear Totem (Mask)',
+          'sky' => 'Joy Totem (Wings)',
+          'cloud' => 'Calm Totem (Mirror)',
       ];
     @endphp
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      @foreach($areas as $name => $emotion)
-        <div class="zone {{ $unlocked[$emotion] ? 'unlocked' : 'locked' }}">
+      @foreach($areas as $name => $key)
+        <div class="zone {{ $unlockedViaTotem[$key] ? 'unlocked' : 'locked' }}">
           <h2 class="text-xl font-semibold">{{ $name }}</h2>
-          <p class="text-sm mt-1">Requires: <span class="capitalize">{{ $emotion }}</span></p>
+          <p class="text-sm mt-1 text-purple-200">Requires: {{ $requirements[$key] }}</p>
 
-          @if($unlocked[$emotion])
+          @if($unlockedViaTotem[$key])
             <p class="mt-2 text-green-400 font-medium">✅ Unlocked</p>
+            <a href="/dream-world/{{ $key }}" class="text-blue-300 hover:underline mt-2 inline-block">✨ Explore</a>
           @else
             <p class="mt-2 text-red-400 font-medium">🔒 Locked</p>
           @endif

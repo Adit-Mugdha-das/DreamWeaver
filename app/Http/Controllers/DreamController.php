@@ -198,4 +198,24 @@ class DreamController extends Controller
         $pdf = Pdf::loadView('dreams.single_pdf', compact('dream', 'user'));
         return $pdf->download($dream->title . '.pdf');
     }
+
+public function showDreamMap()
+{
+    $user = Auth::user();
+
+    // If tokens are already stored as array (casted in User model)
+    $tokens = $user->dream_tokens ?? [];
+
+    // Realm unlock logic based on totems
+    $unlockedViaTotem = [
+        'forest' => in_array('Mask', $tokens),   // Mask = Fear
+        'sky'    => in_array('Wings', $tokens),  // Wings = Joy
+        'cloud'  => in_array('Mirror', $tokens), // Mirror = Calm
+    ];
+
+    return view('dreams.dream_map', compact('unlockedViaTotem'));
+}
+
+
+
 }
