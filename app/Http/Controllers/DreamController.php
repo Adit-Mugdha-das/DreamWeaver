@@ -9,6 +9,8 @@ use App\Helpers\GeminiHelper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
+
 
 class DreamController extends Controller
 {
@@ -216,6 +218,27 @@ public function showDreamMap()
     return view('dreams.dream_map', compact('unlockedViaTotem'));
 }
 
+public function getByEmotion($emotion)
+{
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    $matchedDreams = $user->dreams->filter(function ($dream) use ($emotion) {
+        return strtolower($dream->emotion_summary) === strtolower($emotion);
+    });
+
+    if ($matchedDreams->isEmpty()) {
+        return response()->json(['html' => '<p class="text-gray-400 italic mt-4">No dreams found with this emotion.</p>']);
+    }
+
+    $html = '<ul class="text-left space-y-2 mt-4">';
+    foreach ($matchedDreams as $dream) {
+        $html .= '<li class="border-b border-purple-500 pb-2">' . e(Str::limit($dream->content, 120)) . '</li>';
+    }
+    $html .= '</ul>';
+
+    return response()->json(['html' => $html]);
+}
 
 
 }

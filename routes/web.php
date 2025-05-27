@@ -48,6 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/dreams', [DreamController::class, 'store'])->name('dreams.store');
     Route::get('/dreams', [DreamController::class, 'index'])->name('dreams.index');
     Route::post('/dreams/interpret', [DreamController::class, 'interpret']);
+    Route::get('/dreams/emotion/{emotion}', [DreamController::class, 'getByEmotion']);
+
     Route::delete('/dreams/{dream}', [DreamController::class, 'destroy'])->name('dreams.destroy');
     Route::get('/dashboard', [DreamController::class, 'showDashboard'])->name('dashboard');
     Route::get('/dreams/export/pdf', [DreamController::class, 'exportPdf'])->name('dreams.export.pdf');
