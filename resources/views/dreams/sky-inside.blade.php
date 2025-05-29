@@ -71,7 +71,7 @@
   </video>
 
   <!-- Back to Portal Button -->
-  <a href="/dream-world" class="back-to-portal">← Back to Portal</a>
+  <a href="{{ route('dream.map') }}" class="back-to-portal">← Back to Portal</a>
 
   <!-- 🔁 New: Previous Scene Button -->
   <a href="{{ route('sky.entrance') }}" class="prev-scene">← Previous Scene</a>
