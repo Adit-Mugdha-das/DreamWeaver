@@ -167,3 +167,13 @@ Route::get('/dream-world/sky/arrival', function () {
 Route::get('/dream-world/sky/rebirth', function () {
     return view('dreams.sky-rebirth');
 })->middleware('auth')->name('sky.rebirth');
+
+
+Route::get('/dream-world/forest', [DreamController::class, 'showForestEntrance'])->middleware('auth')->name('forest.entrance');
+Route::get('/dream-world/forest/inside', function () {
+    return view('dreams.forest-inside');
+})->middleware('auth')->name('forest.inside');
+
+Route::get('/dream-world/forest/ending', function () {
+    return view('dreams.forest-ending');
+})->middleware('auth')->name('forest.ending');

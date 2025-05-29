@@ -246,5 +246,10 @@ public function showSkyTemple()
     return view('dreams.sky');
 }
 
+public function showForestEntrance()
+{
+    return view('dreams.forest'); // assuming your Blade file is forest.blade.php
+}
+
 
 }
