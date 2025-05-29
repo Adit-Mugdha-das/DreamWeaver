@@ -136,3 +136,34 @@ Route::get('/test-avatar', function () {
     return app(AvatarController::class)->show();
 });
 
+Route::get('/dream-world/sky', [DreamController::class, 'showSkyTemple'])
+    ->middleware('auth')
+    ->name('sky.entrance');
+
+Route::get('/dream-world/sky/inside', function () {
+    return view('dreams.sky-inside');
+})->middleware('auth')->name('sky.inside');
+Route::get('/dream-world/sky/3d', function () {
+    return view('dreams.sky-3d');
+})->middleware('auth')->name('sky.3d');
+Route::get('/dream-world/sky/final', function () {
+    return view('dreams.sky-final');
+})->middleware('auth')->name('sky.final');
+Route::get('/dream-world/sky/epilogue', function () {
+    return view('dreams.sky-epilogue');
+})->middleware('auth')->name('sky.epilogue');
+Route::get('/dream-world/sky/chapter6', function () {
+    return view('dreams.sky-chapter6');
+})->middleware('auth')->name('sky.chapter6');
+Route::get('/dream-world/sky/awakening', function () {
+    return view('dreams.sky-awakening');
+})->middleware('auth')->name('sky.awakening');
+Route::get('/dream-world/sky/transcendence', function () {
+    return view('dreams.sky-transcendence');
+})->middleware('auth')->name('sky.transcendence');
+Route::get('/dream-world/sky/arrival', function () {
+    return view('dreams.sky-arrival');
+})->middleware('auth')->name('sky.arrival');
+Route::get('/dream-world/sky/rebirth', function () {
+    return view('dreams.sky-rebirth');
+})->middleware('auth')->name('sky.rebirth');

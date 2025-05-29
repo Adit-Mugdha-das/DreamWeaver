@@ -210,10 +210,11 @@ public function showDreamMap()
 
     // Realm unlock logic based on totems
     $unlockedViaTotem = [
-        'forest' => in_array('Mask', $tokens),   // Mask = Fear
-        'sky'    => in_array('Wings', $tokens),  // Wings = Joy
-        'cloud'  => in_array('Mirror', $tokens), // Mirror = Calm
-    ];
+    'forest' => in_array('mask', $tokens),   // match stored 'mask'
+    'sky'    => in_array('wings', $tokens),  // match stored 'wings'
+    'cloud'  => in_array('cloud', $tokens),  // match stored 'cloud'
+];
+
 
     return view('dreams.dream_map', compact('unlockedViaTotem'));
 }
@@ -238,6 +239,11 @@ public function getByEmotion($emotion)
     $html .= '</ul>';
 
     return response()->json(['html' => $html]);
+}
+
+public function showSkyTemple()
+{
+    return view('dreams.sky');
 }
 
 
