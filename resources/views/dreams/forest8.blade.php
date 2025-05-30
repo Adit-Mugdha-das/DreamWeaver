@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sanctuary of Whispering Spirits</title>
+  <title>Forest Realm – Final Passage</title>
   @vite('resources/css/app.css')
   <style>
     body {
@@ -64,20 +64,20 @@
 </head>
 <body>
 
-  <!-- Forest Realm Video Scene 7 -->
+  <!-- Background Forest 8 Video -->
   <video autoplay loop muted playsinline class="bg">
-    <source src="{{ asset('videos/forest7.mp4') }}" type="video/mp4">
+    <source src="{{ asset('videos/forest8.mp4') }}" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- Top-left Back to Portal -->
+  <!-- Back to Portal -->
   <a href="{{ route('dream.map') }}" class="back-to-portal">← Back to Portal</a>
 
-  <!-- Previous -->
-  <a href="{{ route('forest6') }}" class="prev-scene">← Previous Scene</a>
+  <!-- Previous Scene -->
+  <a href="{{ route('forest7') }}" class="prev-scene">← Previous Scene</a>
 
-  <!-- Continue -->
-  <a href="{{ route('forest8') }}" class="next-scene">Continue →</a>
+  <!-- Continue (if you have forest9 or final ending) -->
+  <a href="{{ route('forest9') }}" class="next-scene">Continue →</a>
 
 </body>
 </html>

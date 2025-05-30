@@ -192,3 +192,12 @@ Route::get('/dream-world/forest/6', function () {
 Route::get('/dream-world/forest/7', function () {
     return view('dreams.forest7');
 })->middleware('auth')->name('forest7');
+Route::get('/dream-world/forest/8', function () {
+    return view('dreams.forest8');
+})->middleware('auth')->name('forest8');
+Route::get('/dream-world/forest/9', function () {
+    return view('dreams.forest9');
+})->middleware('auth')->name('forest9');
+Route::get('/dream-world/forest/10', function () {
+    return view('dreams.forest10');
+})->middleware('auth')->name('forest10');
