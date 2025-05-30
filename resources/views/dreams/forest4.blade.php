@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Inside the Forgotten Forest</title>
+  <title>Forest of Forgotten Thoughts: Chapter IV</title>
   @vite('resources/css/app.css')
   <style>
     body {
@@ -51,34 +51,33 @@
       left: 1.5rem;
     }
 
-    .next-scene {
-      bottom: 1.5rem;
-      right: 1.5rem;
-    }
-
     .prev-scene {
       bottom: 1.5rem;
       left: 1.5rem;
+    }
+
+    .next-scene {
+      bottom: 1.5rem;
+      right: 1.5rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Forest Video -->
+  <!-- Background Forest 4th Scene Video -->
   <video autoplay loop muted playsinline class="bg">
-    <source src="{{ asset('videos/forest_inside.mp4') }}" type="video/mp4">
+    <source src="{{ asset('videos/forest4.mp4') }}" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
   <!-- Back to Dream Map -->
   <a href="{{ route('dream.map') }}" class="back-to-portal">← Back to Portal</a>
 
-  <!-- Previous Forest Entrance -->
-  <a href="{{ route('forest.entrance') }}" class="prev-scene">← Previous Scene</a>
+  <!-- Previous Forest Scene -->
+  <a href="{{ route('forest.3d') }}" class="prev-scene">← Previous Scene</a>
 
-  <!-- Continue Deeper -->
-  <a href="{{ route('forest.3d') }}" class="next-scene">Continue →</a>
-
+  <!-- Next Scene Placeholder -->
+  <a href="{{ route('forest5') }}" class="next-scene">Continue →</a>
 
 </body>
 </html>

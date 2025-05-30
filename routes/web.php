@@ -177,3 +177,18 @@ Route::get('/dream-world/forest/inside', function () {
 Route::get('/dream-world/forest/ending', function () {
     return view('dreams.forest-ending');
 })->middleware('auth')->name('forest.ending');
+Route::get('/dream-world/forest/3d', function () {
+    return view('dreams.forest-3d');
+})->middleware('auth')->name('forest.3d');
+Route::get('/dream-world/forest/chapter4', function () {
+    return view('dreams.forest4');
+})->middleware('auth')->name('forest4');
+Route::get('/dream-world/forest/5', function () {
+    return view('dreams.forest5');
+})->middleware('auth')->name('forest5');
+Route::get('/dream-world/forest/6', function () {
+    return view('dreams.forest6');
+})->middleware('auth')->name('forest6');
+Route::get('/dream-world/forest/7', function () {
+    return view('dreams.forest7');
+})->middleware('auth')->name('forest7');

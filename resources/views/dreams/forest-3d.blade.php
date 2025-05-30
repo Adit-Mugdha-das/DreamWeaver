@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Inside the Forgotten Forest</title>
+  <title>Forest Realm 3D</title>
   @vite('resources/css/app.css')
   <style>
     body {
@@ -26,8 +26,8 @@
     }
 
     .back-to-portal,
-    .next-scene,
-    .prev-scene {
+    .prev-scene,
+    .next-scene {
       position: absolute;
       background: rgba(255, 255, 255, 0.1);
       color: #e0e7ff;
@@ -41,8 +41,8 @@
     }
 
     .back-to-portal:hover,
-    .next-scene:hover,
-    .prev-scene:hover {
+    .prev-scene:hover,
+    .next-scene:hover {
       background: rgba(255, 255, 255, 0.2);
     }
 
@@ -51,34 +51,33 @@
       left: 1.5rem;
     }
 
-    .next-scene {
-      bottom: 1.5rem;
-      right: 1.5rem;
-    }
-
     .prev-scene {
       bottom: 1.5rem;
       left: 1.5rem;
+    }
+
+    .next-scene {
+      bottom: 1.5rem;
+      right: 1.5rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Forest Video -->
+  <!-- Background 3D Forest Video -->
   <video autoplay loop muted playsinline class="bg">
-    <source src="{{ asset('videos/forest_inside.mp4') }}" type="video/mp4">
+    <source src="{{ asset('videos/forest_3d.mp4') }}" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- Back to Dream Map -->
+  <!-- Top-left Back to Portal -->
   <a href="{{ route('dream.map') }}" class="back-to-portal">← Back to Portal</a>
 
-  <!-- Previous Forest Entrance -->
-  <a href="{{ route('forest.entrance') }}" class="prev-scene">← Previous Scene</a>
+  <!-- Bottom-left Previous -->
+  <a href="{{ route('forest.inside') }}" class="prev-scene">← Previous Scene</a>
 
-  <!-- Continue Deeper -->
-  <a href="{{ route('forest.3d') }}" class="next-scene">Continue →</a>
-
+  <!-- Bottom-right Next -->
+  <a href="{{ route('forest4') }}" class="next-scene">Continue →</a>
 
 </body>
 </html>
