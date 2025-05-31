@@ -201,3 +201,20 @@ Route::get('/dream-world/forest/9', function () {
 Route::get('/dream-world/forest/10', function () {
     return view('dreams.forest10');
 })->middleware('auth')->name('forest10');
+
+
+Route::get('/dream-world/cloud', [DreamController::class, 'showCloudEntrance'])
+    ->middleware('auth')
+    ->name('cloud.entrance');
+Route::get('/dream-world/cloud/2', function () {
+    return view('dreams.cloud2');
+})->middleware('auth')->name('cloud.2');
+Route::get('/dream-world/cloud/3d', function () {
+    return view('dreams.cloud-3d');
+})->middleware('auth')->name('cloud.3d');
+Route::get('/dream-world/cloud/4', function () {
+    return view('dreams.cloud4');
+})->middleware('auth')->name('cloud.4');
+Route::get('/dream-world/cloud/5', function () {
+    return view('dreams.cloud5');
+})->middleware('auth')->name('cloud.5');

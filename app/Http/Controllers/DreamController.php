@@ -250,6 +250,10 @@ public function showForestEntrance()
 {
     return view('dreams.forest'); // assuming your Blade file is forest.blade.php
 }
+public function showCloudEntrance()
+{
+    return view('dreams.cloud');
+}
 
 
 }
