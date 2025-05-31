@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cloud of Lucid Realms – Soul in the Sky</title>
+  <title>Cloud of Lucid Realms: Phase 6</title>
   @vite('resources/css/app.css')
   <style>
     body {
@@ -64,16 +64,16 @@
 </head>
 <body>
 
-  <!-- Background Cloud Scene 5 Video -->
+  <!-- Background Video -->
   <video autoplay loop muted playsinline class="bg">
-    <source src="{{ asset('videos/cloud5.mp4') }}" type="video/mp4">
+    <source src="{{ asset('videos/cloud6.mp4') }}" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
   <!-- Navigation Buttons -->
   <a href="{{ route('dream.map') }}" class="back-to-portal">← Dream World</a>
-  <a href="{{ route('cloud.4') }}" class="prev-scene">← Previous Scene</a>
-  <a href="{{ route('cloud.6') }}" class="next-scene">Continue →</a>
+  <a href="{{ route('cloud.5') }}" class="prev-scene">← Previous Scene</a>
+
 
 </body>
 </html>

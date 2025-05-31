@@ -218,3 +218,6 @@ Route::get('/dream-world/cloud/4', function () {
 Route::get('/dream-world/cloud/5', function () {
     return view('dreams.cloud5');
 })->middleware('auth')->name('cloud.5');
+Route::get('/dream-world/cloud/6', function () {
+    return view('dreams.cloud6');
+})->middleware('auth')->name('cloud.6');
