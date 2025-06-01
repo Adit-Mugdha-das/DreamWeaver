@@ -26,14 +26,16 @@
     }
 
     .portal-heading {
-      margin-top: 4rem;
-      font-size: 1.7rem;
-      font-weight: bold;
-    }
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  line-height: 1.3;
+}
+
 
     .portal-subtext {
       margin-top: 0.5rem;
-      font-size: 1rem;
+      font-size: 1.2rem;
       color: #cbd5e1;
     }
 
@@ -95,6 +97,15 @@
       transform: scale(1.05);
       box-shadow: 0 0 20px rgba(255,255,255,0.3);
     }
+
+    .center-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
   </style>
 </head>
 <body>
@@ -103,14 +114,16 @@
   <!-- 🏠 Home button top-left -->
   <a href="{{ url('/welcome') }}" class="home-btn">🏠 Home</a>
 
-  <div class="portal-heading">🪄 Welcome to Your Dream World</div>
-  <div class="portal-subtext">Wander through the magical realm your dreams have shaped...</div>
+  <!-- 🌌 Centered Portal Content -->
+  <div class="center-container">
+    <div class="portal-heading"> Welcome to Your Dream World</div>
+    <div class="portal-subtext">Wander through the magical realm your dreams have shaped...</div>
 
-  <div class="button-row">
-    <a href="http://127.0.0.1:8000/test-avatar" class="portal-btn">🎭 Your Dream Avatar</a>
-
-    <a href="{{ route('totems') }}" class="portal-btn">🔮 Dream Totems</a>
-    <a href="{{ route('dream.map') }}" class="portal-btn">🗺️ Dream Map</a>
+    <div class="button-row">
+      <a href="http://127.0.0.1:8000/test-avatar" class="portal-btn">🎭 Your Dream Avatar</a>
+      <a href="{{ route('totems') }}" class="portal-btn">🔮 Dream Totems</a>
+      <a href="{{ route('dream.map') }}" class="portal-btn">🗺️ Dream Map</a>
+    </div>
   </div>
 
   <!-- 🔮 Background Script -->

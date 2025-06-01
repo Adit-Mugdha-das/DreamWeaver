@@ -15,15 +15,15 @@
     }
 
     video.bg {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      height: 100%;
-      width: auto;
-      transform: translate(-50%, -50%) scaleX(1.45);
-      object-fit: cover;
-      z-index: -1;
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
 
     .back-to-portal,
     .next-scene,
