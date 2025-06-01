@@ -276,6 +276,17 @@
 </p>
 
     @endif
+    @if ($dream->story_generation)
+  <p class="mt-3 text-base text-purple-200">
+    <strong class="text-purple-400">Story Generation:</strong> {{ $dream->story_generation }}
+  </p>
+@endif
+
+@if ($dream->long_narrative)
+  <p class="mt-3 text-base text-fuchsia-200">
+    <strong class="text-fuchsia-400">Long Narrative:</strong> {{ $dream->long_narrative }}
+  </p>
+@endif
 
    <div class="button-group mt-4">
   <form class="delete-form" data-id="{{ $dream->id }}">

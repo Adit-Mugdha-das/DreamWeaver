@@ -56,4 +56,58 @@ class GeminiHelper
         $data = json_decode($body, true);
         return $data['candidates'][0]['content']['parts'][0]['text'] ?? 'No interpretation available';
     }
+
+    public static function generateStory($text)
+    {
+        $apiKey = env('GEMINI_API_KEY');
+
+        $prompt = "Turn this dream into a creative short story, imaginative and emotionally engaging. Do not exceed 120 words:\n\n$text";
+
+
+        $client = new Client();
+        $response = $client->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$apiKey", [
+            'json' => [
+                'contents' => [
+                    [
+                        'parts' => [
+                            ['text' => $prompt]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $body = $response->getBody()->getContents();
+        Log::info('Gemini story generation response', ['body' => $body]);
+
+        $data = json_decode($body, true);
+        return $data['candidates'][0]['content']['parts'][0]['text'] ?? 'No story generated';
+    }
+
+    public static function generateNarrative($text)
+    {
+        $apiKey = env('GEMINI_API_KEY');
+
+        $prompt = "Write a thoughtful and professional long narrative interpretation of the dream. Include possible meanings and emotional insights. Limit your response to a maximum of 150 words:\n\n$text";
+
+
+        $client = new Client();
+        $response = $client->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$apiKey", [
+            'json' => [
+                'contents' => [
+                    [
+                        'parts' => [
+                            ['text' => $prompt]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $body = $response->getBody()->getContents();
+        Log::info('Gemini long narrative response', ['body' => $body]);
+
+        $data = json_decode($body, true);
+        return $data['candidates'][0]['content']['parts'][0]['text'] ?? 'No narrative generated';
+    }
 }

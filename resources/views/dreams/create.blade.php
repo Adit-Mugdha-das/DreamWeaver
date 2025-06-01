@@ -6,13 +6,15 @@
   @vite('resources/css/app.css')
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100%;
-      background: radial-gradient(circle at center, #0b0f1a 0%, #000 100%);
-      font-family: 'Inter', sans-serif;
-    }
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: radial-gradient(circle at center, #0b0f1a 0%, #000 100%);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto; /* ✅ Enable vertical scrolling */
+}
+
 
     canvas {
       position: absolute;
@@ -20,16 +22,21 @@
       left: 0;
       z-index: 0;
     }
+    html {
+    scroll-behavior: smooth;
+  }
 
     .form-wrapper {
-      position: relative;
-      z-index: 1;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
+  position: relative;
+  z-index: 1;
+  min-height: 100vh; /* ✅ change from fixed height to min-height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem; /* ✅ add padding to avoid cutoff */
+  overflow-y: auto;   /* ✅ allow vertical scroll */
+}
+
 
     .form-container {
       display: flex;
@@ -343,6 +350,9 @@
       <input type="hidden" name="content" id="saveContent">
       <input type="hidden" name="short_interpretation" id="shortInterpretation">
       <input type="hidden" name="emotion_summary" id="emotionSummary">
+      <input type="hidden" name="story_generation" id="storyGeneration">
+      <input type="hidden" name="long_narrative" id="longNarrative">
+
 
       <button class="mt-4" type="submit">Save This Dream</button>
     </form>
@@ -511,13 +521,21 @@
         document.getElementById('saveTitle').value = title.trim();
         const allTextBlocks = document.querySelectorAll('#allResults p');
         const fullInterpretation = [...allTextBlocks].map(p => p.textContent).join('\n\n');
-        document.getElementById('saveContent').value = content.trim() + "\n\n" + fullInterpretation.trim();
+        document.getElementById('saveContent').value = content.trim();
+
         if (type === 'short') {
           document.getElementById('shortInterpretation').value = text.trim();
         }
         if (type === 'emotion') {
           document.getElementById('emotionSummary').value = text.trim();
+          }
+        if (type === 'story') {
+          document.getElementById('storyGeneration').value = text.trim();
         }
+        if (type === 'long') {
+          document.getElementById('longNarrative').value = text.trim();
+        }
+
 
 
         formBox.classList.add('shift-left');
@@ -560,6 +578,9 @@ saveDreamForm.addEventListener('submit', async (e) => {
   const content = document.getElementById('saveContent').value;
   const short = document.getElementById('shortInterpretation').value;
   const emotion = document.getElementById('emotionSummary').value;
+  const story = document.getElementById('storyGeneration').value;
+  const narrative = document.getElementById('longNarrative').value;
+
 
   document.getElementById('saveLoadingSpinner').style.display = 'flex';
 
@@ -577,8 +598,11 @@ saveDreamForm.addEventListener('submit', async (e) => {
         content,
         used_types: Array.from(usedTypes),
         short_interpretation: short || null,
-        emotion_summary: emotion || null
+        emotion_summary: emotion || null,
+        story_generation: story || null,
+        long_narrative: narrative || null
       })
+
     });
 
     if (!response.ok) throw new Error('Failed to save dream.');

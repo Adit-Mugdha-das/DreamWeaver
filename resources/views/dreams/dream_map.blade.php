@@ -119,7 +119,7 @@
 
   <div class="content">
     <!-- Imagine Button -->
-    <a href="{{ url('/imagine') }}" class="top-left-button">← Imagine</a>
+    <a href="{{ url('/imagine') }}" class="top-left-button">← Portal</a>
 
     <h1 class="text-4xl font-bold text-white mb-12 drop-shadow-lg">🌌 Explore Your Dream Realm</h1>
 

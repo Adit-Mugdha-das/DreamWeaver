@@ -24,12 +24,15 @@ class DreamController extends Controller
     if ($request->expectsJson()) {
         // ✅ Handle AJAX request and use already-generated interpretations
         $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'used_types' => 'nullable|array',
-            'short_interpretation' => 'nullable|string',
-            'emotion_summary' => 'nullable|string',
-        ]);
+    'title' => 'required|string|max:255',
+    'content' => 'required|string',
+    'used_types' => 'nullable|array',
+    'short_interpretation' => 'nullable|string',
+    'emotion_summary' => 'nullable|string',
+    'story_generation' => 'nullable|string',
+    'long_narrative' => 'nullable|string',
+]);
+
 
         $usedTypes = $data['used_types'] ?? [];
 
@@ -61,12 +64,15 @@ class DreamController extends Controller
         Log::info('Current Auth ID for dream save:', ['user_id' => Auth::id()]);
 
         $dream = Dream::create([
-            'title' => $data['title'],
-            'content' => $data['content'],
-            'emotion_summary' => $emotion,
-            'short_interpretation' => $short,
-            'user_id' => Auth::id(),
-        ]);
+    'title' => $data['title'],
+    'content' => $data['content'],
+    'emotion_summary' => $emotion,
+    'short_interpretation' => $short,
+    'story_generation' => $data['story_generation'] ?? null,
+    'long_narrative' => $data['long_narrative'] ?? null,
+    'user_id' => Auth::id(),
+]);
+
 
         return response()->json(['status' => 'success', 'dream' => $dream]);
     }
@@ -119,32 +125,42 @@ class DreamController extends Controller
     }
 
     public function interpret(Request $request)
-    {
-        try {
-            $data = $request->json()->all();
+{
+    try {
+        $data = $request->json()->all();
 
-            if (!isset($data['title'], $data['content'], $data['type'])) {
-                return response()->json(['error' => 'Missing fields.'], 422);
-            }
-
-            $type = $data['type'];
-            $result = null;
-
-            if ($type === 'emotion') {
-                $result = GeminiHelper::analyzeEmotion($data['content']);
-            } elseif ($type === 'short') {
-                $result = GeminiHelper::analyzeShort($data['content']);
-            } else {
-                return response()->json(['error' => 'Invalid interpretation type.'], 400);
-            }
-
-            return response()->json(['result' => $result]);
-
-        } catch (\Throwable $e) {
-            Log::error('Interpretation failed: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to interpret dream.'], 500);
+        if (!isset($data['title'], $data['content'], $data['type'])) {
+            return response()->json(['error' => 'Missing fields.'], 422);
         }
+
+        $type = $data['type'];
+        $result = null;
+
+        switch ($type) {
+            case 'emotion':
+                $result = GeminiHelper::analyzeEmotion($data['content']);
+                break;
+            case 'short':
+                $result = GeminiHelper::analyzeShort($data['content']);
+                break;
+            case 'story':
+                $result = GeminiHelper::generateStory($data['content']);
+                break;
+            case 'long':
+                $result = GeminiHelper::generateNarrative($data['content']);
+                break;
+            default:
+                return response()->json(['error' => 'Invalid interpretation type.'], 400);
+        }
+
+        return response()->json(['result' => $result]);
+
+    } catch (\Throwable $e) {
+        Log::error('Interpretation failed: ' . $e->getMessage());
+        return response()->json(['error' => 'Failed to interpret dream.'], 500);
     }
+}
+
 
     public function destroy(Dream $dream)
     {

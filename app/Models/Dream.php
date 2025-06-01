@@ -11,7 +11,8 @@ class Dream extends Model
         'content',
         'emotion_summary',
         'short_interpretation',
-        'story',
-        'user_id' // ✅ ADD THIS LINE
+        'story_generation',   // ✅ Corrected
+        'long_narrative',     // ✅ Missing before — now added
+        'user_id'
     ];
 }
