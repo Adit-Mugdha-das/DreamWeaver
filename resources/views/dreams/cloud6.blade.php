@@ -73,7 +73,7 @@
   <!-- Navigation Buttons -->
   <a href="{{ route('dream.map') }}" class="back-to-portal">← Dream World</a>
   <a href="{{ route('cloud.5') }}" class="prev-scene">← Previous Scene</a>
-
+    <a href="{{ route('cloud.7') }}" class="next-scene">Continue →</a>
 
 </body>
 </html>
