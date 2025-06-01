@@ -20,7 +20,7 @@
       left: 50%;
       height: 100%;
       width: auto;
-      transform: translate(-50%, -50%) scaleX(1.5);
+      transform: translate(-50%, -50%) scaleX(2.13);
       object-fit: cover;
       z-index: -1;
     }
