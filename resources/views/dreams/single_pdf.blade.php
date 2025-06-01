@@ -74,6 +74,20 @@
             <div class="value">{{ $dream->short_interpretation }}</div>
         </div>
         @endif
+
+        @if ($dream->story_generation)
+        <div class="section">
+            <div class="label">📖 Story Generation:</div>
+            <div class="value">{{ $dream->story_generation }}</div>
+        </div>
+        @endif
+
+        @if ($dream->long_narrative)
+        <div class="section">
+            <div class="label">🪄 Long Narrative:</div>
+            <div class="value">{{ $dream->long_narrative }}</div>
+        </div>
+        @endif
     </div>
 
 </body>
