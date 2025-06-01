@@ -192,7 +192,8 @@
     <div style="height: 300px; position: relative; padding-bottom: 2rem;">
 
       <canvas id="dailyChart" class="chart-canvas"></canvas>
-      <button onclick="downloadChart('weeklyChart')" class="download-btn">📥 Download Chart</button>
+      <button onclick="downloadChart('dailyChart')" class="download-btn">📥 Download Chart</button>
+
     </div>
   </div>
 </div> <!-- ✅ This is the correct place to close .grid -->
