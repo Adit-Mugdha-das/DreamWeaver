@@ -177,6 +177,10 @@
 
 
 <a href="{{ route('imagine.portal') }}" class="button">Enter Dream World</a>
+<a href="{{ route('library.index') }}" class="button">
+    📖 Dream Library
+</a>
+
   </div>
 </div>
 

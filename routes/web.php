@@ -9,6 +9,7 @@ use App\Http\Controllers\SupportController;
 use App\Http\Controllers\AvatarController;
 use Illuminate\Support\Str;
 use App\Models\Dream;
+use App\Http\Controllers\LibraryTextController;
 
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
@@ -233,3 +234,6 @@ Route::get('/dream-world/cloud/9', function () {
 Route::get('/dream-world/cloud/10', function () {
     return view('dreams.cloud10');
 })->middleware('auth')->name('cloud.10');
+
+Route::get('/dream-library', [LibraryTextController::class, 'index'])->name('library.index');
+Route::get('/dream-library/{id}', [LibraryTextController::class, 'show'])->name('library.show');

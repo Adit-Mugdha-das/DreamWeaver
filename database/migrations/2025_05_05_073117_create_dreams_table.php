@@ -17,7 +17,8 @@ return new class extends Migration
             $table->text('content');
             $table->string('emotion_summary')->nullable(); // For Gemini result
             $table->text('interpretation')->nullable();    // For GPT/Gemini interpretation
-            $table->text('story')->nullable();             // For dream-to-story
+            $table->text('story')->nullable(); 
+                        // For dream-to-story
             $table->timestamps();
         });
     }
