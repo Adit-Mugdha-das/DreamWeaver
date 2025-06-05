@@ -237,3 +237,7 @@ Route::get('/dream-world/cloud/10', function () {
 
 Route::get('/dream-library', [LibraryTextController::class, 'index'])->name('library.index');
 Route::get('/dream-library/{id}', [LibraryTextController::class, 'show'])->name('library.show');
+
+Route::get('/library/{id}/download', [LibraryTextController::class, 'download'])->name('library.download');
+
+

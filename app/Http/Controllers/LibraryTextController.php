@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\LibraryText;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 
 class LibraryTextController extends Controller
 {
@@ -23,5 +25,15 @@ class LibraryTextController extends Controller
     {
         $text = LibraryText::findOrFail($id);
         return view('dreams.library.show', compact('text'));
+    }
+
+    /**
+     * Download the selected dream text as a PDF.
+     */
+    public function download($id)
+    {
+        $text = LibraryText::findOrFail($id);
+        $pdf = Pdf::loadView('dreams.library.pdf', compact('text'));
+        return $pdf->download(Str::slug($text->title) . '.pdf');
     }
 }
