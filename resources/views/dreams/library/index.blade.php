@@ -98,6 +98,20 @@
               'The Star That Slept Too Long' => ['Ember Kavir', 'the_star_that_slept_too_long.png'],
               'The Voice in the Hollow' => ['Noor Elen', 'the_voice_in_the_hollow.png'],
               'Echoes of the Astral Thread' => ['Seraph Elion', 'echoes_of_the_astral_thread.png'],
+              'The Whisper Clock' => ['Mira Solene', 'the_whisper_clock.png'],
+              'The Breath Between Pages' => ['Elen Raye', 'the_breath_between_pages.png'],
+              'The Room That Remembers Sounds' => ['Cael Merrin', 'the_room_that_remembers_sounds.png'],
+              'The Mirror Between Moments' => ['Nyra Lune', 'the_mirror_between_moments.png'],
+              'Where the Letters Never Sent Go' => ['Jalen Rhys', 'where_the_letters_never_sent_go.png'],
+              'The Star That Hears Your Name' => ['Elira Vane', 'the_star_that_hears_your_name.png'],
+              'The Room with No Corners' => ['Arien Dusk', 'the_room_with_no_corners.png'],
+              'The Window That Opens Inward' => ['Virel Thorne', 'the_window_that_opens_inward.png'],
+
+              'The Clock That Counted Memories' => ['Orla Mire', 'the_clock_that_counted_memories.png'],
+
+
+
+
             ];
             $imgPath = null;
             foreach($imgMap as $t => [$a, $f]) {
