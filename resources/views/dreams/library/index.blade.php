@@ -131,7 +131,17 @@
             <div class="p-4">
               <h3 class="text-[1.4rem] font-bold text-purple-200 group-hover:text-purple-300">{{ $text->title }}</h3>
               <p class="text-base italic text-gray-400 mb-1">by {{ $text->author }}</p>
-              <p class="text-sm text-gray-500 mb-3">Est. Reading Time: ~2 min</p>
+              @php
+                $readingTimeMap = [
+                  'poem' => '3 min',
+                  'story' => '5 min',
+                  'myth'  => '7 min',
+                  'echo'  => '4 min',
+                ];
+                $readingTime = $readingTimeMap[$text->type] ?? '4 min';
+              @endphp
+              <p class="text-sm text-gray-500 mb-3">Est. Reading Time: ~{{ $readingTime }}</p>
+
 
               <div class="flex justify-between items-center">
                 <span class="text-sm font-semibold px-3 py-1 rounded-full bg-fuchsia-700 text-white uppercase tracking-wider">
