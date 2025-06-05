@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('library_texts', function (Blueprint $table) {
             $table->id();
-            $table->string('title');           // Title of the text
-            $table->string('author');          // Author name
-            $table->enum('type', ['poem', 'story', 'myth'])->default('story'); // Category
-            $table->text('content');           // The actual story/poem
-            $table->timestamps();              // Created_at & updated_at
+            $table->string('title');            // Title of the text
+            $table->string('author');           // Author name
+            $table->enum('type', ['poem', 'story', 'myth', 'echo'])->default('story'); // Category (with 'echo' added)
+            $table->text('content');            // The actual story/poem/etc.
+            $table->timestamps();               // created_at & updated_at
         });
     }
 

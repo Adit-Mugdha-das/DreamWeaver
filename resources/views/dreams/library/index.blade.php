@@ -54,10 +54,15 @@
 
   @php $grouped = $texts->groupBy('type'); @endphp
 
-  @foreach(['poem' => 'Poems ✨', 'story' => 'Stories 📖', 'myth' => 'Myths 🐉'] as $key => $label)
+  @foreach([
+    'poem' => 'Poems ✨',
+    'story' => 'Stories 📖',
+    'myth' => 'Myths 🐉',
+    'echo' => 'Echoes 🌀'
+  ] as $key => $label)
     @if($grouped->has($key))
       <h2 class="text-2xl font-bold text-fuchsia-300 mt-10 mb-4">{{ $label }}</h2>
-      <div class="{{ in_array($key, ['poem', 'story', 'myth']) ? 'scroll-container' : 'grid' }}">
+      <div class="{{ in_array($key, ['poem', 'story', 'myth', 'echo']) ? 'scroll-container' : 'grid' }}">
         @foreach($grouped[$key] as $index => $text)
           @php
             $imgMap = [
@@ -91,17 +96,8 @@
               'The Dream-Eater of Noktara' => ['Aarav Sen', 'the_dream_eater_of_noktara.png'],
               'The Garden of First Dreams' => ['Lina Aster', 'the_garden_of_first_dreams.png'],
               'The Star That Slept Too Long' => ['Ember Kavir', 'the_star_that_slept_too_long.png'],
-
-
-
-
-
-
-
-
-
-
-
+              'The Voice in the Hollow' => ['Noor Elen', 'the_voice_in_the_hollow.png'],
+              'Echoes of the Astral Thread' => ['Seraph Elion', 'echoes_of_the_astral_thread.png'],
             ];
             $imgPath = null;
             foreach($imgMap as $t => [$a, $f]) {
