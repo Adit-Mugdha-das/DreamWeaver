@@ -148,7 +148,7 @@
     button {
     background-color: #D1D5DB; /* light silver */
     color: #000000;            /* black text */
-    padding: 0.75rem;
+    padding: 0.75rem 2.5rem;
     width: 100%;
     border: none;
     border-radius: 0.5rem;
@@ -336,14 +336,17 @@
 
         <p class="font-semibold mb-2">Select Interpretation Type:</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-          <div class="card" data-type="emotion">🧠 Emotion Detection (Gemini)</div>
-          <div class="card" data-type="story">📖 Story Generation (GPT-3.5)</div>
-          <div class="card" data-type="short">✍️ Short Interpretation (Gemini)</div>
-          <div class="card" data-type="long">🪄 Long Narrative (GPT-4)</div>
+          <div class="card" data-type="emotion">Emotion Detection</div>
+          <div class="card" data-type="story">Story Generation</div>
+          <div class="card" data-type="short">Short Interpretation</div>
+          <div class="card" data-type="long">Long Narrative</div>
         </div>
 
         <input type="hidden" id="interpretationType" name="interpretationType" required>
-        <button type="submit">Submit</button>
+        <button type="submit" class="mt-6">
+  Submit
+</button>
+
       </form>
       <!-- Place under dreamForm -->
 <div id="interpretLoadingSpinner" class="spinner-wrapper">
@@ -361,10 +364,10 @@
 
     <!-- Buttons to add more interpretations -->
     <div id="extraOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 small-buttons">
-      <div class="card" data-type="emotion">🧠 Emotion Detection (Gemini)</div>
-      <div class="card" data-type="story">📖 Story Generation (GPT-3.5)</div>
-      <div class="card" data-type="short">✍️ Short Interpretation (Gemini)</div>
-      <div class="card" data-type="long">🪄 Long Narrative (GPT-4)</div>
+      <div class="card" data-type="emotion">Emotion Detection</div>
+      <div class="card" data-type="story">Story Generation</div>
+      <div class="card" data-type="short">Short Interpretation</div>
+      <div class="card" data-type="long">Long Narrative</div>
     </div>
 
     <!-- Save Dream Form -->
@@ -390,13 +393,19 @@
   <input type="hidden" name="story_generation" id="shareStory">
   <input type="hidden" name="long_narrative" id="shareNarrative">
 
-  <button id="share-btn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded shadow">Share</button>
+  <button id="share-btn" type="button">
+  Share
+</button>
+
 
 <!-- Loading Animation -->
 <div id="loading" class="text-white mt-4 hidden">⏳ Sharing...</div>
 
 <!-- Success Message -->
-<div id="success-message" class="text-green-400 mt-4 hidden">✅ Dream shared successfully!</div>
+<div id="success-message" class="hidden mt-4 px-4 py-3 rounded-lg bg-green-500/10 text-green-300 font-medium border border-green-400/30 shadow-md transition-all duration-500">
+   Dream shared successfully!
+</div>
+
 
 </form>
 
