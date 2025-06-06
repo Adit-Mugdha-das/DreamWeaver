@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Create Dream</title>
   @vite('resources/css/app.css')
   <style>
@@ -284,6 +285,28 @@
   color: #ffffff;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #000; /* black background */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: #444; /* dark gray thumb */
+  border-radius: 10px;
+  border: 2px solid #000; /* match track */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
 
 
   </style>
@@ -344,24 +367,39 @@
       <div class="card" data-type="long">🪄 Long Narrative (GPT-4)</div>
     </div>
 
-    <form id="saveDreamForm" method="POST" action="{{ route('dreams.store') }}">
-      @csrf
-      <input type="hidden" name="title" id="saveTitle">
-      <input type="hidden" name="content" id="saveContent">
-      <input type="hidden" name="short_interpretation" id="shortInterpretation">
-      <input type="hidden" name="emotion_summary" id="emotionSummary">
-      <input type="hidden" name="story_generation" id="storyGeneration">
-      <input type="hidden" name="long_narrative" id="longNarrative">
-        <!-- Share checkbox -->
-  <label class="flex items-center mt-2 text-sm">
-    <input type="checkbox" name="is_shared" value="1" class="form-checkbox text-fuchsia-500 focus:ring-fuchsia-400">
-    <span class="ml-2 text-gray-200">🌐 Share this dream publicly</span>
-  </label>
+    <!-- Save Dream Form -->
+<form id="saveDreamForm" method="POST" action="{{ route('dreams.store') }}">
+  @csrf
+  <input type="hidden" name="title" id="saveTitle">
+  <input type="hidden" name="content" id="saveContent">
+  <input type="hidden" name="short_interpretation" id="shortInterpretation">
+  <input type="hidden" name="emotion_summary" id="emotionSummary">
+  <input type="hidden" name="story_generation" id="storyGeneration">
+  <input type="hidden" name="long_narrative" id="longNarrative">
 
+  <button class="mt-4" type="submit">Save This Dream</button>
+</form>
 
+<!-- Share Dream Form -->
+<form id="shareDreamForm" method="POST" action="{{ route('dreams.share') }}">
+  @csrf
+  <input type="hidden" name="title" id="shareTitle">
+  <input type="hidden" name="content" id="shareContent">
+  <input type="hidden" name="short_interpretation" id="shareShort">
+  <input type="hidden" name="emotion_summary" id="shareEmotion">
+  <input type="hidden" name="story_generation" id="shareStory">
+  <input type="hidden" name="long_narrative" id="shareNarrative">
 
-      <button class="mt-4" type="submit">Save This Dream</button>
-    </form>
+  <button id="share-btn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded shadow">Share</button>
+
+<!-- Loading Animation -->
+<div id="loading" class="text-white mt-4 hidden">⏳ Sharing...</div>
+
+<!-- Success Message -->
+<div id="success-message" class="text-green-400 mt-4 hidden">✅ Dream shared successfully!</div>
+
+</form>
+
 
     <button class="mt-4" onclick="goBack()">← Back to Form</button>
 
@@ -541,6 +579,14 @@
         if (type === 'long') {
           document.getElementById('longNarrative').value = text.trim();
         }
+        
+// ✅ Also populate the Share form with current data
+        document.getElementById('shareTitle').value = title.trim();
+        document.getElementById('shareContent').value = content.trim();
+        document.getElementById('shareShort').value = type === 'short' ? text.trim() : '';
+        document.getElementById('shareEmotion').value = type === 'emotion' ? text.trim() : '';
+        document.getElementById('shareStory').value = type === 'story' ? text.trim() : '';
+        document.getElementById('shareNarrative').value = type === 'long' ? text.trim() : '';
 
 
 
@@ -576,6 +622,10 @@ document.querySelectorAll('#extraOptions .card').forEach(card => {
 
 
 const saveDreamForm = document.getElementById('saveDreamForm');
+const shareDreamBtn = document.getElementById('shareDreamBtn');
+
+let isSharing = false; // track if user clicked share
+
 
 saveDreamForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -586,8 +636,6 @@ saveDreamForm.addEventListener('submit', async (e) => {
   const emotion = document.getElementById('emotionSummary').value;
   const story = document.getElementById('storyGeneration').value;
   const narrative = document.getElementById('longNarrative').value;
-  const isShared = document.querySelector('input[name="is_shared"]').checked;
-
 
   document.getElementById('saveLoadingSpinner').style.display = 'flex';
 
@@ -607,20 +655,22 @@ saveDreamForm.addEventListener('submit', async (e) => {
         short_interpretation: short || null,
         emotion_summary: emotion || null,
         story_generation: story || null,
-        long_narrative: narrative || null,
-        is_shared: isShared
+        long_narrative: narrative || null
       })
-
     });
 
     if (!response.ok) throw new Error('Failed to save dream.');
 
     const anim = document.getElementById('saveAnimation');
+    anim.textContent = '✨ Dream saved!';
     anim.classList.remove('hidden');
     anim.style.opacity = 1;
+
     setTimeout(() => {
       anim.style.opacity = 0;
-      setTimeout(() => anim.classList.add('hidden'), 400);
+      setTimeout(() => {
+        anim.classList.add('hidden');
+      }, 400);
     }, 2500);
 
   } catch (err) {
@@ -630,7 +680,14 @@ saveDreamForm.addEventListener('submit', async (e) => {
   }
 });
 
+
+
+
 </script>
+
+
+
+
 
 <script>
   const canvas = document.getElementById("galaxyCanvas");
@@ -712,5 +769,66 @@ saveDreamForm.addEventListener('submit', async (e) => {
 
   animate();
 </script>
+
+<script>
+  document.getElementById("share-btn").addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    // Collect data directly from the form
+    const title = document.getElementById("shareTitle").value.trim();
+    const content = document.getElementById("shareContent").value.trim();
+    const short = document.getElementById("shareShort").value.trim();
+    const emotion = document.getElementById("shareEmotion").value.trim();
+    const story = document.getElementById("shareStory").value.trim();
+    const narrative = document.getElementById("shareNarrative").value.trim();
+
+    // Validation (optional)
+    if (!title || !content) {
+      alert("❌ Please complete your dream before sharing.");
+      return;
+    }
+
+    document.getElementById("loading").classList.remove("hidden");
+    document.getElementById("success-message").classList.add("hidden");
+
+    try {
+      const response = await fetch("/dreams/share", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({
+          title,
+          content,
+          short_interpretation: short || null,
+          emotion_summary: emotion || null,
+          story_generation: story || null,
+          long_narrative: narrative || null,
+          is_shared: true
+        })
+      });
+
+      const result = await response.json();
+
+      document.getElementById("loading").classList.add("hidden");
+
+      if (result.status === "shared") {
+        document.getElementById("success-message").classList.remove("hidden");
+        setTimeout(() => {
+          document.getElementById("success-message").classList.add("hidden");
+        }, 3000);
+      } else {
+        alert("❌ Failed to share dream.");
+      }
+    } catch (error) {
+      console.error("Share failed:", error);
+      alert("❌ An error occurred while sharing.");
+    }
+  });
+</script>
+
+
+
 </body>
 </html>

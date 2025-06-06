@@ -242,3 +242,5 @@ Route::get('/library/{id}/download', [LibraryTextController::class, 'download'])
 Route::get('/shared-dreams', [DreamController::class, 'sharedDreams'])->name('dreams.shared');
 
 
+Route::post('/dreams/share', [DreamController::class, 'share'])->name('dreams.share'); // Share only
+

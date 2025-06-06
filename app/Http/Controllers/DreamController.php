@@ -19,7 +19,7 @@ class DreamController extends Controller
         return view('dreams.create');
     }
 
-    public function store(Request $request)
+  public function store(Request $request)
 {
     if ($request->expectsJson()) {
         // ✅ Handle AJAX request and use already-generated interpretations
@@ -68,7 +68,7 @@ class DreamController extends Controller
             'short_interpretation' => $short,
             'story_generation' => $data['story_generation'] ?? null,
             'long_narrative' => $data['long_narrative'] ?? null,
-            'is_shared' => $request->has('is_shared'), // ✅ ADD THIS
+            'is_shared' => false, // ✅ Always private
             'user_id' => Auth::id(),
         ]);
 
@@ -109,7 +109,7 @@ class DreamController extends Controller
         'content' => $validated['content'],
         'emotion_summary' => $emotion,
         'short_interpretation' => $short,
-        'is_shared' => $request->has('is_shared'), // ✅ ADD THIS
+        'is_shared' => false, // ✅ Always private
         'user_id' => Auth::id(),
     ]);
 
@@ -117,6 +117,34 @@ class DreamController extends Controller
 }
 
 
+    public function share(Request $request)
+    {
+        // Save & Mark as Shared
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'emotion_summary' => 'nullable|string',
+            'short_interpretation' => 'nullable|string',
+            'story_generation' => 'nullable|string',
+            'long_narrative' => 'nullable|string',
+        ]);
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $dream = Dream::create([
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'emotion_summary' => $data['emotion_summary'] ?? null,
+            'short_interpretation' => $data['short_interpretation'] ?? null,
+            'story_generation' => $data['story_generation'] ?? null,
+            'long_narrative' => $data['long_narrative'] ?? null,
+            'is_shared' => true,
+            'user_id' => $user->id,
+        ]);
+
+        return response()->json(['status' => 'shared', 'dream' => $dream]);
+    }
 
     public function index()
     {
