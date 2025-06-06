@@ -24,24 +24,22 @@ class DreamController extends Controller
     if ($request->expectsJson()) {
         // ✅ Handle AJAX request and use already-generated interpretations
         $data = $request->validate([
-    'title' => 'required|string|max:255',
-    'content' => 'required|string',
-    'used_types' => 'nullable|array',
-    'short_interpretation' => 'nullable|string',
-    'emotion_summary' => 'nullable|string',
-    'story_generation' => 'nullable|string',
-    'long_narrative' => 'nullable|string',
-]);
-
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'used_types' => 'nullable|array',
+            'short_interpretation' => 'nullable|string',
+            'emotion_summary' => 'nullable|string',
+            'story_generation' => 'nullable|string',
+            'long_narrative' => 'nullable|string',
+        ]);
 
         $usedTypes = $data['used_types'] ?? [];
-
         $emotion = $data['emotion_summary'] ?? null;
         $short = $data['short_interpretation'] ?? null;
 
         if ($emotion) {
             session(['last_emotion' => $emotion]);
-            $emotion = strtolower($emotion); // ✅ normalize case
+            $emotion = strtolower($emotion);
 
             // ✅ Map emotion to token and save
             $token = match($emotion) {
@@ -64,15 +62,15 @@ class DreamController extends Controller
         Log::info('Current Auth ID for dream save:', ['user_id' => Auth::id()]);
 
         $dream = Dream::create([
-    'title' => $data['title'],
-    'content' => $data['content'],
-    'emotion_summary' => $emotion,
-    'short_interpretation' => $short,
-    'story_generation' => $data['story_generation'] ?? null,
-    'long_narrative' => $data['long_narrative'] ?? null,
-    'user_id' => Auth::id(),
-]);
-
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'emotion_summary' => $emotion,
+            'short_interpretation' => $short,
+            'story_generation' => $data['story_generation'] ?? null,
+            'long_narrative' => $data['long_narrative'] ?? null,
+            'is_shared' => $request->has('is_shared'), // ✅ ADD THIS
+            'user_id' => Auth::id(),
+        ]);
 
         return response()->json(['status' => 'success', 'dream' => $dream]);
     }
@@ -87,7 +85,7 @@ class DreamController extends Controller
     $short = GeminiHelper::analyzeShort($validated['content']);
 
     session(['last_emotion' => $emotion]);
-    $emotion = strtolower($emotion); // ✅ normalize case
+    $emotion = strtolower($emotion);
 
     // ✅ Map emotion to token and save
     $token = match($emotion) {
@@ -111,11 +109,13 @@ class DreamController extends Controller
         'content' => $validated['content'],
         'emotion_summary' => $emotion,
         'short_interpretation' => $short,
+        'is_shared' => $request->has('is_shared'), // ✅ ADD THIS
         'user_id' => Auth::id(),
     ]);
 
     return redirect()->route('dreams.index')->with('success', 'Dream saved with emotion and short interpretation!');
 }
+
 
 
     public function index()
@@ -269,6 +269,12 @@ public function showForestEntrance()
 public function showCloudEntrance()
 {
     return view('dreams.cloud');
+}
+
+public function sharedDreams()
+{
+    $dreams = Dream::where('is_shared', true)->with('user')->latest()->get();
+    return view('dreams.shared', compact('dreams'));
 }
 
 

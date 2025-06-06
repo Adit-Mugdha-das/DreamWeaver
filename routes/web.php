@@ -239,5 +239,6 @@ Route::get('/dream-library', [LibraryTextController::class, 'index'])->name('lib
 Route::get('/dream-library/{id}', [LibraryTextController::class, 'show'])->name('library.show');
 
 Route::get('/library/{id}/download', [LibraryTextController::class, 'download'])->name('library.download');
+Route::get('/shared-dreams', [DreamController::class, 'sharedDreams'])->name('dreams.shared');
 
 

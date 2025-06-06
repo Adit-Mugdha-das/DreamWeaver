@@ -352,6 +352,12 @@
       <input type="hidden" name="emotion_summary" id="emotionSummary">
       <input type="hidden" name="story_generation" id="storyGeneration">
       <input type="hidden" name="long_narrative" id="longNarrative">
+        <!-- Share checkbox -->
+  <label class="flex items-center mt-2 text-sm">
+    <input type="checkbox" name="is_shared" value="1" class="form-checkbox text-fuchsia-500 focus:ring-fuchsia-400">
+    <span class="ml-2 text-gray-200">🌐 Share this dream publicly</span>
+  </label>
+
 
 
       <button class="mt-4" type="submit">Save This Dream</button>
@@ -580,6 +586,7 @@ saveDreamForm.addEventListener('submit', async (e) => {
   const emotion = document.getElementById('emotionSummary').value;
   const story = document.getElementById('storyGeneration').value;
   const narrative = document.getElementById('longNarrative').value;
+  const isShared = document.querySelector('input[name="is_shared"]').checked;
 
 
   document.getElementById('saveLoadingSpinner').style.display = 'flex';
@@ -600,7 +607,8 @@ saveDreamForm.addEventListener('submit', async (e) => {
         short_interpretation: short || null,
         emotion_summary: emotion || null,
         story_generation: story || null,
-        long_narrative: narrative || null
+        long_narrative: narrative || null,
+        is_shared: isShared
       })
 
     });

@@ -180,6 +180,9 @@
 <a href="{{ route('library.index') }}" class="button">
      Dream Library
 </a>
+<a href="{{ route('dreams.shared') }}" class="block my-2 py-2 px-4 rounded-lg text-white bg-gradient-to-r from-purple-600 to-fuchsia-500 hover:scale-105 transition">
+    🌐 Explore Shared Dreams
+</a>
 
   </div>
 </div>
