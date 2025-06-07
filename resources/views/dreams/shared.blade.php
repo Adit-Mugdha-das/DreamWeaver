@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <title>🌙 Shared Dreams | DreamWeaver</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   <script src="//unpkg.com/alpinejs" defer></script>
@@ -70,21 +72,33 @@
 
       <!-- Interaction Buttons -->
       <div class="flex items-center gap-6 mt-4 text-sm text-gray-400">
-        <button class="hover:text-fuchsia-400 transition">💜 Like</button>
+        <button class="like-btn hover:text-fuchsia-400 transition" data-id="{{ $dream->id }}">
+          💜 <span class="like-count">{{ $dream->likes->count() }}</span> Like
+        </button>
         <button @click="showComments = !showComments" class="hover:text-fuchsia-400 transition">💬 Comment</button>
         <button class="hover:text-fuchsia-400 transition">🔗 Share</button>
       </div>
 
-      <!-- Comments Section -->
+      <!-- Comment Form + List -->
       <div x-show="showComments" class="mt-6 border-t border-gray-700 pt-4 space-y-4">
-        <input type="text" placeholder="Write a comment..." class="w-full px-4 py-2 bg-[#1f2937] text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-600">
-        
-        <!-- Sample comment -->
-        <div class="flex items-start gap-3 text-sm text-gray-300">
-          <div class="w-8 h-8 bg-fuchsia-600/70 rounded-full flex items-center justify-center font-bold text-white">A</div>
-          <div>
-            <p><span class="font-semibold text-white">Aria:</span> This dream feels so familiar... beautiful!</p>
+        <!-- Comment Form -->
+        <form class="comment-form" data-id="{{ $dream->id }}">
+          <input type="text" class="comment-input w-full px-4 py-2 bg-[#1f2937] text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-600" placeholder="Write a comment...">
+        </form>
+
+        <!-- Comment List -->
+        <div class="comment-list mt-3">
+          @foreach ($dream->comments as $comment)
+          <div class="flex items-start gap-3 text-sm text-gray-300">
+            <div class="w-8 h-8 bg-fuchsia-600/70 rounded-full flex items-center justify-center font-bold text-white">
+              {{ strtoupper(substr($comment->user->name, 0, 1)) }}
+            </div>
+            <div>
+              <p><span class="font-semibold text-white">{{ $comment->user->name }}:</span> {{ $comment->content }}</p>
+              <p class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
+            </div>
           </div>
+          @endforeach
         </div>
       </div>
 
@@ -93,6 +107,54 @@
       <p class="text-center text-gray-400 mt-20">No dreams have been shared yet.</p>
     @endforelse
   </div>
+
+<!-- AJAX Script -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.like-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      const dreamId = button.dataset.id;
+      const res = await fetch(`/dreams/${dreamId}/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({})
+      });
+
+      const data = await res.json();
+      button.querySelector('.like-count').innerText = data.likes;
+    });
+  });
+
+  document.querySelectorAll('.comment-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const dreamId = form.dataset.id;
+      const input = form.querySelector('.comment-input');
+      const commentList = form.nextElementSibling;
+
+      const res = await fetch(`/dreams/${dreamId}/comment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ content: input.value })
+      });
+
+      const data = await res.json();
+      const html = `<div class="flex items-start gap-3 text-sm text-gray-300 mt-2">
+        <div class="w-8 h-8 bg-fuchsia-600/70 rounded-full flex items-center justify-center font-bold text-white">${data.user[0]}</div>
+        <div><p><span class="font-semibold text-white">${data.user}:</span> ${data.content}</p><p class="text-xs text-gray-500">${data.time}</p></div>
+      </div>`;
+      commentList.innerHTML += html;
+      input.value = '';
+    });
+  });
+});
+</script>
 
 </body>
 </html>

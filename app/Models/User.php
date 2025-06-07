@@ -7,6 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Dream;
 use App\Models\Avatar;
+use App\Models\Like;
+use App\Models\Comment;
+
 
 class User extends Authenticatable
 {
@@ -61,4 +64,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Avatar::class);
     }
+
+    public function likes() {
+    return $this->hasMany(Like::class);
+}
+
+public function comments() {
+    return $this->hasMany(Comment::class);
+}
+
 }

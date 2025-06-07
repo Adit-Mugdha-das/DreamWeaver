@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
+use App\Models\Like;
+use App\Models\Comment;
 
 
 class DreamController extends Controller
@@ -305,5 +307,35 @@ public function sharedDreams()
     return view('dreams.shared', compact('dreams'));
 }
 
+public function like($id) {
+    $user = Auth::user();
+    $dream = Dream::findOrFail($id);
+
+    $like = $dream->likes()->where('user_id', $user->id)->first();
+
+    if ($like) {
+        $like->delete(); // Unlike
+    } else {
+        $dream->likes()->create(['user_id' => $user->id]);
+    }
+
+    return response()->json(['likes' => $dream->likes()->count()]);
+}
+
+public function comment(Request $request, $id) {
+    $request->validate(['content' => 'required|string|max:1000']);
+    $dream = Dream::findOrFail($id);
+
+    $comment = $dream->comments()->create([
+        'user_id' => Auth::id(),
+        'content' => $request->content
+    ]);
+
+    return response()->json([
+        'user' => $comment->user->name,
+        'content' => $comment->content,
+        'time' => $comment->created_at->diffForHumans()
+    ]);
+}
 
 }

@@ -244,3 +244,5 @@ Route::get('/shared-dreams', [DreamController::class, 'sharedDreams'])->name('dr
 
 Route::post('/dreams/share', [DreamController::class, 'share'])->name('dreams.share'); // Share only
 
+Route::post('/dreams/{id}/like', [DreamController::class, 'like']);
+Route::post('/dreams/{id}/comment', [DreamController::class, 'comment']);
