@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Vanta.js & Three.js for 3D Background -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+
 <head>
   <meta charset="UTF-8">
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -10,10 +14,21 @@
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
-    document.addEventListener('alpine:init', () => {
-      AOS.init({ once: true, duration: 800, easing: 'ease-out-cubic' });
+  document.addEventListener('DOMContentLoaded', () => {
+    AOS.init({
+      once: false, // animate on every scroll into view
+      mirror: true, // re-animate on scroll up
+      duration: 1000,
+      offset: 120,
+      easing: 'ease-in-out',
+      anchorPlacement: 'top-bottom'
     });
-  </script>
+
+    // Optional: in case content loads late or gets missed
+    setTimeout(() => AOS.refreshHard(), 1000);
+  });
+</script>
+
   <style>
     ::-webkit-scrollbar {
       width: 6px;
@@ -24,19 +39,28 @@
     }
   </style>
 </head>
-<body class="bg-[#0a0c1b] text-white font-sans px-4 py-10 min-h-screen">
+<body class="text-white font-sans min-h-screen" x-data x-init="initVanta()">
+<div id="vanta-bg" class="fixed inset-0 -z-10"></div>
+<div class="relative px-4 py-10">
+
 
   <!-- Back Button -->
-  <a href="{{ url('/welcome') }}" class="fixed top-4 left-4 text-white bg-fuchsia-700 hover:bg-fuchsia-600 px-4 py-2 rounded-lg transition shadow-lg">
-    ⬅ Back
-  </a>
+  <a href="{{ url('/welcome') }}"
+   class="fixed top-5 left-5 z-10 px-5 py-2 rounded-xl bg-black/80 backdrop-blur border border-white/10 text-white font-semibold hover:bg-white/10 hover:scale-105 transition-all shadow-md flex items-center gap-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+  </svg>
+  Back
+</a>
+
 
   <!-- Heading -->
   <div class="text-center mb-12" data-aos="fade-down">
     <h1 class="text-5xl font-bold text-violet-400 mb-2 flex justify-center items-center gap-2">
       <span class="text-4xl">🪐</span> Explore Shared Dreams
     </h1>
-    <p class="text-gray-400 text-sm md:text-base">Discover how others have wandered through their subconscious.</p>
+    <p class="text-slate-200 text-sm md:text-base">Discover how others have wandered through their subconscious.</p>
+
   </div>
 
   <!-- Feed Section -->
@@ -45,13 +69,18 @@
     @php
       $userLiked = $dream->likes->contains('user_id', auth()->id());
     @endphp
-    <div class="bg-[#111827] border border-violet-500/10 rounded-2xl p-6 shadow-md hover:shadow-violet-600/10 transition" data-aos="fade-up" x-data="{ expanded: false, showComments: false }">
+<div
+  class="bg-black/80 border border-gray-500/20 backdrop-blur-md rounded-3xl p-8 text-[1.05rem] shadow-md transition duration-300 hover:shadow-[0_0_60px_12px_rgba(147,51,234,0.5)] hover:scale-[1.015]"
+  data-aos="fade-up"
+  x-data="{ expanded: false, showComments: false }">
+
       
       <!-- User Info -->
       <div class="flex items-center gap-4 mb-4">
-        <div class="w-12 h-12 bg-fuchsia-700/80 rounded-full flex items-center justify-center text-white font-bold text-lg">
-          {{ strtoupper(substr($dream->user->name, 0, 1)) }}
-        </div>
+        <div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-inner border border-white/10">
+  {{ strtoupper(substr($dream->user->name, 0, 1)) }}
+</div>
+
         <div>
           <p class="font-semibold text-white text-base">{{ $dream->user->name }}</p>
           <p class="text-xs text-gray-400">Shared • {{ $dream->created_at->diffForHumans() }}</p>
@@ -59,22 +88,28 @@
       </div>
 
       <!-- Title -->
-      <h2 class="text-xl font-bold text-fuchsia-400 mb-2">{{ $dream->title }}</h2>
+      <h2 class="text-2xl font-semibold text-sky-300 mb-3">{{ $dream->title }}</h2>
+
+
 
       <!-- Content with Expand Option -->
-      <p class="text-gray-300 text-sm leading-relaxed mb-2" x-show="expanded">
+      <p class="text-gray-300 text-[1.1rem] leading-relaxed mb-3" x-show="expanded">
+
+
         {{ $dream->content }}
       </p>
-      <p class="text-gray-300 text-sm leading-relaxed mb-2" x-show="!expanded">
+      <p class="text-gray-300 text-[1.05rem] leading-relaxed mb-3" x-show="!expanded">
+
         {{ Str::limit($dream->content, 300, '...') }}
       </p>
-      <button @click="expanded = !expanded" class="text-xs text-violet-400 hover:underline transition">
+      <button @click="expanded = !expanded" class="text-sm font-medium text-violet-400 hover:underline transition">
+
         <span x-show="!expanded">Read more</span>
         <span x-show="expanded">Show less</span>
       </button>
 
       <!-- Interaction Buttons -->
-      <div class="flex items-center gap-6 mt-4 text-sm">
+      <div class="flex items-center gap-6 mt-5 text-sm">
         <button class="like-btn transition {{ $userLiked ? 'text-fuchsia-500' : 'text-gray-400' }}" data-id="{{ $dream->id }}">
           💜 <span class="like-count">{{ $dream->likes->count() }}</span> Like
         </button>
@@ -87,7 +122,7 @@
       <div x-show="showComments" class="mt-6 border-t border-gray-700 pt-4 space-y-4">
         <!-- Comment Form -->
         <form class="comment-form" data-id="{{ $dream->id }}">
-  <input type="text" class="comment-input w-full px-4 py-2 bg-[#1f2937] text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-600" placeholder="Write a comment...">
+  <input type="text" class="comment-input w-full px-4 py-2 bg-black/40 backdrop-blur  text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-600" placeholder="Write a comment...">
   <button type="submit" class="hidden"></button> <!-- ✅ This is what you're missing -->
 </form>
 
@@ -239,12 +274,32 @@ function deleteComment(id, el) {
 
 <!-- Modal to show who liked the dream -->
 <div id="like-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden justify-center items-center">
-  <div class="bg-[#1f2937] p-6 rounded-xl text-white max-w-sm w-full shadow-lg relative">
+  <div class="bg-black/60 backdrop-blur-md p-6 rounded-xl text-white max-w-sm w-full shadow-lg relative">
     <button onclick="hideLikes()" class="absolute top-2 right-3 text-gray-400 hover:text-white text-xl">✖</button>
     <h3 class="text-lg font-semibold mb-4">Liked by</h3>
     <ul id="like-user-list" class="space-y-2 text-sm text-gray-300"></ul>
-  </div>
+  </>
 </div>
+<script>
+function initVanta() {
+  if (window.VANTA) {
+    VANTA.FOG({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      highlightColor: 0xffffff,   // white
+      midtoneColor: 0xcccccc,     // light gray
+      lowlightColor: 0x999999,    // slightly darker gray
+      baseColor: 0x000000,        // keep base black for depth
+      blurFactor: 0.5,
+      speed: 2.00,
+      zoom: 1.1
+    });
+  }
+}
+</script>
 
 </body>
 </html>

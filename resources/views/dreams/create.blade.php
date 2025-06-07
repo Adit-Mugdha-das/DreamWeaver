@@ -380,7 +380,8 @@
   <input type="hidden" name="story_generation" id="storyGeneration">
   <input type="hidden" name="long_narrative" id="longNarrative">
 
-  <button class="mt-4" type="submit">Save This Dream</button>
+  <button class="mt-4 mb-3" type="submit">Save This Dream</button>
+
 </form>
 
 <!-- Share Dream Form -->
@@ -393,9 +394,8 @@
   <input type="hidden" name="story_generation" id="shareStory">
   <input type="hidden" name="long_narrative" id="shareNarrative">
 
-  <button id="share-btn" type="button">
-  Share
-</button>
+  <button class="mb-3" id="share-btn" type="button">Share</button>
+
 
 
 <!-- Loading Animation -->
@@ -410,7 +410,8 @@
 </form>
 
 
-    <button class="mt-4" onclick="goBack()">← Back to Form</button>
+    <button class="mt-4 mb-3" type="button" onclick="goBack()">← Back to Form</button>
+
 
     <div id="saveAnimation" class="mt-4 hidden animate-pulse text-sm text-green-400 text-center">
       ✨ Dream saved!
