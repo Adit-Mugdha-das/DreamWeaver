@@ -10,6 +10,7 @@ use App\Http\Controllers\AvatarController;
 use Illuminate\Support\Str;
 use App\Models\Dream;
 use App\Http\Controllers\LibraryTextController;
+use App\Http\Controllers\CommentController;
 
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
@@ -243,6 +244,13 @@ Route::get('/shared-dreams', [DreamController::class, 'sharedDreams'])->name('dr
 
 
 Route::post('/dreams/share', [DreamController::class, 'share'])->name('dreams.share'); // Share only
+Route::middleware('auth')->group(function () {
+    // ... your dream routes
 
-Route::post('/dreams/{id}/like', [DreamController::class, 'like']);
-Route::post('/dreams/{id}/comment', [DreamController::class, 'comment']);
+    // 👇 MOVE these inside this group:
+    Route::post('/dreams/{id}/like', [DreamController::class, 'like']);
+    Route::post('/dreams/{dream}/comment', [DreamController::class, 'comment']);
+    Route::get('/dreams/{id}/likes', [DreamController::class, 'getLikes']);
+    Route::put('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'update']);
+    Route::delete('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'destroy']);
+});

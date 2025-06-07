@@ -14,6 +14,7 @@ use App\Models\Like;
 use App\Models\Comment;
 
 
+
 class DreamController extends Controller
 {
     public function create()
@@ -322,20 +323,34 @@ public function like($id) {
     return response()->json(['likes' => $dream->likes()->count()]);
 }
 
-public function comment(Request $request, $id) {
-    $request->validate(['content' => 'required|string|max:1000']);
-    $dream = Dream::findOrFail($id);
 
-    $comment = $dream->comments()->create([
-        'user_id' => Auth::id(),
-        'content' => $request->content
+
+public function comment(Request $request, Dream $dream)
+{
+    $request->validate([
+        'content' => 'required|string|max:1000',
     ]);
+
+    $comment = new Comment();
+    $comment->user_id = Auth::id();
+    $comment->dream_id = $dream->id;
+    $comment->content = $request->content;
+    $comment->save();
 
     return response()->json([
-        'user' => $comment->user->name,
+        'user' => Auth::user()->name,
         'content' => $comment->content,
-        'time' => $comment->created_at->diffForHumans()
+        'time' => $comment->created_at->diffForHumans(),
     ]);
 }
+public function getLikes($id)
+{
+    $dream = Dream::with('likes.user')->findOrFail($id);
+    $users = $dream->likes->pluck('user.name');
+    return response()->json(['users' => $users]);
+}
+
+
+
 
 }

@@ -42,6 +42,9 @@
   <!-- Feed Section -->
   <div class="space-y-10 max-w-3xl mx-auto">
     @forelse ($dreams as $dream)
+    @php
+      $userLiked = $dream->likes->contains('user_id', auth()->id());
+    @endphp
     <div class="bg-[#111827] border border-violet-500/10 rounded-2xl p-6 shadow-md hover:shadow-violet-600/10 transition" data-aos="fade-up" x-data="{ expanded: false, showComments: false }">
       
       <!-- User Info -->
@@ -71,34 +74,46 @@
       </button>
 
       <!-- Interaction Buttons -->
-      <div class="flex items-center gap-6 mt-4 text-sm text-gray-400">
-        <button class="like-btn hover:text-fuchsia-400 transition" data-id="{{ $dream->id }}">
+      <div class="flex items-center gap-6 mt-4 text-sm">
+        <button class="like-btn transition {{ $userLiked ? 'text-fuchsia-500' : 'text-gray-400' }}" data-id="{{ $dream->id }}">
           💜 <span class="like-count">{{ $dream->likes->count() }}</span> Like
         </button>
-        <button @click="showComments = !showComments" class="hover:text-fuchsia-400 transition">💬 Comment</button>
-        <button class="hover:text-fuchsia-400 transition">🔗 Share</button>
+        <button onclick="showLikes({{ $dream->id }})" class="text-sm text-gray-400 hover:text-fuchsia-400">🧑 View Likers</button>
+        <button @click="showComments = !showComments" class="text-gray-400 hover:text-fuchsia-400 transition">💬 Comment</button>
+        <button onclick="copyLink({{ $dream->id }})" class="text-gray-400 hover:text-fuchsia-400 transition">🔗 Share</button>
       </div>
 
       <!-- Comment Form + List -->
       <div x-show="showComments" class="mt-6 border-t border-gray-700 pt-4 space-y-4">
         <!-- Comment Form -->
         <form class="comment-form" data-id="{{ $dream->id }}">
-          <input type="text" class="comment-input w-full px-4 py-2 bg-[#1f2937] text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-600" placeholder="Write a comment...">
-        </form>
+  <input type="text" class="comment-input w-full px-4 py-2 bg-[#1f2937] text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-600" placeholder="Write a comment...">
+  <button type="submit" class="hidden"></button> <!-- ✅ This is what you're missing -->
+</form>
+
 
         <!-- Comment List -->
         <div class="comment-list mt-3">
           @foreach ($dream->comments as $comment)
-          <div class="flex items-start gap-3 text-sm text-gray-300">
-            <div class="w-8 h-8 bg-fuchsia-600/70 rounded-full flex items-center justify-center font-bold text-white">
-              {{ strtoupper(substr($comment->user->name, 0, 1)) }}
-            </div>
-            <div>
-              <p><span class="font-semibold text-white">{{ $comment->user->name }}:</span> {{ $comment->content }}</p>
-              <p class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
-            </div>
-          </div>
-          @endforeach
+<div class="flex items-start gap-3 text-sm text-gray-300 mt-2" data-aos="fade-up">
+  <div class="w-8 h-8 bg-fuchsia-600/70 rounded-full flex items-center justify-center font-bold text-white">
+    {{ strtoupper(substr($comment->user->name, 0, 1)) }}
+  </div>
+  <div>
+    <p><span class="font-semibold text-white">{{ $comment->user->name }}:</span> {{ $comment->content }}</p>
+    <p class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
+
+    <!-- ✅ Add this block inside here -->
+    @if ($comment->user_id === auth()->id())
+      <div class="flex gap-2 text-xs mt-1">
+        <button onclick="editComment({{ $comment->id }}, `{{ addslashes($comment->content) }}`)" class="text-yellow-400 hover:underline">Edit</button>
+        <button onclick="deleteComment({{ $comment->id }}, this)" class="text-red-400 hover:underline">Delete</button>
+      </div>
+    @endif
+  </div>
+</div>
+@endforeach
+
         </div>
       </div>
 
@@ -108,7 +123,7 @@
     @endforelse
   </div>
 
-<!-- AJAX Script -->
+<!-- Like & Comment + Share Script -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.like-btn').forEach(button => {
@@ -125,36 +140,111 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const data = await res.json();
       button.querySelector('.like-count').innerText = data.likes;
+      button.classList.toggle('text-fuchsia-500');
+      button.classList.toggle('text-gray-400');
     });
   });
 
   document.querySelectorAll('.comment-form').forEach(form => {
     form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const dreamId = form.dataset.id;
-      const input = form.querySelector('.comment-input');
-      const commentList = form.nextElementSibling;
+  e.preventDefault();
+  const dreamId = form.dataset.id;
+  const input = form.querySelector('.comment-input');
 
-      const res = await fetch(`/dreams/${dreamId}/comment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({ content: input.value })
-      });
+  // FIXED: Find correct comment list
+  const commentList = form.parentElement.querySelector('.comment-list');
 
-      const data = await res.json();
-      const html = `<div class="flex items-start gap-3 text-sm text-gray-300 mt-2">
-        <div class="w-8 h-8 bg-fuchsia-600/70 rounded-full flex items-center justify-center font-bold text-white">${data.user[0]}</div>
-        <div><p><span class="font-semibold text-white">${data.user}:</span> ${data.content}</p><p class="text-xs text-gray-500">${data.time}</p></div>
-      </div>`;
-      commentList.innerHTML += html;
-      input.value = '';
+  const res = await fetch(`/dreams/${dreamId}/comment`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+    },
+    body: JSON.stringify({ content: input.value })
+  });
+
+  const data = await res.json();
+  const html = `<div class="flex items-start gap-3 text-sm text-gray-300 mt-2">
+    <div class="w-8 h-8 bg-fuchsia-600/70 rounded-full flex items-center justify-center font-bold text-white">${data.user[0]}</div>
+    <div><p><span class="font-semibold text-white">${data.user}:</span> ${data.content}</p><p class="text-xs text-gray-500">${data.time}</p></div>
+  </div>`;
+  commentList.innerHTML += html;
+  input.value = '';
+    
+      AOS.refresh(); // Animate new comment
     });
   });
 });
+
+// ✅ Copy link to clipboard
+function copyLink(dreamId) {
+  const url = `${window.location.origin}/dreams/${dreamId}`;
+  navigator.clipboard.writeText(url).then(() => {
+    alert("🔗 Link copied to clipboard!");
+  });
+}
+
+// ✅ Show who liked a dream
+function showLikes(dreamId) {
+  fetch(`/dreams/${dreamId}/likes`)
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById('like-user-list');
+      list.innerHTML = '';
+      if (data.users.length === 0) {
+        list.innerHTML = '<li>No likes yet.</li>';
+      } else {
+        data.users.forEach(name => {
+          const li = document.createElement('li');
+          li.textContent = name;
+          list.appendChild(li);
+        });
+      }
+      document.getElementById('like-modal').classList.remove('hidden');
+    });
+}
+
+function hideLikes() {
+  document.getElementById('like-modal').classList.add('hidden');
+}
 </script>
+
+<script>
+function editComment(id, oldContent) {
+  const newContent = prompt("Edit your comment:", oldContent);
+  if (newContent && newContent.trim() !== '') {
+    fetch(`/comments/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ content: newContent })
+    }).then(() => location.reload());
+  }
+}
+
+function deleteComment(id, el) {
+  if (confirm("Delete this comment?")) {
+    fetch(`/comments/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+      }
+    }).then(() => el.closest('.flex').remove());
+  }
+}
+</script>
+
+
+<!-- Modal to show who liked the dream -->
+<div id="like-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden justify-center items-center">
+  <div class="bg-[#1f2937] p-6 rounded-xl text-white max-w-sm w-full shadow-lg relative">
+    <button onclick="hideLikes()" class="absolute top-2 right-3 text-gray-400 hover:text-white text-xl">✖</button>
+    <h3 class="text-lg font-semibold mb-4">Liked by</h3>
+    <ul id="like-user-list" class="space-y-2 text-sm text-gray-300"></ul>
+  </div>
+</div>
 
 </body>
 </html>
