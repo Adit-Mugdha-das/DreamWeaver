@@ -263,3 +263,5 @@ Route::get('/notifications', function () {
         'notifications' => $user->notifications
     ]);
 })->name('notifications.index')->middleware('auth');
+
+Route::post('/dreams/{dream}/share-later', [DreamController::class, 'shareLater'])->middleware('auth')->name('dreams.shareLater');

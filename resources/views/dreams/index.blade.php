@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <title>All Dreams</title>
   @vite('resources/css/app.css')
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
@@ -296,6 +298,14 @@
   <a href="{{ route('dreams.download', $dream->id) }}" class="download-btn">
     📄 Download
   </a>
+  @if (!$dream->is_shared)
+  <button type="button"
+          onclick="shareDream({{ $dream->id }})"
+          class="download-btn">
+      📤 Share
+  </button>
+@endif
+
 </div>
 
 
@@ -402,6 +412,35 @@
     });
   });
 </script>
+
+<script>
+  function shareDream(dreamId) {
+    if (!confirm("Are you sure you want to share this dream?")) return;
+
+    fetch(`/dreams/${dreamId}/share-later`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({})
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Forbidden or error from server');
+      return res.json();
+    })
+    .then(data => {
+      alert(data.message || 'Shared!');
+      location.reload();
+    })
+    .catch(err => {
+      alert("❌ Failed to share dream.");
+      console.error(err);
+    });
+  }
+</script>
+
 
 
 </body>

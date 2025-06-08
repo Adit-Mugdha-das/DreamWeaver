@@ -362,6 +362,21 @@ public function getLikes($id)
     return response()->json(['users' => $users]);
 }
 
+public function shareLater(Request $request, Dream $dream)
+{
+    $user = Auth::user();
+
+    if (!$user || $dream->user_id !== $user->id) {
+        return abort(403);
+    }
+
+    $dream->is_shared = true;
+    $dream->save();
+
+    return response()->json(['message' => 'Dream shared successfully.']);
+}
+
+
 
 
 
