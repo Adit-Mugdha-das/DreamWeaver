@@ -308,7 +308,8 @@ public function sharedDreams()
     return view('dreams.shared', compact('dreams'));
 }
 
-public function like($id) {
+public function like($id)
+{
     $user = Auth::user();
     $dream = Dream::findOrFail($id);
 
@@ -318,6 +319,11 @@ public function like($id) {
         $like->delete(); // Unlike
     } else {
         $dream->likes()->create(['user_id' => $user->id]);
+
+        // 🔔 Trigger notification if the liker is not the owner
+        if ($dream->user_id !== $user->id) {
+            $dream->user->notify(new \App\Notifications\DreamLiked($user, $dream));
+        }
     }
 
     return response()->json(['likes' => $dream->likes()->count()]);
@@ -337,12 +343,18 @@ public function comment(Request $request, Dream $dream)
     $comment->content = $request->content;
     $comment->save();
 
+    // 🔔 Trigger notification if the commenter is not the dream owner
+    if ($dream->user_id !== Auth::id()) {
+        $dream->user->notify(new \App\Notifications\DreamCommented(Auth::user(), $dream, $comment));
+    }
+
     return response()->json([
         'user' => Auth::user()->name,
         'content' => $comment->content,
         'time' => $comment->created_at->diffForHumans(),
     ]);
 }
+
 public function getLikes($id)
 {
     $dream = Dream::with('likes.user')->findOrFail($id);

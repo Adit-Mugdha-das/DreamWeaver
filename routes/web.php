@@ -254,3 +254,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'update']);
     Route::delete('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'destroy']);
 });
+
+Route::get('/notifications', function () {
+    $user = Auth::user();
+    $user->unreadNotifications->markAsRead();
+
+    return view('notifications.index', [
+        'notifications' => $user->notifications
+    ]);
+})->name('notifications.index')->middleware('auth');

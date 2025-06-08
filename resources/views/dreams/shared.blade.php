@@ -41,6 +41,24 @@
 </head>
 <body class="text-white font-sans min-h-screen" x-data x-init="initVanta()">
 <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
+<!-- Notification Bell Button -->
+<!-- 🔔 Notification Bell Top Right -->
+<!-- 🔔 Glowing Notification Bell Top Right -->
+<a href="{{ route('notifications.index') }}"
+   class="fixed top-4 right-6 z-50 text-white text-3xl transition duration-200 ease-in-out animate-pulse hover:text-yellow-400 shadow-lg"
+   style="text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7;">
+   <span class="relative inline-block">
+       🔔
+       @if(auth()->check() && auth()->user()->unreadNotifications->count())
+       <span class="absolute -top-1 -right-1 text-xs px-1.5 bg-red-600 text-white rounded-full shadow">
+         {{ auth()->user()->unreadNotifications->count() }}
+       </span>
+       @endif
+   </span>
+</a>
+
+
+
 <div class="relative px-4 py-10">
 
 

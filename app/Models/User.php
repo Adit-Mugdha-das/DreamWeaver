@@ -9,7 +9,7 @@ use App\Models\Dream;
 use App\Models\Avatar;
 use App\Models\Like;
 use App\Models\Comment;
-
+use Illuminate\Notifications\DatabaseNotification;
 
 class User extends Authenticatable
 {
@@ -65,12 +65,21 @@ class User extends Authenticatable
         return $this->hasMany(Avatar::class);
     }
 
-    public function likes() {
-    return $this->hasMany(Like::class);
-}
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 
-public function comments() {
-    return $this->hasMany(Comment::class);
-}
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
+    /**
+     * Get the notifications for the user (optional but useful).
+     */
+    public function notifications()
+    {
+        return $this->morphMany(DatabaseNotification::class, 'notifiable');
+    }
 }
