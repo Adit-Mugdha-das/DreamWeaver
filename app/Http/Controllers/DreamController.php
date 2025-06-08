@@ -204,28 +204,33 @@ class DreamController extends Controller
         return redirect()->route('dreams.index')->with('success', 'Dream deleted successfully.');
     }
 
-    public function showDashboard()
-    {
-        $dreams = Dream::where('user_id', Auth::id())->get();
+    
+public function showDashboard()
+{
+    $dreams = Dream::where('user_id', Auth::id())->get();
 
-        $emotionCounts = $dreams->groupBy('emotion_summary')->map->count();
+    // Normalize and group emotions
+    $emotionCounts = $dreams->groupBy(function ($dream) {
+        $emotion = strtolower(trim($dream->emotion_summary ?? 'unknown'));
+        return Str::title($emotion); // e.g., joy, fear → Joy, Fear
+    })->map->count();
 
-        // Group dreams by exact day
-        $dailyCounts = $dreams->groupBy(function ($dream) {
-            return Carbon::parse($dream->created_at)->format('Y-m-d');
-        })->map->count();
+    // Group dreams by exact day
+    $dailyCounts = $dreams->groupBy(function ($dream) {
+        return Carbon::parse($dream->created_at)->format('Y-m-d');
+    })->map->count();
 
-        // Extract keywords
-        $keywords = collect();
-        foreach ($dreams as $dream) {
-            $words = str_word_count(strtolower(strip_tags($dream->content)), 1);
-            $filtered = array_filter($words, fn($w) => strlen($w) > 3 && !in_array($w, ['this', 'that', 'with', 'have', 'just']));
-            $keywords = $keywords->merge($filtered);
-        }
-        $topKeywords = $keywords->countBy()->sortDesc()->take(10);
-
-        return view('dreams.dashboard', compact('emotionCounts', 'dailyCounts', 'topKeywords'));
+    // Extract keywords
+    $keywords = collect();
+    foreach ($dreams as $dream) {
+        $words = str_word_count(strtolower(strip_tags($dream->content)), 1);
+        $filtered = array_filter($words, fn($w) => strlen($w) > 3 && !in_array($w, ['this', 'that', 'with', 'have', 'just']));
+        $keywords = $keywords->merge($filtered);
     }
+    $topKeywords = $keywords->countBy()->sortDesc()->take(10);
+
+    return view('dreams.dashboard', compact('emotionCounts', 'dailyCounts', 'topKeywords'));
+}
 
     public function exportPdf()
     {
