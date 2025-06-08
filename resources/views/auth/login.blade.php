@@ -210,10 +210,7 @@
       <a href="{{ route('password.request') }}" class="forgot-link">Forgot your password?</a>
       <a href="{{ route('register') }}" class="register-link">Don't have an account? Register</a>
 
-      <div class="remember-me">
-        <input type="checkbox" name="remember" id="remember">
-        <label for="remember">Remember Me</label>
-      </div>
+      
     </form>
   </div>
 
