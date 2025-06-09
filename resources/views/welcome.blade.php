@@ -137,12 +137,40 @@
 }
 
 .top-left-logout .button {
-  padding: 0.4rem 1rem;
-  font-size: 0.8rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
   width: auto;
   min-width: unset;
   border-radius: 0.6rem;
 }
+.top-right-tutorial {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+}
+
+.top-right-tutorial .button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  width: auto;
+  min-width: unset;
+  border-radius: 0.6rem;
+  background-color: rgba(0, 255, 255, 0.08);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.15);
+  color: #e0f7ff;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.top-right-tutorial .button:hover {
+  background-color: rgba(0, 255, 255, 0.12);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.35);
+  transform: translateY(-0.3px);
+}
+
 
 
   </style>
@@ -155,6 +183,12 @@
   @csrf
   <button type="submit" class="button">🚪 Logout</button>
 </form>
+
+<a href="{{ route('tutorial.show') }}" class="top-right-tutorial">
+  <div class="button">📘 Tutorial</div>
+</a>
+
+
 
 
 <div class="container">

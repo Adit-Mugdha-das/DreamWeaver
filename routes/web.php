@@ -265,3 +265,6 @@ Route::get('/notifications', function () {
 })->name('notifications.index')->middleware('auth');
 
 Route::post('/dreams/{dream}/share-later', [DreamController::class, 'shareLater'])->middleware('auth')->name('dreams.shareLater');
+Route::get('/tutorial', function () {
+    return view('support.tutorial');
+})->name('tutorial.show');
