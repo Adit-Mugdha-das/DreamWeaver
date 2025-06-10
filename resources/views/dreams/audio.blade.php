@@ -97,7 +97,7 @@
 <body>
 <!-- Background -->
 <!-- Home Button (Top Left) -->
-<a href="{{ route('welcome') }}" class="nav-button">🏠 Home</a>
+<a href="{{ route('welcome') }}" class="nav-button"> Home</a>
 
 
 
