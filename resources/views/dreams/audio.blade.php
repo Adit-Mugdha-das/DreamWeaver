@@ -79,7 +79,7 @@
   left: 1rem;
   z-index: 10;
   padding: 0.3rem 0.75rem;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   border-radius: 9999px;
   background-color: rgba(0, 0, 0, 0.7);
   border: 1px solid #a855f7;
