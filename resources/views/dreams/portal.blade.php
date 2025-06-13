@@ -13,7 +13,6 @@
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
       min-height: 100vh;
-      text-align: center;
     }
 
     #vanta-bg {
@@ -30,12 +29,14 @@
       font-weight: 800;
       letter-spacing: 1px;
       line-height: 1.3;
+      text-align: center;
     }
 
     .portal-subtext {
       margin-top: 0.5rem;
       font-size: 1.2rem;
       color: #cbd5e1;
+      text-align: center;
     }
 
     .home-btn {
@@ -70,97 +71,118 @@
     .card-row {
       margin-top: 3rem;
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
       gap: 2rem;
+      justify-content: center;
     }
 
     .portal-card {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 1rem;
-      padding: 1.5rem;
+      position: relative;
       width: 260px;
-      text-align: center;
+      height: 380px;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       text-decoration: none;
       color: white;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+      background-color: #1e293b;
     }
 
     .portal-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 30px rgba(255, 255, 255, 0.2);
+      transform: scale(1.03);
+      box-shadow: 0 12px 40px rgba(255, 255, 255, 0.2);
     }
 
-    .card-icon {
-      width: 60px;
-      height: 60px;
-      margin-bottom: 1rem;
+    .portal-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.8);
+      transition: filter 0.3s ease;
     }
 
-    .card-content h3 {
+    .portal-card:hover img {
+      filter: brightness(1);
+    }
+
+    .card-overlay {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    .card-overlay h3 {
+      margin: 0 0 0.5rem;
       font-size: 1.2rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
     }
 
-    .card-content p {
+    .card-overlay p {
+      margin: 0 0 1rem;
       font-size: 0.95rem;
       color: #cbd5e1;
     }
 
-    /* 🌠 Floating Emoji Styles */
-    .float-emoji {
-      position: absolute;
-      font-size: 1.5rem;
-      animation: rise 2s ease-out forwards;
-      pointer-events: none;
-      z-index: 100;
+    .card-button {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      background: #ec4899;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      transition: background 0.3s ease;
     }
 
-    @keyframes rise {
-      from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(-60px); opacity: 0; }
+    .card-button:hover {
+      background: #f472b6;
     }
   </style>
 </head>
 <body>
   <div id="vanta-bg"></div>
 
-  <!-- 🏠 Home button top-left -->
   <a href="{{ url('/welcome') }}" class="home-btn">🏠 Home</a>
 
-  <!-- 🌌 Portal Content -->
   <div class="center-container">
     <div class="portal-heading">Welcome to Your Dream World</div>
     <div class="portal-subtext">Wander through the magical realm your dreams have shaped...</div>
 
     <div class="card-row">
       <a href="http://127.0.0.1:8000/test-avatar" class="portal-card">
-        <img src="/images/avatar-icon.png" alt="Avatar Icon" class="card-icon">
-        <div class="card-content">
+        <img src="/images/avatar-icon.png" alt="Your Dream Avatar">
+        <div class="card-overlay">
           <h3>Your Dream Avatar</h3>
           <p>Craft the persona born from your dreams.</p>
+          <span class="card-button">Enter →</span>
         </div>
       </a>
+
       <a href="{{ route('totems') }}" class="portal-card">
-        <img src="/images/totem-icon.png" alt="Totem Icon" class="card-icon">
-        <div class="card-content">
+        <img src="/images/totem-icon.png" alt="Dream Totems">
+        <div class="card-overlay">
           <h3>Dream Totems</h3>
           <p>Discover powerful relics in your dreamscape.</p>
+          <span class="card-button">Explore →</span>
         </div>
       </a>
+
       <a href="{{ route('dream.map') }}" class="portal-card">
-        <img src="/images/map-icon.png" alt="Map Icon" class="card-icon">
-        <div class="card-content">
+        <img src="/images/map-icon.png" alt="Dream Map">
+        <div class="card-overlay">
           <h3>Dream Map</h3>
           <p>Explore your dream world visually.</p>
+          <span class="card-button">View →</span>
         </div>
       </a>
     </div>
   </div>
 
-  <!-- 🔮 Background Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.cells.min.js"></script>
   <script>
@@ -177,22 +199,6 @@
       color2: 0xec4899,
       size: 2.0,
       backgroundColor: 0x0f172a
-    });
-  </script>
-
-  <!-- ✨ Floating Emoji Animation -->
-  <script>
-    const emojis = ['✨', '🪐', '🌙'];
-    document.querySelectorAll('.portal-card').forEach(card => {
-      card.addEventListener('click', e => {
-        const span = document.createElement('span');
-        span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        span.className = 'float-emoji';
-        span.style.left = `${e.clientX}px`;
-        span.style.top = `${e.clientY}px`;
-        document.body.appendChild(span);
-        setTimeout(() => span.remove(), 2000);
-      });
     });
   </script>
 </body>
