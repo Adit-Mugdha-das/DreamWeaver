@@ -180,6 +180,14 @@
           <span class="card-button">View →</span>
         </div>
       </a>
+      <a href="{{ route('riddles.index') }}" class="portal-card">
+    <img src="/images/riddle-icon.png" alt="Dream Riddles">
+    <div class="card-overlay">
+      <h3>Dream Riddles</h3>
+      <p>Solve mystical puzzles whispered from the void.</p>
+      <span class="card-button">Solve →</span>
+    </div>
+  </a>
     </div>
   </div>
 

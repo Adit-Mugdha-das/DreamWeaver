@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Models\Dream;
 use App\Http\Controllers\LibraryTextController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\RiddleController;
 
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
@@ -268,3 +269,8 @@ Route::post('/dreams/{dream}/share-later', [DreamController::class, 'shareLater'
 Route::get('/tutorial', function () {
     return view('support.tutorial');
 })->name('tutorial.show');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/riddles', [RiddleController::class, 'index'])->name('riddles.index');
+    Route::post('/riddles/{id}/solve', [RiddleController::class, 'solve'])->name('riddles.solve');
+});
