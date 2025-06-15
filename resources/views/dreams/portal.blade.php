@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>Dream World Portal</title>
   @vite('resources/css/app.css')
+
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
@@ -149,12 +153,12 @@
 
   <a href="{{ url('/welcome') }}" class="home-btn">🏠 Home</a>
 
-  <div class="center-container">
-    <div class="portal-heading">Welcome to Your Dream World</div>
-    <div class="portal-subtext">Wander through the magical realm your dreams have shaped...</div>
+  <div class="center-container" data-aos="fade-up">
+    <div class="portal-heading" data-aos="zoom-in" data-aos-delay="100">Welcome to Your Dream World</div>
+    <div class="portal-subtext" data-aos="fade-up" data-aos-delay="300">Wander through the magical realm your dreams have shaped...</div>
 
-    <div class="card-row">
-      <a href="http://127.0.0.1:8000/test-avatar" class="portal-card">
+    <div class="card-row" data-aos="fade-up" data-aos-delay="600">
+      <a href="http://127.0.0.1:8000/test-avatar" class="portal-card" data-aos="zoom-in" data-aos-delay="800">
         <img src="/images/avatar-icon.png" alt="Your Dream Avatar">
         <div class="card-overlay">
           <h3>Your Dream Avatar</h3>
@@ -163,7 +167,7 @@
         </div>
       </a>
 
-      <a href="{{ route('totems') }}" class="portal-card">
+      <a href="{{ route('totems') }}" class="portal-card" data-aos="zoom-in" data-aos-delay="1000">
         <img src="/images/totem-icon.png" alt="Dream Totems">
         <div class="card-overlay">
           <h3>Dream Totems</h3>
@@ -172,7 +176,7 @@
         </div>
       </a>
 
-      <a href="{{ route('dream.map') }}" class="portal-card">
+      <a href="{{ route('dream.map') }}" class="portal-card" data-aos="zoom-in" data-aos-delay="1200">
         <img src="/images/map-icon.png" alt="Dream Map">
         <div class="card-overlay">
           <h3>Dream Map</h3>
@@ -180,19 +184,22 @@
           <span class="card-button">View →</span>
         </div>
       </a>
-      <a href="{{ route('riddles.index') }}" class="portal-card">
-    <img src="/images/riddle-icon.png" alt="Dream Riddles">
-    <div class="card-overlay">
-      <h3>Dream Riddles</h3>
-      <p>Solve mystical puzzles whispered from the void.</p>
-      <span class="card-button">Solve →</span>
-    </div>
-  </a>
+
+      <a href="{{ route('riddles.index') }}" class="portal-card" data-aos="zoom-in" data-aos-delay="1400">
+        <img src="/images/riddle-icon.png" alt="Dream Riddles">
+        <div class="card-overlay">
+          <h3>Dream Riddles</h3>
+          <p>Solve mystical puzzles whispered from the void.</p>
+          <span class="card-button">Solve →</span>
+        </div>
+      </a>
     </div>
   </div>
 
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.cells.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
     VANTA.CELLS({
       el: "#vanta-bg",
@@ -207,6 +214,12 @@
       color2: 0xec4899,
       size: 2.0,
       backgroundColor: 0x0f172a
+    });
+
+    AOS.init({
+      once: true,
+      duration: 800,
+      easing: 'ease-out-cubic'
     });
   </script>
 </body>
