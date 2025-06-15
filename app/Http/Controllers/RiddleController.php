@@ -23,7 +23,7 @@ class RiddleController extends Controller
         return view('dreams.riddle', compact('nextRiddle'));
     }
 
-    // Handle riddle submission
+    // Handle riddle submission (AJAX)
     public function solve(Request $request, $riddleId)
     {
         $riddle = Riddle::findOrFail($riddleId);
@@ -31,17 +31,14 @@ class RiddleController extends Controller
         $correctAnswer = strtolower($riddle->answer);
 
         if ($userAnswer === $correctAnswer) {
-            DB::table('riddle_user')->insert([
-                'user_id' => Auth::id(),
-                'riddle_id' => $riddle->id,
-                'is_solved' => true,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+            DB::table('riddle_user')->updateOrInsert(
+                ['user_id' => Auth::id(), 'riddle_id' => $riddle->id],
+                ['is_solved' => true, 'updated_at' => now(), 'created_at' => now()]
+            );
 
-            return redirect()->route('riddles.index')->with('success', '✅ Correct! You solved the riddle.');
+            return response()->json(['success' => true, 'message' => '✅ Correct! You solved the riddle.']);
         } else {
-            return back()->with('error', '❌ Not quite. Try again!');
+            return response()->json(['success' => false, 'message' => '❌ Wrong! Try again.']);
         }
     }
 }
