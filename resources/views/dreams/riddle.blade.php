@@ -6,14 +6,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   @vite('resources/css/app.css')
 
+  <!-- Vanta.js & Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
   <style>
     body {
-      background-color: #0f172a;
-      color: white;
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
       margin: 0;
       padding: 0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      color: white;
+      background-color: #000000; /* Pure black background */
+      overflow: hidden;
+    }
+
+    #vanta-bg {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      top: 0;
+      left: 0;
+    }
+
+    .flex {
+      z-index: 1;
+      position: relative;
     }
 
     .box {
@@ -21,7 +40,7 @@
       background: rgba(255, 255, 255, 0.05);
       padding: 2rem;
       border-radius: 1rem;
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 25px rgba(255, 102, 204, 0.3);
       backdrop-filter: blur(10px);
       margin: 2rem auto;
       text-align: center;
@@ -45,24 +64,25 @@
     }
 
     .back-btn {
-      position: fixed;
-      top: 1.5rem;
-      left: 1.5rem;
-      background: linear-gradient(135deg, #14b8a6, #ec4899);
-      padding: 0.5rem 1rem;
-      color: white;
-      font-weight: 600;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
-      text-decoration: none;
-      transition: all 0.3s ease;
-      z-index: 100;
-    }
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: linear-gradient(to right, #d946ef, #9333ea);
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 15px rgba(255, 102, 204, 0.3);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  z-index: 100;
+  border: none;
+}
 
-    .back-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255,255,255,0.3);
-    }
+.back-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 102, 204, 0.6);
+}
 
     #hintBox {
       opacity: 0;
@@ -74,6 +94,55 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    button {
+      transition: all 0.3s ease;
+      font-weight: 600;
+      border: none;
+    }
+
+    #generateBtn {
+  background: linear-gradient(to right, #ec4899, #8b5cf6);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 12px rgba(255, 102, 204, 0.3);
+  border: none;
+}
+
+#generateBtn:hover {
+  background: linear-gradient(to right, #f472b6, #a78bfa);
+  box-shadow: 0 0 18px rgba(255, 102, 204, 0.5);
+}
+
+    #hintBtn {
+      background: linear-gradient(to right, #6366f1, #7c3aed);
+      color: white;
+    }
+
+    #hintBtn:hover {
+      background: linear-gradient(to right, #818cf8, #a78bfa);
+    }
+
+    button[type="submit"] {
+      background: linear-gradient(to right, #f472b6, #ec4899);
+      color: white;
+    }
+
+    button[type="submit"]:hover {
+      background: linear-gradient(to right, #fb7185, #f43f5e);
+    }
+
+    button[onclick="skipRiddle()"] {
+  background: linear-gradient(to right, #4f46e5, #6d28d9);
+  color: white;
+}
+
+button[onclick="skipRiddle()"]:hover {
+  background: linear-gradient(to right, #6366f1, #8b5cf6);
+}
+
 
     input[type="text"] {
       background: white;
@@ -88,32 +157,49 @@
 </head>
 <body>
 
+<div id="vanta-bg"></div>
+
 <a href="{{ url('/imagine') }}" class="back-btn">← Portal</a>
 
 <div class="flex flex-col justify-center items-center min-h-screen">
-  <button id="generateBtn" class="mb-6 px-6 py-3 bg-pink-600 hover:bg-pink-700 rounded text-white font-semibold transition">✨ Generate Riddle</button>
+  <button id="generateBtn" class="mb-6 px-6 py-3 rounded text-white font-semibold"> Generate Riddle</button>
 
   <div id="riddleBox" class="box">
-    <h2 class="text-2xl font-bold mb-2">🧠 Dream Riddle</h2>
+    <h2 class="text-2xl font-bold mb-2"> Dream Riddle</h2>
     <p id="typedText" class="riddle-question"></p>
 
-    <button id="hintBtn" onclick="toggleHint()" class="mt-3 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-sm hidden">💡 Show Hint</button>
+    <button id="hintBtn" onclick="toggleHint()" class="mt-3 px-4 py-2 rounded text-sm hidden"> Show Hint</button>
     <div id="hintBox" class="mt-3 text-indigo-300 text-sm"></div>
 
     <form id="riddleForm" class="mt-4">
       @csrf
-      <input type="text" name="answer" id="answerInput" placeholder="Your answer..." required class="w-full p-2 rounded mb-3 text-black">
-      <button type="submit" class="px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded">Submit</button>
+      <input type="text" name="answer" id="answerInput" placeholder="Your answer..." required class="w-full p-2 rounded mb-3">
+      <button type="submit" class="px-4 py-2 rounded">Submit</button>
     </form>
 
-    <!-- ✅ Skip Riddle Button -->
-    <button type="button" onclick="skipRiddle()" class="mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded text-black">⏭️ Skip Riddle</button>
+    <button type="button" onclick="skipRiddle()" class="mt-2 px-4 py-2 rounded"> Skip Riddle</button>
 
     <div id="feedback" class="text-sm mt-2"></div>
   </div>
 </div>
 
 <script>
+VANTA.NET({
+  el: "#vanta-bg",
+  mouseControls: true,
+  touchControls: true,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  scale: 1.0,
+  scaleMobile: 1.0,
+  color: 0xff69b4, // Pure pink lines
+  backgroundColor: 0x000000, // Pure black background
+  points: 10.0,
+  maxDistance: 20.0,
+  spacing: 18.0
+});
+
+
 let currentRiddleId = null;
 
 function startTyping(text) {
@@ -155,7 +241,7 @@ function fetchNextRiddle() {
   .then(res => res.json())
   .then(data => {
     if (!data.id) {
-      document.getElementById('typedText').textContent = "🎉 You've solved all riddles!";
+      document.getElementById('typedText').textContent = " You've solved all riddles!";
       document.getElementById('hintBox').textContent = '';
       document.getElementById('hintBtn').classList.add('hidden');
       document.getElementById('riddleForm').style.display = 'none';
@@ -225,7 +311,6 @@ document.getElementById('riddleForm').addEventListener('submit', function (e) {
   });
 });
 
-// ✅ Skip Riddle logic
 function skipRiddle() {
   fetch("{{ route('riddles.next') }}", {
     method: 'POST',
