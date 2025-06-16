@@ -272,5 +272,6 @@ Route::get('/tutorial', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/riddles', [RiddleController::class, 'index'])->name('riddles.index');
+    Route::post('/riddles/next', [RiddleController::class, 'next'])->name('riddles.next');
     Route::post('/riddles/{id}/solve', [RiddleController::class, 'solve'])->name('riddles.solve');
 });

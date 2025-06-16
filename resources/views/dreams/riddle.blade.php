@@ -23,7 +23,7 @@
       border-radius: 1rem;
       box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
-      margin: 10% auto;
+      margin: 2rem auto;
       text-align: center;
       display: none;
       opacity: 0;
@@ -87,93 +87,187 @@
   </style>
 </head>
 <body>
-  <!-- 🔙 Back to Portal -->
-  <a href="{{ url('/imagine') }}" class="back-btn">← Portal</a>
 
-  <!-- 🧠 Generate Riddle -->
-  <div class="flex flex-col justify-center items-center min-h-screen">
-    <button onclick="startTyping()" class="mb-6 px-6 py-3 bg-pink-600 hover:bg-pink-700 rounded text-white font-semibold transition">✨ Generate Riddle</button>
+<a href="{{ url('/imagine') }}" class="back-btn">← Portal</a>
 
-    <div id="riddleBox" class="box">
-      <h2 class="text-2xl font-bold mb-2">🧠 Dream Riddle</h2>
-      <p id="typedText" class="riddle-question"></p>
+<div class="flex flex-col justify-center items-center min-h-screen">
+  <button id="generateBtn" class="mb-6 px-6 py-3 bg-pink-600 hover:bg-pink-700 rounded text-white font-semibold transition">✨ Generate Riddle</button>
 
-      @if($nextRiddle && $nextRiddle->hint)
-        <button onclick="toggleHint()" class="mt-3 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-sm">💡 Show Hint</button>
-        <div id="hintBox" class="mt-3 text-indigo-300 text-sm">{{ $nextRiddle->hint }}</div>
-      @endif
+  <div id="riddleBox" class="box">
+    <h2 class="text-2xl font-bold mb-2">🧠 Dream Riddle</h2>
+    <p id="typedText" class="riddle-question"></p>
 
-      <form id="riddleForm" class="mt-4">
-        @csrf
-        <input type="text" name="answer" id="answerInput" placeholder="Your answer..." required class="w-full p-2 rounded mb-3 text-black">
-        <button type="submit" class="px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded">Submit</button>
-      </form>
+    <button id="hintBtn" onclick="toggleHint()" class="mt-3 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-sm hidden">💡 Show Hint</button>
+    <div id="hintBox" class="mt-3 text-indigo-300 text-sm"></div>
 
-      <div id="feedback" class="text-sm"></div>
-    </div>
+    <form id="riddleForm" class="mt-4">
+      @csrf
+      <input type="text" name="answer" id="answerInput" placeholder="Your answer..." required class="w-full p-2 rounded mb-3 text-black">
+      <button type="submit" class="px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded">Submit</button>
+    </form>
+
+    <!-- ✅ Skip Riddle Button -->
+    <button type="button" onclick="skipRiddle()" class="mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded text-black">⏭️ Skip Riddle</button>
+
+    <div id="feedback" class="text-sm mt-2"></div>
   </div>
+</div>
 
-  <!-- ✨ Script -->
-  <script>
-    const originalText = @json($nextRiddle?->question ?? '');
-    const riddleId = @json($nextRiddle?->id ?? null);
-    const riddleForm = document.getElementById('riddleForm');
+<script>
+let currentRiddleId = null;
+
+function startTyping(text) {
+  const box = document.getElementById('riddleBox');
+  const target = document.getElementById('typedText');
+  const feedback = document.getElementById('feedback');
+
+  box.style.display = 'block';
+  box.style.opacity = 1;
+  target.textContent = '';
+  feedback.textContent = '';
+
+  let i = 0;
+  const speed = 35;
+  const interval = setInterval(() => {
+    if (i < text.length) {
+      target.textContent += text.charAt(i);
+      i++;
+    } else {
+      clearInterval(interval);
+    }
+  }, speed);
+}
+
+function toggleHint() {
+  document.getElementById('hintBox')?.classList.toggle('show');
+}
+
+document.getElementById('generateBtn').addEventListener('click', fetchNextRiddle);
+
+function fetchNextRiddle() {
+  fetch("{{ route('riddles.next') }}", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (!data.id) {
+      document.getElementById('typedText').textContent = "🎉 You've solved all riddles!";
+      document.getElementById('hintBox').textContent = '';
+      document.getElementById('hintBtn').classList.add('hidden');
+      document.getElementById('riddleForm').style.display = 'none';
+      return;
+    }
+
+    currentRiddleId = data.id;
+    startTyping(data.question);
+
+    document.getElementById('riddleForm').style.display = 'block';
+    document.getElementById('answerInput').value = '';
+    document.getElementById('answerInput').disabled = false;
+    document.querySelector('#riddleForm button').disabled = false;
+
+    if (data.hint) {
+      document.getElementById('hintBox').textContent = data.hint;
+      document.getElementById('hintBtn').classList.remove('hidden');
+    } else {
+      document.getElementById('hintBox').textContent = '';
+      document.getElementById('hintBtn').classList.add('hidden');
+    }
+
+    document.getElementById('hintBox').classList.remove('show');
+  });
+}
+
+document.getElementById('riddleForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const answer = document.getElementById('answerInput').value.trim();
+  const feedback = document.getElementById('feedback');
+  const submitButton = document.querySelector('#riddleForm button');
+
+  if (!currentRiddleId || !answer) {
+    feedback.textContent = "Please enter an answer.";
+    feedback.style.color = "#f87171";
+    return;
+  }
+
+  submitButton.disabled = true;
+  feedback.textContent = '';
+
+  fetch(`/riddles/${currentRiddleId}/solve`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    },
+    body: JSON.stringify({ answer: answer })
+  })
+  .then(res => res.json())
+  .then(data => {
+    feedback.textContent = data.message;
+    feedback.style.color = data.success ? "#4ade80" : "#f87171";
+
+    if (data.success) {
+      setTimeout(() => fetchNextRiddle(), 1000);
+    } else {
+      submitButton.disabled = false;
+      document.getElementById('answerInput').focus();
+    }
+  })
+  .catch(() => {
+    feedback.textContent = "Something went wrong.";
+    feedback.style.color = "#f87171";
+    submitButton.disabled = false;
+  });
+});
+
+// ✅ Skip Riddle logic
+function skipRiddle() {
+  fetch("{{ route('riddles.next') }}", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    const target = document.getElementById('typedText');
     const feedback = document.getElementById('feedback');
 
-    function startTyping() {
-      const box = document.getElementById('riddleBox');
-      const target = document.getElementById('typedText');
-
-      if (!originalText || !box || !target) return;
-
-      box.style.display = 'block';
-      box.style.opacity = 1;
-      target.textContent = '';
-      feedback.textContent = '';
-
-      let i = 0;
-      const speed = 35;
-      const interval = setInterval(() => {
-        if (i < originalText.length) {
-          target.textContent += originalText.charAt(i);
-          i++;
-        } else {
-          clearInterval(interval);
-        }
-      }, speed);
+    if (!data.id) {
+      target.textContent = "✨ You've reached the end!";
+      document.getElementById('hintBox').textContent = '';
+      document.getElementById('hintBtn').classList.add('hidden');
+      document.getElementById('riddleForm').style.display = 'none';
+      return;
     }
 
-    function toggleHint() {
-      const hintBox = document.getElementById('hintBox');
-      if (hintBox) hintBox.classList.toggle('show');
+    currentRiddleId = data.id;
+    startTyping(data.question);
+    feedback.textContent = '';
+
+    document.getElementById('riddleForm').style.display = 'block';
+    document.getElementById('answerInput').value = '';
+    document.getElementById('answerInput').disabled = false;
+    document.querySelector('#riddleForm button').disabled = false;
+
+    if (data.hint) {
+      document.getElementById('hintBox').textContent = data.hint;
+      document.getElementById('hintBtn').classList.remove('hidden');
+    } else {
+      document.getElementById('hintBox').textContent = '';
+      document.getElementById('hintBtn').classList.add('hidden');
     }
 
-    // ✅ Handle submission without reload
-    if (riddleForm) {
-      riddleForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+    document.getElementById('hintBox').classList.remove('show');
+  });
+}
+</script>
 
-        const answer = document.getElementById('answerInput').value;
-
-        fetch("{{ url('/riddles') }}/" + riddleId + "/solve", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-          },
-          body: JSON.stringify({ answer: answer })
-        })
-        .then(response => response.json())
-        .then(data => {
-          feedback.textContent = data.message;
-          feedback.style.color = data.success ? '#4ade80' : '#f87171'; // green/red
-        })
-        .catch(error => {
-          feedback.textContent = "Something went wrong!";
-          feedback.style.color = '#f87171';
-        });
-      });
-    }
-  </script>
 </body>
 </html>
