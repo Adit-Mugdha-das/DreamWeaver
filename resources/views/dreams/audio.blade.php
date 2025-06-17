@@ -178,7 +178,7 @@
 
 
 <div class="audio-card">
-  <h2 class="text-xl font-semibold mb-2">🎵 Healing Frequencies for Deep Sleep</h2>
+  <h2 class="text-xl font-semibold mb-2"> Healing Frequencies for Deep Sleep</h2>
   <iframe src="https://www.youtube.com/embed/o-9T184mpY4" allowfullscreen></iframe>
 </div>
 
