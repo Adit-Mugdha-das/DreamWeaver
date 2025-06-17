@@ -103,7 +103,7 @@
 
 
   <div class="container">
-    <h1 class="text-3xl font-bold text-purple-300 mb-4">🧘 Guided Mindfulness & Sleep Audio</h1>
+    <h1 class="text-3xl font-bold text-purple-300 mb-4"> Guided Mindfulness & Sleep Audio</h1>
     <p class="mb-8 text-purple-200">Listen to these to reduce anxiety or fall asleep peacefully after a dream.</p>
 
     <div class="audio-card">
