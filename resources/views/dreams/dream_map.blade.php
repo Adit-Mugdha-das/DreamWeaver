@@ -3,9 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Dream Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   @vite('resources/css/app.css')
+
+  <!-- Vanta.js & Three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.cells.min.js"></script>
+
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
   <style>
     html, body {
       margin: 0;
@@ -88,10 +95,9 @@
     }
 
     a:hover {
-  color: #67e8f9; /* or remove this too for no change */
-  text-shadow: none;
-}
-
+      color: #67e8f9;
+      text-shadow: none;
+    }
 
     .top-left-button {
       position: absolute;
@@ -115,13 +121,14 @@
   </style>
 </head>
 <body>
+
   <div id="vanta-bg"></div>
 
   <div class="content">
-    <!-- Imagine Button -->
+    <!-- Back Button -->
     <a href="{{ url('/imagine') }}" class="top-left-button">← Portal</a>
 
-    <h1 class="text-4xl font-bold text-white mb-12 drop-shadow-lg">🌌 Explore Your Dream Realm</h1>
+    <h1 class="text-4xl font-bold text-white mb-12 drop-shadow-lg" data-aos="zoom-in" data-aos-delay="200">🌌 Explore Your Dream Realm</h1>
 
     @php
       $areas = [
@@ -140,14 +147,14 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl w-full px-4">
       @foreach($areas as $name => $key)
         @if($unlockedViaTotem[$key])
-          <a href="/dream-world/{{ $key }}" class="zone unlocked block hover:cursor-pointer">
+          <a href="/dream-world/{{ $key }}" class="zone unlocked block hover:cursor-pointer" data-aos="fade-up" data-aos-delay="{{ $loop->index * 150 + 300 }}">
             <h2 class="text-2xl font-semibold mb-2">{{ $name }}</h2>
             <p class="text-sm text-purple-200 mb-2">Requires: {{ $requirements[$key] }}</p>
             <p class="text-green-400 font-medium">✅ Unlocked</p>
             <p class="text-blue-300 mt-2">✨ Explore</p>
           </a>
         @else
-          <div class="zone locked">
+          <div class="zone locked" data-aos="fade-up" data-aos-delay="{{ $loop->index * 150 + 300 }}">
             <h2 class="text-2xl font-semibold mb-2">{{ $name }}</h2>
             <p class="text-sm text-purple-200 mb-2">Requires: {{ $requirements[$key] }}</p>
             <p class="text-red-400 font-medium">🔒 Locked</p>
@@ -157,6 +164,7 @@
     </div>
   </div>
 
+  <!-- Vanta Cells Init -->
   <script>
     VANTA.CELLS({
       el: "#vanta-bg",
@@ -166,6 +174,16 @@
       color2: 0x1f1b2e,
       size: 2.00,
       speed: 1.5
+    });
+  </script>
+
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: true,
+      easing: 'ease-in-out'
     });
   </script>
 </body>
