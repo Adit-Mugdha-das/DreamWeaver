@@ -14,15 +14,18 @@
       overflow: hidden;
     }
 
-    video.bg {
+ video.bg {
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  transform: scaleX(2.12); /* Increase this to stretch more */
   z-index: -1;
+  background: black;
 }
+
 
 
     .back-to-portal,
