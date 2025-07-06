@@ -156,7 +156,7 @@
 <body>
 
 <!-- 🌌 Portal Intro Video -->
-<div id="portal-intro" class="fixed inset-0 z-50">
+<div id="portal-intro" class="fixed inset-0 z-50 hidden">
   <video autoplay muted playsinline id="portalVideo" class="w-full h-full object-cover">
     <source src="{{ asset('videos/portal_intro.mp4') }}" type="video/mp4">
     Your browser does not support the video tag.
@@ -172,9 +172,9 @@
 <!-- 🌙 Main App Content -->
 <div id="main-content" class="opacity-0 transition-opacity duration-1000">
 
-  <form method="POST" action="{{ route('logout') }}" class="top-left-logout">
+  <form method="POST" action="{{ route('logout') }}" class="top-left-logout" id="logout-form">
     @csrf
-    <button type="submit" class="button">🚪 Logout</button>
+    <button type="submit" class="button" id="logout-button">🚪 Logout</button>
   </form>
 
   <a href="{{ route('tutorial.show') }}" class="top-right-tutorial">
@@ -250,18 +250,39 @@
 
   init();
 
-  // 🌌 Fade-in after video ends
+  // 🌌 Fade-in logic based on sessionStorage
   document.addEventListener("DOMContentLoaded", () => {
-    const video = document.getElementById("portalVideo");
-    video.onended = () => {
-      document.getElementById("portal-intro").style.display = "none";
-      document.getElementById("nebula").classList.remove("opacity-0");
-      document.getElementById("nebula").classList.add("opacity-100");
+    const portalIntro = document.getElementById("portal-intro");
+    const mainContent = document.getElementById("main-content");
+    const nebula = document.getElementById("nebula");
 
-      const content = document.getElementById("main-content");
-      content.classList.remove("opacity-0");
-      content.classList.add("opacity-100");
-    };
+    if (!sessionStorage.getItem('welcomeAnimationShown')) {
+      portalIntro.classList.remove("hidden");
+      const video = document.getElementById("portalVideo");
+
+      video.onended = () => {
+        portalIntro.style.display = "none";
+        nebula.classList.remove("opacity-0");
+        nebula.classList.add("opacity-100");
+        mainContent.classList.remove("opacity-0");
+        mainContent.classList.add("opacity-100");
+        sessionStorage.setItem('welcomeAnimationShown', 'true');
+      };
+    } else {
+      portalIntro.remove();
+      nebula.classList.remove("opacity-0");
+      nebula.classList.add("opacity-100");
+      mainContent.classList.remove("opacity-0");
+      mainContent.classList.add("opacity-100");
+    }
+
+    // 🧹 Clear animation flag on logout
+    const logoutButton = document.getElementById('logout-button');
+    if (logoutButton) {
+      logoutButton.addEventListener('click', () => {
+        sessionStorage.removeItem('welcomeAnimationShown');
+      });
+    }
   });
 </script>
 
