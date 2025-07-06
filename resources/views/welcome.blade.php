@@ -161,7 +161,8 @@
     <source src="{{ asset('videos/portal_intro.mp4') }}" type="video/mp4">
     Your browser does not support the video tag.
   </video>
-  <div class="absolute inset-0 flex items-center justify-center text-fuchsia-300 text-xl font-semibold backdrop-blur-sm">
+  <div class="absolute inset-0 flex items-center justify-center text-fuchsia-300 text-xl font-semibold">
+
     Entering the Dream Realm...
   </div>
 </div>
