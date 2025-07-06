@@ -94,133 +94,113 @@
       transform: translateY(-0.3px);
     }
 
-    
-
     @keyframes fadeSlideDown {
-      0% {
-        opacity: 0;
-        transform: translateY(-120px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      0% { opacity: 0; transform: translateY(-120px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes fadeSlideLeft {
-      0% {
-        opacity: 0;
-        transform: translateX(-60px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateX(0);
-      }
+      0% { opacity: 0; transform: translateX(-60px); }
+      100% { opacity: 1; transform: translateX(0); }
     }
 
     @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     .top-left-logout {
-  position: fixed;
-  top: 1.5rem;
-  left: 1.5rem;
-  z-index: 10;
-}
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 10;
+    }
 
-.top-left-logout .button {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  width: auto;
-  min-width: unset;
-  border-radius: 0.6rem;
-}
-.top-right-tutorial {
-  position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
-  z-index: 10;
-}
+    .top-left-logout .button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      width: auto;
+      min-width: unset;
+      border-radius: 0.6rem;
+    }
 
-.top-right-tutorial .button {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  width: auto;
-  min-width: unset;
-  border-radius: 0.6rem;
-  background-color: rgba(0, 255, 255, 0.08);
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  box-shadow: 0 0 8px rgba(0, 255, 255, 0.15);
-  color: #e0f7ff;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
-}
+    .top-right-tutorial {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 10;
+    }
 
-.top-right-tutorial .button:hover {
-  background-color: rgba(0, 255, 255, 0.12);
-  color: #ffffff;
-  box-shadow: 0 0 12px rgba(0, 255, 255, 0.35);
-  transform: translateY(-0.3px);
-}
+    .top-right-tutorial .button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      width: auto;
+      min-width: unset;
+      border-radius: 0.6rem;
+      background-color: rgba(0, 255, 255, 0.08);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 8px rgba(0, 255, 255, 0.15);
+      color: #e0f7ff;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(4px);
+    }
 
-
-
+    .top-right-tutorial .button:hover {
+      background-color: rgba(0, 255, 255, 0.12);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(0, 255, 255, 0.35);
+      transform: translateY(-0.3px);
+    }
   </style>
 </head>
 <body>
 
-<canvas id="nebula"></canvas>
-
-<form method="POST" action="{{ route('logout') }}" class="top-left-logout">
-  @csrf
-  <button type="submit" class="button">🚪 Logout</button>
-</form>
-
-<a href="{{ route('tutorial.show') }}" class="top-right-tutorial">
-  <div class="button">📘 Tutorial</div>
-</a>
-
-
-
-
-<div class="container">
-  <header>
-    <h1>🌌 Welcome {{ Auth::user()->name }} to DreamWeaver</h1>
-    <p>The magical World of Dreams</p>
-  </header>
-
-  <div class="button-group">
-    <a href="{{ route('dreams.create') }}" class="button">Analyze a Dream</a>
-    <a href="{{ route('dreams.index') }}" class="button">View Saved Dreams</a>
-    <a href="{{ route('support') }}" class="button">
-   Psychological Support
-</a>
-  <a href="{{ route('dashboard') }}" class="button">
-   Dream Patterns
-</a>
-<a href="{{ route('dreams.audio') }}" class="button">Guided Audio</a>
-
-
-
-<a href="{{ route('imagine.portal') }}" class="button">Enter Dream World</a>
-<a href="{{ route('library.index') }}" class="button">
-     Dream Library
-</a>
-<a href="{{ route('dreams.shared') }}" class="button">
-     Shared Realm
-</a>
-
+<!-- 🌌 Portal Intro Video -->
+<div id="portal-intro" class="fixed inset-0 z-50">
+  <video autoplay muted playsinline id="portalVideo" class="w-full h-full object-cover">
+    <source src="{{ asset('videos/portal_intro.mp4') }}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="absolute inset-0 flex items-center justify-center text-fuchsia-300 text-xl font-semibold backdrop-blur-sm">
+    Entering the Dream Realm...
   </div>
 </div>
 
+<!-- ✨ Background Canvas -->
+<canvas id="nebula" class="opacity-0 transition-opacity duration-1000"></canvas>
+
+<!-- 🌙 Main App Content -->
+<div id="main-content" class="opacity-0 transition-opacity duration-1000">
+
+  <form method="POST" action="{{ route('logout') }}" class="top-left-logout">
+    @csrf
+    <button type="submit" class="button">🚪 Logout</button>
+  </form>
+
+  <a href="{{ route('tutorial.show') }}" class="top-right-tutorial">
+    <div class="button">📘 Tutorial</div>
+  </a>
+
+  <div class="container">
+    <header>
+      <h1>🌌 Welcome {{ Auth::user()->name }} to DreamWeaver</h1>
+      <p>The magical World of Dreams</p>
+    </header>
+
+    <div class="button-group">
+      <a href="{{ route('dreams.create') }}" class="button">Analyze a Dream</a>
+      <a href="{{ route('dreams.index') }}" class="button">View Saved Dreams</a>
+      <a href="{{ route('support') }}" class="button">Psychological Support</a>
+      <a href="{{ route('dashboard') }}" class="button">Dream Patterns</a>
+      <a href="{{ route('dreams.audio') }}" class="button">Guided Audio</a>
+      <a href="{{ route('imagine.portal') }}" class="button">Enter Dream World</a>
+      <a href="{{ route('library.index') }}" class="button">Dream Library</a>
+      <a href="{{ route('dreams.shared') }}" class="button">Shared Realm</a>
+    </div>
+  </div>
+</div>
+
+<!-- 🌌 Nebula Background Script -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script>
   let scene, camera, renderer, particles;
@@ -253,7 +233,6 @@
 
     particles = new THREE.Points(geometry, material);
     scene.add(particles);
-
     animate();
   }
 
@@ -270,6 +249,21 @@
   });
 
   init();
+
+  // 🌌 Fade-in after video ends
+  document.addEventListener("DOMContentLoaded", () => {
+    const video = document.getElementById("portalVideo");
+    video.onended = () => {
+      document.getElementById("portal-intro").style.display = "none";
+      document.getElementById("nebula").classList.remove("opacity-0");
+      document.getElementById("nebula").classList.add("opacity-100");
+
+      const content = document.getElementById("main-content");
+      content.classList.remove("opacity-0");
+      content.classList.add("opacity-100");
+    };
+  });
 </script>
+
 </body>
 </html>
