@@ -143,13 +143,13 @@
               'name' => 'Sky Temple of Light',
               'key' => 'sky',
               'requirement' => 'Joy Totem (Wings)',
-              'image' => asset('images/sky.jpg')
+              'image' => asset('images/sky.png')
           ],
           [
               'name' => 'Cloud of Lucid Realms',
               'key' => 'cloud',
               'requirement' => 'Calm Totem (Mirror)',
-              'image' => asset('images/cloud.jpg')
+              'image' => asset('images/cloud.png')
           ]
       ];
     @endphp
