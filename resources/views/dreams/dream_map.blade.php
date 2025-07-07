@@ -148,7 +148,7 @@
           [
               'name' => 'Cloud of Lucid Realms',
               'key' => 'cloud',
-              'requirement' => 'Calm Totem (Mirror)',
+              'requirement' => 'Calm Totem (Cloud)',
               'image' => asset('images/cloud.png')
           ]
       ];
