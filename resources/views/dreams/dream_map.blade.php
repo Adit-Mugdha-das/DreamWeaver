@@ -44,39 +44,40 @@
     }
 
     .zone {
-      border: 1px solid rgba(167, 139, 250, 0.3);
-      background: rgba(30, 27, 75, 0.85);
+      position: relative;
       border-radius: 1.5rem;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
       padding: 2.9rem;
-      transition: all 0.4s ease;
-      box-shadow: inset 0 0 0.5px rgba(255,255,255,0.1), 0 0 20px rgba(192, 132, 252, 0.1);
+      color: white;
+      text-align: left;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      transition: all 0.3s ease-in-out;
       text-decoration: none;
     }
 
+    .zone .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 0;
+    }
+
+    .zone h2,
+    .zone p {
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 1px 5px rgba(0,0,0,0.7);
+    }
+
     .zone:hover {
-      transform: scale(1.035);
-      box-shadow: 0 0 25px #a855f7aa, 0 0 10px #7c3aed55;
-      border-color: #a855f7;
+      transform: scale(1.04);
+      box-shadow: 0 0 30px rgba(148, 0, 211, 0.5);
     }
 
     .locked {
-      background: rgba(31, 41, 55, 0.25);
-      border-color: rgba(255, 0, 0, 0.2);
-      opacity: 0.5;
-      color: #ff5c5c;
-    }
-
-    .unlocked {
-      background: rgba(88, 28, 135, 0.5);
-      border-color: rgba(167, 139, 250, 0.4);
-    }
-
-    h1, h2 {
-      color: #f0e9ff;
-    }
-
-    p {
-      color: #bfaaff;
+      filter: grayscale(70%) brightness(0.7);
     }
 
     .text-green-400 {
@@ -132,32 +133,58 @@
 
     @php
       $areas = [
-          'Forest of Forgotten Thoughts' => 'forest',
-          'Sky Temple of Light' => 'sky',
-          'Cloud of Lucid Realms' => 'cloud',
-      ];
-
-      $requirements = [
-          'forest' => 'Fear Totem (Mask)',
-          'sky' => 'Joy Totem (Wings)',
-          'cloud' => 'Calm Totem (Mirror)',
+          [
+              'name' => 'Forest of Forgotten Thoughts',
+              'key' => 'forest',
+              'requirement' => 'Fear Totem (Mask)',
+              'image' => asset('images/forest.png')
+          ],
+          [
+              'name' => 'Sky Temple of Light',
+              'key' => 'sky',
+              'requirement' => 'Joy Totem (Wings)',
+              'image' => asset('images/sky.jpg')
+          ],
+          [
+              'name' => 'Cloud of Lucid Realms',
+              'key' => 'cloud',
+              'requirement' => 'Calm Totem (Mirror)',
+              'image' => asset('images/cloud.jpg')
+          ]
       ];
     @endphp
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl w-full px-4">
-      @foreach($areas as $name => $key)
-        @if($unlockedViaTotem[$key])
-          <a href="/dream-world/{{ $key }}" class="zone unlocked block hover:cursor-pointer" data-aos="fade-up" data-aos-delay="{{ $loop->index * 150 + 300 }}">
-            <h2 class="text-2xl font-semibold mb-2">{{ $name }}</h2>
-            <p class="text-sm text-purple-200 mb-2">Requires: {{ $requirements[$key] }}</p>
+      @foreach($areas as $area)
+        @php $unlocked = $unlockedViaTotem[$area['key']]; @endphp
+
+        @if($unlocked)
+          <a href="/dream-world/{{ $area['key'] }}"
+             class="zone block {{ $unlocked ? 'unlocked' : 'locked' }}"
+             style="background-image: url('{{ $area['image'] }}');"
+             data-aos="fade-up"
+             data-aos-delay="{{ $loop->index * 150 + 300 }}">
+        @else
+          <div class="zone locked"
+               style="background-image: url('{{ $area['image'] }}');"
+               data-aos="fade-up"
+               data-aos-delay="{{ $loop->index * 150 + 300 }}">
+        @endif
+
+          <div class="overlay"></div>
+          <h2 class="text-2xl font-semibold mb-2">{{ $area['name'] }}</h2>
+          <p class="text-sm text-purple-200 mb-2">Requires: {{ $area['requirement'] }}</p>
+
+          @if($unlocked)
             <p class="text-green-400 font-medium">✅ Unlocked</p>
             <p class="text-blue-300 mt-2">✨ Explore</p>
+          @else
+            <p class="text-red-400 font-medium">🔒 Locked</p>
+          @endif
+
+        @if($unlocked)
           </a>
         @else
-          <div class="zone locked" data-aos="fade-up" data-aos-delay="{{ $loop->index * 150 + 300 }}">
-            <h2 class="text-2xl font-semibold mb-2">{{ $name }}</h2>
-            <p class="text-sm text-purple-200 mb-2">Requires: {{ $requirements[$key] }}</p>
-            <p class="text-red-400 font-medium">🔒 Locked</p>
           </div>
         @endif
       @endforeach
