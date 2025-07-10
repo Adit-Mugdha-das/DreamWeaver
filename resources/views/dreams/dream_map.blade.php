@@ -129,7 +129,7 @@
     <!-- Back Button -->
     <a href="{{ url('/imagine') }}" class="top-left-button">← Portal</a>
 
-    <h1 class="text-4xl font-bold text-white mb-12 drop-shadow-lg" data-aos="zoom-in" data-aos-delay="200"> Explore Your Dream Realm</h1>
+    <h1 class="text-4xl font-bold text-white mb-12 drop-shadow-lg" data-aos="zoom-in" data-aos-delay="200">🌌 Explore Your Dream Realm</h1>
 
     @php
       $areas = [
