@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title> Shared Dreams | DreamWeaver</title>
+  <title>🌙 Shared Dreams | DreamWeaver</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   <script src="//unpkg.com/alpinejs" defer></script>
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
