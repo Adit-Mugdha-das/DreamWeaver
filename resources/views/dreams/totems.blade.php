@@ -75,7 +75,7 @@
   </a>
 
   <div class="min-h-screen flex flex-col items-center justify-center text-center px-6 py-12 relative z-10">
-    <h1 class="text-3xl font-bold text-purple-300 mb-8">🧿 Your Dream Totems</h1>
+    <h1 class="text-3xl font-bold text-purple-300 mb-8"> Your Dream Totems</h1>
 
     @php
       $meanings = [
