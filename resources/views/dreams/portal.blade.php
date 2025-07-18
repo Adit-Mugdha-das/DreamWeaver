@@ -151,7 +151,7 @@
 <body>
   <div id="vanta-bg"></div>
 
-  <a href="{{ url('/welcome') }}" class="home-btn">🏠 Home</a>
+  <a href="{{ url('/welcome') }}" class="home-btn"> Home</a>
 
   <div class="center-container" data-aos="fade-up">
     <div class="portal-heading" data-aos="zoom-in" data-aos-delay="100">Welcome to Your Dream World</div>
