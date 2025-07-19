@@ -201,7 +201,7 @@
 
   <!-- Keywords -->
   <div class="chart-box mt-8">
-    <h2 class="text-lg mb-4 text-center">🧠 Top Keywords in Your Dreams</h2>
+    <h2 class="text-lg mb-4 text-center"> Top Keywords in Your Dreams</h2>
     <div class="keywords text-center">
       @foreach($topKeywords as $word => $count)
         <span>{{ $word }} ({{ $count }})</span>
