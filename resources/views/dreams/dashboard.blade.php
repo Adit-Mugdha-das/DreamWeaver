@@ -196,7 +196,7 @@
 
     </div>
   </div>
-</div> <!-- ✅ This is the correct place to close .grid -->
+</div> <!--  This is the correct place to close .grid -->
 
 
   <!-- Keywords -->
