@@ -72,7 +72,7 @@
             @endif
 
             @if ($dream->story_generation)
-                <div class="label"> Story Generation:</div>
+                <div class="label">📖 Story Generation:</div>
                 <div class="text">{{ $dream->story_generation }}</div>
             @endif
 
