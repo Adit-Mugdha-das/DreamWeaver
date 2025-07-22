@@ -67,7 +67,7 @@
             @endif
 
             @if ($dream->short_interpretation)
-                <div class="label"> Short Interpretation:</div>
+                <div class="label">🔮 Short Interpretation:</div>
                 <div class="text">{{ $dream->short_interpretation }}</div>
             @endif
 
