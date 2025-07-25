@@ -176,7 +176,7 @@
           <p class="text-sm text-purple-200 mb-2">Requires: {{ $area['requirement'] }}</p>
 
           @if($unlocked)
-            <p class="text-green-400 font-medium">✅ Unlocked</p>
+            <p class="text-green-400 font-medium"> Unlocked</p>
             <p class="text-blue-300 mt-2">✨ Explore</p>
           @else
             <p class="text-red-400 font-medium">🔒 Locked</p>
