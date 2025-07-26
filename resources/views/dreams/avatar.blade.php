@@ -289,7 +289,7 @@
     ];
   @endphp
 
-  <a href="{{ route('imagine.portal') }}" class="btn-glassy btn-fixed"> Dream Portal</a>
+  <a href="{{ route('imagine.portal') }}" class="btn-glassy btn-fixed">🌌 Dream Portal</a>
 
 
 
