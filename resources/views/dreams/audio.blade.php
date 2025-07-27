@@ -107,7 +107,7 @@
     <p class="mb-8 text-purple-200">Listen to these to reduce anxiety or fall asleep peacefully after a dream.</p>
 
     <div class="audio-card">
-      <h2 class="text-xl font-semibold mb-2"> Sleep Meditation</h2>
+      <h2 class="text-xl font-semibold mb-2">🌙 Sleep Meditation</h2>
       <iframe src="https://www.youtube.com/embed/ZToicYcHIOU" allowfullscreen></iframe>
     </div>
 
