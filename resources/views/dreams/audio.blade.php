@@ -119,7 +119,7 @@
     </div>
 
     <div class="audio-card">
-      <h2 class="text-xl font-semibold mb-2">🧘‍♀️ Anxiety Relief</h2>
+      <h2 class="text-xl font-semibold mb-2"> Anxiety Relief</h2>
       <iframe src="https://www.youtube.com/embed/W19PdslW7iw" allowfullscreen></iframe>
     </div>
 
