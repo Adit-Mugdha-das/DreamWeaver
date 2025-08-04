@@ -399,7 +399,7 @@
 
 
 <!-- Loading Animation -->
-<div id="loading" class="text-white mt-4 hidden"> Sharing...</div>
+<div id="loading" class="text-white mt-4 hidden">⏳ Sharing...</div>
 
 <!-- Success Message -->
 <div id="success-message" class="hidden mt-4 px-4 py-3 rounded-lg bg-green-500/10 text-green-300 font-medium border border-green-400/30 shadow-md transition-all duration-500">
