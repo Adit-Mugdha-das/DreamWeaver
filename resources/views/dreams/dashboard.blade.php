@@ -182,7 +182,7 @@
     <h2 class="text-lg mb-2 text-center">Emotion Distribution</h2>
     <div style="height: 300px; position: relative;">
       <canvas id="emotionChart" class="chart-canvas"></canvas>
-      <button onclick="downloadChart('emotionChart')" class="download-btn"> Download Chart</button>
+      <button onclick="downloadChart('emotionChart')" class="download-btn">📥 Download Chart</button>
     </div>
   </div>
 
