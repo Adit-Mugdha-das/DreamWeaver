@@ -68,7 +68,7 @@
   <a href="{{ route('dream.map') }}" class="back-to-portal">← Back to Portal</a>
 
 
-  <!--  Fixed: Next Scene Button -->
+  <!-- ✅ Fixed: Next Scene Button -->
   <a href="{{ route('sky.inside') }}" class="next-scene">Next Scene →</a>
 
 </body>
