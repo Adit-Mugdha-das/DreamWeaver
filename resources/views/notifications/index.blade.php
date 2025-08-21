@@ -62,7 +62,7 @@
 
   <a href="{{ url('/welcome') }}" class="back-btn">← Back to Home</a>
 
-  <h1 class="text-3xl font-bold text-violet-400 mb-6 flex items-center gap-2"> Your Notifications</h1>
+  <h1 class="text-3xl font-bold text-violet-400 mb-6 flex items-center gap-2">🔔 Your Notifications</h1>
 
   @forelse ($notifications as $notification)
     <div class="notif-box">
