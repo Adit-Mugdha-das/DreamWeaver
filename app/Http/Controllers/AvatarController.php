@@ -36,14 +36,30 @@ class AvatarController extends Controller
         $rawEmotion = session('last_emotion') ?? 'neutral';
         $emotion = strtolower(trim($rawEmotion));
 
-        // Map emotion to visual avatar config
+        // 🔁 Updated emotion → avatar item + color mapping
         $avatar = match ($emotion) {
-            'joy' => ['color' => 'gold', 'item' => 'wings'],
-            'fear' => ['color' => 'black', 'item' => 'mask'],
-            'calm' => ['color' => 'blue', 'item' => 'cloud'],
-            'confused' => ['color' => 'gray', 'item' => 'swirl'],
-            'anger' => ['color' => 'red', 'item' => 'fire'],
-            default => ['color' => 'gray', 'item' => 'mirror'],
+            'joy'       => ['color' => 'gold',  'item' => 'wings'],
+            'fear'      => ['color' => 'black', 'item' => 'mask'],
+            'calm'      => ['color' => 'blue',  'item' => 'cloud'],
+            'confused'  => ['color' => 'gray',  'item' => 'swirl'],
+            'anger'     => ['color' => 'red',   'item' => 'fire'],
+
+            // 🆕 New emotions and their avatars
+            'sadness'   => ['color' => 'navy',    'item' => 'tear'],
+            'awe'       => ['color' => 'indigo',  'item' => 'star'],
+            'love'      => ['color' => 'pink',    'item' => 'heart'],
+            'curiosity' => ['color' => 'teal',    'item' => 'compass'],
+            'gratitude' => ['color' => 'amber',   'item' => 'quill'],
+            'pride'     => ['color' => 'purple',  'item' => 'crest'],
+            'relief'    => ['color' => 'green',   'item' => 'key'],
+            'nostalgia' => ['color' => 'silver',  'item' => 'moon'],
+            'surprise'  => ['color' => 'yellow',  'item' => 'bolt'],
+            'hope'      => ['color' => 'lime',    'item' => 'leaf'],
+            'courage'   => ['color' => 'maroon',  'item' => 'shield'],
+            'trust'     => ['color' => 'cyan',    'item' => 'anchor'],
+
+            // Default fallback
+            default     => ['color' => 'gray',    'item' => 'mirror'],
         };
 
         /** @var User $user */
@@ -53,11 +69,11 @@ class AvatarController extends Controller
 
         Avatar::create([
             'user_id' => $user->id,
-            'color' => $avatar['color'],
-            'item' => $avatar['item'],
+            'color'   => $avatar['color'],
+            'item'    => $avatar['item'],
         ]);
 
         return redirect('/test-avatar')
-                         ->with('message', 'Avatar generated based on your last dream emotion.');
+            ->with('message', 'Avatar generated based on your last dream emotion.');
     }
 }
