@@ -46,13 +46,30 @@ class DreamController extends Controller
 
             // ✅ Map emotion to token and save
             $token = match($emotion) {
-                'joy' => 'wings',
-                'fear' => 'mask',
-                'calm' => 'cloud',
-                'confused' => 'swirl',
-                'anger' => 'fire',
-                default => 'mirror',
-            };
+    // existing
+    'joy'       => 'wings',
+    'fear'      => 'mask',
+    'calm'      => 'cloud',
+    'confused'  => 'swirl',
+    'anger'     => 'fire',
+
+    // new
+    'sadness'   => 'tear',
+    'awe'       => 'star',
+    'love'      => 'heart',
+    'curiosity' => 'compass',
+    'gratitude' => 'quill',
+    'pride'     => 'crest',
+    'relief'    => 'key',
+    'nostalgia' => 'moon',
+    'surprise'  => 'bolt',
+    'hope'      => 'leaf',
+    'courage'   => 'shield',
+    'trust'     => 'anchor',
+
+    default     => 'mirror',
+};
+
 
             /** @var \App\Models\User $user */
             $user = Auth::user();
@@ -92,13 +109,30 @@ class DreamController extends Controller
 
     // ✅ Map emotion to token and save
     $token = match($emotion) {
-        'joy' => 'wings',
-        'fear' => 'mask',
-        'calm' => 'cloud',
-        'confused' => 'swirl',
-        'anger' => 'fire',
-        default => 'mirror',
-    };
+    // existing
+    'joy'       => 'wings',
+    'fear'      => 'mask',
+    'calm'      => 'cloud',
+    'confused'  => 'swirl',
+    'anger'     => 'fire',
+
+    // new
+    'sadness'   => 'tear',
+    'awe'       => 'star',
+    'love'      => 'heart',
+    'curiosity' => 'compass',
+    'gratitude' => 'quill',
+    'pride'     => 'crest',
+    'relief'    => 'key',
+    'nostalgia' => 'moon',
+    'surprise'  => 'bolt',
+    'hope'      => 'leaf',
+    'courage'   => 'shield',
+    'trust'     => 'anchor',
+
+    default     => 'mirror',
+};
+
 
     /** @var \App\Models\User $user */
     $user = Auth::user();
