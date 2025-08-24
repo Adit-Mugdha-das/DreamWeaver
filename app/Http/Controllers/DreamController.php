@@ -50,7 +50,7 @@ class DreamController extends Controller
     'joy'       => 'wings',
     'fear'      => 'mask',
     'calm'      => 'cloud',
-    'confused'  => 'swirl',
+    'confusion'  => 'swirl',
     'anger'     => 'fire',
 
     // new

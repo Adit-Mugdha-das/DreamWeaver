@@ -83,13 +83,29 @@ Route::get('/totems', function () {
     foreach ($tokens as $token) {
         $match = $allDreams->first(function ($dream) use ($token, $meanings) {
             $emotionMap = [
-                'wings' => 'joy',
-                'mask' => 'fear',
-                'cloud' => 'calm',
-                'swirl' => 'confused',
-                'fire' => 'anger',
-                'mirror' => 'neutral',
-            ];
+    // Existing
+    'wings'   => 'joy',
+    'mask'    => 'fear',
+    'cloud'   => 'calm',
+    'swirl'   => 'confused',
+    'fire'    => 'anger',
+    'mirror'  => 'neutral',  // fallback
+
+    // New
+    'tear'     => 'sadness',
+    'star'     => 'awe',
+    'heart'    => 'love',
+    'compass'  => 'curiosity',
+    'quill'    => 'gratitude',
+    'crest'    => 'pride',
+    'key'      => 'relief',
+    'moon'     => 'nostalgia',
+    'bolt'     => 'surprise',
+    'leaf'     => 'hope',
+    'shield'   => 'courage',
+    'anchor'   => 'trust',
+];
+
             $expectedEmotion = $emotionMap[$token] ?? '';
             return strtolower($dream->emotion_summary) === $expectedEmotion;
         });

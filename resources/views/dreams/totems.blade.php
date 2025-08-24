@@ -77,14 +77,28 @@
   <div class="min-h-screen flex flex-col items-center justify-center text-center px-6 py-12 relative z-10">
     <h1 class="text-3xl font-bold text-purple-300 mb-8">🧿 Your Dream Totems</h1>
 
-    @php
-      $meanings = [
-        'mirror' => ['🪞 Reflection & self-awareness', 'You looked into a mirror and saw your younger self.'],
-        'wings' => ['🪽 Freedom or ambition', 'You flew above mountains, free from all fears.'],
-        'fire' => ['🔥 Transformation or passion', 'You stood in a burning house but felt no pain.'],
-        'mask' => ['🎭 Hidden emotions or identity', 'You wore a mask in a crowded room and no one noticed.'],
-      ];
-    @endphp
+   @php
+  $meanings = [
+    'mirror' => ['🪞 Reflection & self-awareness', 'You looked into a mirror and saw your younger self.'],
+    'wings' => ['🪽 Freedom or ambition', 'You flew above mountains, free from all fears.'],
+    'fire' => ['🔥 Transformation or passion', 'You stood in a burning house but felt no pain.'],
+    'mask' => ['🎭 Hidden emotions or identity', 'You wore a mask in a crowded room and no one noticed.'],
+    'cloud' => ['☁️ Calm & stillness', 'You watched slow-moving clouds in complete silence.'],
+    'tear' => ['💧 Deep sadness or grief', 'You shed a tear that echoed across a silent field.'],
+    'moon' => ['🌙 Nostalgia & memories', 'You walked under a full moon and remembered a past love.'],
+    'bolt' => ['⚡ Sudden change or surprise', 'You were struck by lightning but felt alive.'],
+    'anchor' => ['⚓ Trust & grounding', 'You dropped anchor in stormy seas and found peace.'],
+    'quill' => ['✒️ Gratitude & expression', 'You wrote a heartfelt letter under candlelight.'],
+    'compass' => ['🧭 Curiosity & direction', 'You held a spinning compass pointing to the unknown.'],
+    'star' => ['⭐ Awe & wonder', 'You stood beneath a sky full of falling stars.'],
+    'shield' => ['🛡️ Courage & protection', 'You held a glowing shield against a dark force.'],
+    'leaf' => ['🍃 Hope & renewal', 'A single green leaf grew in a barren land.'],
+    'crest' => ['🏰 Pride & legacy', 'You found your family crest on an ancient tapestry.'],
+    'heart' => ['❤️ Love & connection', 'You held a glowing heart that warmed the coldest night.'],
+
+  ];
+@endphp
+
 
     @if(isset($tokens) && count($tokens))
       <div class="flex flex-wrap justify-center gap-8">
