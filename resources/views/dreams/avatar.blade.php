@@ -278,16 +278,34 @@
 <div class="content page-fade-in">
 
   @php
-    $imageMap = [
-        'wings' => 'wings.png',
-        'mask' => 'mask.png',
-        'cloud' => 'cloud.png',
-        'fire' => 'fire.png',
-        'swirl' => 'swirl.png',
-        'mirror' => 'mirror.png',
-        'default' => 'unknown.png'
-    ];
-  @endphp
+$imageMap = [
+    // Existing
+    'wings'    => 'wings.png',
+    'mask'     => 'mask.png',
+    'cloud'    => 'cloud.png',
+    'swirl'    => 'swirl.png',
+    'fire'     => 'fire.png',
+
+    // New
+    'tear'     => 'tear.png',      // sadness
+    'star'     => 'star.png',      // awe
+    'heart'    => 'heart.png',     // love
+    'compass'  => 'compass.png',   // curiosity
+    'quill'    => 'quill.png',     // gratitude
+    'crest'    => 'crest.png',     // pride
+    'key'      => 'key.png',       // relief
+    'moon'     => 'moon.png',      // nostalgia
+    'bolt'     => 'bolt.png',      // surprise
+    'leaf'     => 'leaf.png',      // hope
+    'shield'   => 'shield.png',    // courage
+    'anchor'   => 'anchor.png',    // trust
+
+    // Fallback
+    'mirror'   => 'mirror.png',
+    'default'  => 'unknown.png',
+];
+@endphp
+
 
   <a href="{{ route('imagine.portal') }}" class="btn-glassy btn-fixed">🌌 Dream Portal</a>
 
