@@ -12,12 +12,12 @@
     }
     *{box-sizing:border-box}
     body{margin:0;color:#fff;font-family:Inter,system-ui,sans-serif;min-height:100vh;background:var(--bg)}
-    /* dreamy animated background target */
+    /* dreamy animated background */
     #bg{position:fixed;inset:0;z-index:-2}
-    /* subtle vignette overlay */
+    /* subtle light glows */
     #vignette{position:fixed;inset:0;pointer-events:none;z-index:-1;
       background: radial-gradient(1200px 600px at 70% -10%, rgba(216,102,255,.18), transparent 60%),
-                  radial-gradient(900px 500px at 10% 30%, rgba(139,92,246,.18), transparent 65%);}
+                  radial-gradient(900px 500px at 10% 30%, rgba(139,92,246,.18), transparent 65%)}
     .wrap{max-width:1200px;margin:0 auto;padding:2rem}
     h1{color:#f0e7ff;text-align:center;margin:0 0 1.1rem;font-weight:800;letter-spacing:.3px}
     .subtitle{color:#bfa8ff;text-align:center;margin-top:-.6rem;margin-bottom:1.2rem;font-size:.95rem}
@@ -37,10 +37,8 @@
       box-shadow:inset 0 0 6px rgba(0,0,0,.35)
     }
     .select:focus{outline:none;border-color:#d966ff;box-shadow:0 0 0 2px rgba(216,102,255,.35)}
-    .control .chev{
-      position:absolute;right:.6rem;top:50%;transform:translateY(-50%);pointer-events:none;color:#d8c9ff;font-size:.9rem
-    }
-    /* Try to style options (support varies by browser) */
+    .control .chev{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);pointer-events:none;color:#d8c9ff;font-size:.9rem}
+    /* (Browser support varies, but helps on many) */
     select option{background:#1a103d;color:#f3e8ff}
 
     /* Layout */
@@ -71,10 +69,26 @@
     }
     .hi{outline:2px solid var(--accent-2);outline-offset:2px;border-radius:.7rem}
     .loading{padding:1rem;text-align:center;color:var(--muted)}
+
+    /* ---- DARK INFOWINDOW FIX ---- */
+    .gm-style .gm-style-iw-c{
+      background: rgba(20,20,35,.97) !important;
+      color: #e5e7eb !important;
+      border-radius: 12px !important;
+      box-shadow: 0 12px 30px rgba(0,0,0,.35) !important;
+    }
+    .gm-style .gm-style-iw-t::after{ background: rgba(20,20,35,.97) !important; }
+    .gm-style .gm-style-iw-d .muted{ color:#a3a3b8 !important; }
+    .gm-style .gm-style-iw-c .iw-link{
+      display:inline-flex;align-items:center;gap:.35rem;
+      background:#111827;color:#ffffff !important;border:1px solid #8b5cf6;
+      padding:.42rem .65rem;border-radius:.55rem;text-decoration:none
+    }
+    .gm-style .gm-style-iw-c .iw-link:hover{ background:#1f2937; }
   </style>
 </head>
 <body>
-  <!-- dreamy animated background layers -->
+  <!-- dreamy background layers -->
   <div id="bg"></div>
   <div id="vignette"></div>
 
@@ -151,8 +165,8 @@
       minWidth: 200.00,
       scale: 1.0,
       scaleMobile: 1.0,
-      color: 0xd966ff,           // accent lines
-      backgroundColor: 0x0b0f19, // base
+      color: 0xd966ff,
+      backgroundColor: 0x0b0f19,
       points: 12.00,
       maxDistance: 20.00,
       spacing: 18.00
@@ -197,8 +211,9 @@
       const R = 6371000; // m
       const toRad = d => d*Math.PI/180;
       const dLat = toRad(b.lat - a.lat), dLng = toRad(b.lng - a.lng);
-      const s = Math.sin(dLat/2)**2 + Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLng/2)**2;
+      const s = Math.sin(dLat/2)**2 + Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*sin2(dLng/2);
       return 2*R*Math.asin(Math.sqrt(s));
+      function sin2(x){const s=Math.sin(x);return s*s;}
     }
 
     function renderList(places){
@@ -261,8 +276,10 @@
               <b>${p.name}</b><br>
               <div class="muted">${p.vicinity || p.formatted_address || ''}</div>
               ${p.rating?`<div class="muted" style="margin-top:.2rem">${stars(p.rating)} · ${p.user_ratings_total||0} reviews</div>`:''}
-              <div style="margin-top:.4rem">
-                <a class="link" target="_blank" href="https://www.google.com/maps/place/?q=place_id:${p.place_id}">Open in Google Maps</a>
+              <div style="margin-top:.45rem">
+                <a class="iw-link" target="_blank" href="https://www.google.com/maps/place/?q=place_id:${p.place_id}">
+                  Open in Google Maps
+                </a>
               </div>
             </div>`);
           info.open(map,m);
