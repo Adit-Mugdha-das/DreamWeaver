@@ -85,12 +85,49 @@
       padding:.42rem .65rem;border-radius:.55rem;text-decoration:none
     }
     .gm-style .gm-style-iw-c .iw-link:hover{ background:#1f2937; }
+
+    .home-btn{
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem .85rem;
+  border-radius: .85rem;
+  background: rgba(20,20,35,.78);
+  color: #e9d5ff;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+  font-weight: 700;
+}
+.home-btn:hover{
+  background: rgba(216,102,255,.16);
+  border-color: rgba(216,102,255,.45);
+  transform: translateY(-1px);
+  transition: all .18s ease;
+}
+
   </style>
 </head>
 <body>
   <!-- dreamy background layers -->
   <div id="bg"></div>
   <div id="vignette"></div>
+  <!-- Home button -->
+<a href="{{ url('welcome') }}" class="home-btn" aria-label="Go to Home">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       style="color:#d966ff">
+    <path d="M3 11l9-7 9 7" />
+    <path d="M9 22V12h6v10" />
+  </svg>
+  <span>Home</span>
+</a>
+
 
   <div class="wrap">
     <h1>Find Nearby Health Support</h1>
