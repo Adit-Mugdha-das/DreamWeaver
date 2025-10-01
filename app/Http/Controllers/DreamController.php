@@ -379,7 +379,7 @@ public function comment(Request $request, Dream $dream)
     $comment = new Comment();
     $comment->user_id = Auth::id();
     $comment->dream_id = $dream->id;
-    $comment->content = $request->content;
+  $comment->setAttribute('content', $request->string('content')); 
     $comment->save();
 
     // 🔔 Trigger notification if the commenter is not the dream owner
