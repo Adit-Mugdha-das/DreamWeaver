@@ -9,6 +9,12 @@
   <style>
     .msg-enter { transform: translateY(6px) scale(0.98); opacity: 0; }
     .msg-enter-active { transform: translateY(0) scale(1); opacity: 1; transition: transform .18s ease, opacity .18s ease; }
+
+    /* Make the entire chat box taller and more immersive */
+    #messages {
+      height: 75vh !important; /* previously 60vh */
+      max-height: calc(100vh - 180px);
+    }
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 antialiased">
@@ -30,9 +36,9 @@
         meId: {{ auth()->id() }}
      })"
     x-init="init()"
-    class="mx-auto max-w-3xl p-4">
+    class="mx-auto max-w-4xl p-6 flex flex-col min-h-[90vh]">
 
-    <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-2">
         <button type="button"
                 onclick="goBackToPrevious()"
@@ -44,14 +50,13 @@
       <a href="{{ route('chat.index') }}" class="text-sm px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 ring-1 ring-white/10">All chats</a>
     </div>
 
-    <div id="messages" class="h-[60vh] overflow-y-auto rounded-2xl p-4 bg-slate-900/60 ring-1 ring-white/10 space-y-2">
-      <!-- composite key so every render is unique -->
+    <div id="messages" class="flex-1 overflow-y-auto rounded-2xl p-5 bg-slate-900/70 ring-1 ring-white/10 space-y-3">
       <template x-for="m in messages" :key="(m.id ?? '') + '-' + (m.clientKey ?? '')">
         <div class="max-w-[80%] msg-enter"
              x-init="$el.classList.add('msg-enter'); requestAnimationFrame(()=>{$el.classList.add('msg-enter-active')})"
              :class="m.user_id === meId ? 'ml-auto text-right' : ''">
           <div class="rounded-2xl px-4 py-2"
-               :class="m.user_id === meId ? 'bg-cyan-600/30' : 'bg-white/5'">
+               :class="m.user_id === meId ? 'bg-cyan-600/40' : 'bg-white/10'">
             <div class="text-sm break-words whitespace-pre-wrap" x-text="m.body ?? ''"></div>
             <div class="text-[10px] opacity-60 mt-1" x-text="formatTime(m.created_at)"></div>
           </div>
@@ -59,13 +64,13 @@
       </template>
     </div>
 
-    <form @submit.prevent="send()" class="mt-3 flex gap-2">
+    <form @submit.prevent="send()" class="mt-4 flex gap-3">
       @csrf
       <input x-model="draft" type="text" placeholder="Type a message..."
-             class="flex-1 rounded-xl bg-slate-900/70 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+             class="flex-1 rounded-xl bg-slate-900/70 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
              autocomplete="off"
              @keydown.enter.prevent="send()">
-      <button type="submit" class="rounded-xl px-4 py-2 bg-cyan-600 hover:bg-cyan-500">
+      <button type="submit" class="rounded-xl px-6 py-3 bg-cyan-600 hover:bg-cyan-500">
         Send
       </button>
     </form>
@@ -87,8 +92,8 @@
       draft: '',
       meId: cfg.meId,
       timer: null,
-      pausePollUntil: 0,      // to avoid races while sending
-      seenIds: new Set(),     // deduplicate server messages by id
+      pausePollUntil: 0,
+      seenIds: new Set(),
 
       init(){
         this.pull();
@@ -98,10 +103,9 @@
         window.addEventListener('beforeunload', ()=> clearInterval(this.timer));
       },
 
-      formatTime(ts) { try { return new Date(ts).toLocaleString(); } catch { return ''; } },
+      formatTime(ts) { try { return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); } catch { return ''; } },
 
       mergeServerMessages(list){
-        // Keep only messages we haven't seen by id
         const fresh = [];
         for (const m of list) {
           if (m && m.id != null && !this.seenIds.has(m.id)) {
@@ -118,9 +122,7 @@
       },
 
       async pull(){
-        // Avoid running immediately after we just sent (prevents temp overwrite)
         if (Date.now() < this.pausePollUntil) return;
-
         try {
           const url = this.lastId ? cfg.fetchUrl + '?after=' + this.lastId : cfg.fetchUrl;
           const res = await fetch(url);
@@ -129,16 +131,13 @@
             this.mergeServerMessages(data);
             this.markRead();
           }
-        } catch (e) {
-          console.warn('Pull failed', e);
-        }
+        } catch (e) { console.warn('Pull failed', e); }
       },
 
       async send(){
         const text = this.draft.trim();
         if (!text) return;
 
-        // 1) Optimistic bubble (ALWAYS reassign array)
         const tempId = 'temp-' + Date.now();
         const tempMsg = {
           id: tempId,
@@ -151,7 +150,6 @@
         this.$nextTick(()=> this.scrollDown());
         this.draft = '';
 
-        // Pause polling briefly to avoid race replacing the optimistic bubble
         this.pausePollUntil = Date.now() + 800;
 
         try {
@@ -163,23 +161,19 @@
           const serverMsg = await res.json();
           if (typeof serverMsg.body !== 'string') serverMsg.body = text;
 
-          // Record server id to prevent duplicates on the next poll
           if (serverMsg.id != null) this.seenIds.add(serverMsg.id);
 
-          // 2) Replace temp with real message (REASSIGN array again)
           const replaced = this.messages.map(m => m.id === tempId ? { ...serverMsg, clientKey: (crypto?.randomUUID?.() || String(performance.now())) } : m);
           this.messages = replaced;
           this.lastId = serverMsg.id;
           this.$nextTick(()=> this.scrollDown());
 
         } catch (e) {
-          // Remove temp & restore text on failure
           this.messages = this.messages.filter(m => m.id !== tempId);
           this.draft = text;
           alert("Message couldn't be sent. Please try again.");
           console.error('Send failed', e);
         } finally {
-          // allow polling again shortly after
           setTimeout(()=> { this.pausePollUntil = 0; }, 300);
         }
       },
