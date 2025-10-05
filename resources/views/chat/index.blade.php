@@ -21,21 +21,27 @@
   <main class="max-w-5xl mx-auto p-6">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-semibold">Messages</h1>
-      <a href="{{ url()->previous() }}" class="text-sm px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 ring-1 ring-white/10">Back</a>
+
+      <!-- NEW: Back to Shared Realm -->
+      <a href="{{ url('/shared-dreams') }}"
+         class="text-sm px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 ring-1 ring-white/10">
+        ← Back to Shared Realm
+      </a>
     </div>
 
-    @php
-      // $convs is a LengthAwarePaginator from ChatController@index
-    @endphp
-
+    {{-- $convs is a LengthAwarePaginator from ChatController@index --}}
     <div class="space-y-3">
       @forelse($convs as $c)
-        @php $other = $c->participants->firstWhere('id', '!=', auth()->id()); @endphp
-        <a href="{{ route('chat.open', $other) }}"
+        @php
+          $other = $c->participants->firstWhere('id', '!=', auth()->id());
+          $last  = optional($c->messages->first());
+        @endphp
+
+        <a href="{{ $other ? route('chat.open', $other) : '#' }}"
            class="block rounded-2xl p-4 bg-slate-900/60 ring-1 ring-white/10 hover:ring-cyan-400/30">
           <div class="font-medium">{{ $other?->name ?? 'Unknown' }}</div>
           <div class="text-sm opacity-75">
-            {{ optional($c->messages->first())->body ? Str::limit($c->messages->first()->body, 80) : 'No messages yet' }}
+            {{ $last?->body ? Str::limit($last->body, 80) : 'No messages yet' }}
           </div>
         </a>
       @empty

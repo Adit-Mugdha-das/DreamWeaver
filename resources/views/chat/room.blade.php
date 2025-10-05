@@ -29,7 +29,16 @@
     class="mx-auto max-w-3xl p-4">
 
     <div class="flex items-center justify-between mb-3">
-      <div class="text-lg font-semibold">Chat with {{ $other->name }}</div>
+      <div class="flex items-center gap-2">
+        <!-- NEW: Back button -->
+        <button type="button"
+                onclick="goBackToPrevious()"
+                class="text-sm px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 ring-1 ring-white/10">
+          ← Back
+        </button>
+        <div class="text-lg font-semibold ml-1">Chat with {{ $other->name }}</div>
+      </div>
+
       <a href="{{ route('chat.index') }}" class="text-sm px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 ring-1 ring-white/10">All chats</a>
     </div>
 
@@ -55,6 +64,17 @@
   </main>
 
   <script>
+  // NEW: Smart back handler (uses history; falls back to chat index)
+  function goBackToPrevious() {
+    // If we navigated here from another page in this tab, go back
+    if (document.referrer && document.referrer !== window.location.href) {
+      window.history.back();
+    } else {
+      // Fallback: go to the conversations list
+      window.location.href = "{{ route('chat.index') }}";
+    }
+  }
+
   function chatRoom(cfg){
     return {
       messages: [],
