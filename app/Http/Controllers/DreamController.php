@@ -37,8 +37,8 @@ public function store(Request $request)
         ]);
 
         $usedTypes = $data['used_types'] ?? [];
-        $emotion = $data['emotion_summary'] ?? null;
-        $short = $data['short_interpretation'] ?? null;
+        $emotion   = $data['emotion_summary'] ?? null;
+        $short     = $data['short_interpretation'] ?? null;
 
         if ($emotion) {
             // 🔧 Normalize BEFORE storing / mapping
@@ -73,7 +73,7 @@ public function store(Request $request)
 
             /** @var \App\Models\User $user */
             $user = Auth::user();
-            $currentTokens = $user->dream_tokens ?? [];
+            $currentTokens   = $user->dream_tokens ?? [];
             $currentTokens[] = $token;
             $user->dream_tokens = array_values(array_unique($currentTokens));
             $user->save();
@@ -102,7 +102,7 @@ public function store(Request $request)
     ]);
 
     $emotion = GeminiHelper::analyzeEmotion($validated['content']);
-    $short = GeminiHelper::analyzeShort($validated['content']);
+    $short   = GeminiHelper::analyzeShort($validated['content']);
 
     // 🔧 Normalize BEFORE storing / mapping
     $emotion = $this->normalizeEmotion($emotion);
@@ -136,7 +136,7 @@ public function store(Request $request)
 
     /** @var \App\Models\User $user */
     $user = Auth::user();
-    $currentTokens = $user->dream_tokens ?? [];
+    $currentTokens   = $user->dream_tokens ?? [];
     $currentTokens[] = $token;
     $user->dream_tokens = array_values(array_unique($currentTokens));
     $user->save();
@@ -417,48 +417,96 @@ public function shareLater(Request $request, Dream $dream)
 
 
 // Add inside DreamController (class scope)
+/**
+ * Collapse synonyms/typos to a canonical emotion.
+ * e.g., "horror" → "fear", "ecstatic" → "joy"
+ */
 private function normalizeEmotion(string $raw): string
 {
     $e = strtolower(trim($raw));
     if ($e === '') return 'neutral';
 
-    // ✅ Synonyms → canonical emotion mapping
+    // Canonical → synonyms
     $syn = [
-        'joy' => ['happy','delight','glad','ecstatic','excited','cheerful','elated','pleased','content','blissful','joyful','merry'],
-        'fear' => ['horror','terror','terrified','fright','frightened','dread','scared','scary','panic','panicked','petrified','afraid','spooked','creeped','creepy','creeped out'],
-        'sadness' => ['sad','sorrow','blue','depressed','melancholy','mournful','down','grief','heartbroken','lonely','tearful'],
-        'calm' => ['peaceful','serene','relaxed','composed','tranquil','soothing','quiet','still','untroubled'],
-        'anger' => ['mad','furious','rage','irritated','annoyed','enraged','outraged','resentful','hostile','infuriated'],
-        'confusion' => ['confused','puzzled','uncertain','doubtful','bewildered','perplexed','lost','disoriented','hesitant'],
-        'awe' => ['wonder','amazement','astonishment','admiration','reverence','marvel'],
-        'love' => ['affection','fondness','devotion','adoration','passion','caring','romance','liking'],
-        'curiosity' => ['interested','inquisitive','exploring','investigative','questioning','wondering','nosy'],
-        'gratitude' => ['thankful','appreciative','grateful','obliged','indebted','acknowledging'],
-        'pride' => ['proud','satisfied','dignity','self-esteem','honor','confidence'],
-        'relief' => ['comfort','ease','assurance','reassured','release','freedom'],
-        'nostalgia' => ['homesick','yearning','reminiscent','sentimental','longing','wistful'],
-        'surprise' => ['shocked','astonished','startled','amazed','stunned','flabbergasted','unexpected'],
-        'hope' => ['optimism','faith','expectation','trusting','confident','aspiration'],
-        'courage' => ['bravery','boldness','fearless','valiant','heroic','guts','determined','dauntless'],
-        'trust' => ['belief','confidence','faith','dependable','secure','assured'],
+        'joy' => [
+            'happy','delight','glad','ecstatic','excited','cheerful','elated',
+            'pleased','content','blissful','joyful','merry','gleeful'
+        ],
+        'fear' => [
+            'horror','terror','terrified','fright','frightened','dread','scared',
+            'scary','panic','panicked','petrified','afraid','spooked','creepy',
+            'creeped out','fearful','nervous','anxious'
+        ],
+        'sadness' => [
+            'sad','sorrow','blue','depressed','melancholy','mournful','down',
+            'grief','heartbroken','lonely','tearful','despair','hopeless'
+        ],
+        'calm' => [
+            'peaceful','serene','relaxed','composed','tranquil','soothing',
+            'quiet','still','untroubled','balanced'
+        ],
+        'anger' => [
+            'mad','furious','rage','irritated','annoyed','enraged','outraged',
+            'resentful','hostile','infuriated','angry','frustrated'
+        ],
+        'confusion' => [
+            'confused','puzzled','uncertain','doubtful','bewildered','perplexed',
+            'lost','disoriented','hesitant','unclear'
+        ],
+        'awe' => [
+            'wonder','amazement','astonishment','admiration','reverence','marvel','wow'
+        ],
+        'love' => [
+            'affection','fondness','devotion','adoration','passion','caring',
+            'romance','liking','attachment'
+        ],
+        'curiosity' => [
+            'interested','inquisitive','exploring','investigative','questioning',
+            'wondering','nosy','seeking'
+        ],
+        'gratitude' => [
+            'thankful','appreciative','grateful','obliged','indebted',
+            'acknowledging','recognition'
+        ],
+        'pride' => [
+            'proud','satisfied','dignity','self-esteem','honor','confidence','selfrespect'
+        ],
+        'relief' => [
+            'comfort','ease','assurance','reassured','release','freedom','unburdened'
+        ],
+        'nostalgia' => [
+            'homesick','yearning','reminiscent','sentimental','longing',
+            'wistful','memories'
+        ],
+        'surprise' => [
+            'shocked','astonished','startled','amazed','stunned','flabbergasted','unexpected'
+        ],
+        'hope' => [
+            'optimism','faith','expectation','trusting','confident','aspiration','positive'
+        ],
+        'courage' => [
+            'bravery','boldness','fearless','valiant','heroic','guts','determined','dauntless'
+        ],
+        'trust' => [
+            'belief','confidence','faith','dependable','secure','assured','reliable'
+        ],
     ];
 
-    // ✅ Exact canonical hit
+    // Exact canonical hit
     if (array_key_exists($e, $syn)) return $e;
 
-    // ✅ Direct synonym hit
+    // Direct synonym hit
     foreach ($syn as $canon => $aliases) {
         if (in_array($e, $aliases, true)) return $canon;
     }
 
-    // ✅ Light fuzzy fallback (helps catch typos like "horor")
+    // Light fuzzy fallback for minor typos (e.g. "horor")
     $candidates = array_merge(array_keys($syn), ...array_values($syn));
     $best = null; $bestPct = 0.0;
     foreach ($candidates as $cand) {
         similar_text($e, $cand, $pct);
         if ($pct > $bestPct) { $bestPct = $pct; $best = $cand; }
     }
-
     if ($best && $bestPct >= 80) {
         if (array_key_exists($best, $syn)) return $best;
         foreach ($syn as $canon => $aliases) {
@@ -466,7 +514,7 @@ private function normalizeEmotion(string $raw): string
         }
     }
 
-    return $e; // leave as-is (e.g., 'neutral' or unknown emotion)
+    return $e; // leave unknowns as-is
 }
 
 
