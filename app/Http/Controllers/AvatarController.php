@@ -34,32 +34,35 @@ class AvatarController extends Controller
     public function generate()
     {
         $rawEmotion = session('last_emotion') ?? 'neutral';
-        $emotion = strtolower(trim($rawEmotion));
 
-        // 🔁 Updated emotion → avatar item + color mapping
+        // 🔧 Normalize BEFORE mapping so synonyms like "horror" → "fear"
+        $emotion = $this->normalizeEmotion($rawEmotion);
+
+        // 🔁 emotion → avatar item + color mapping
         $avatar = match ($emotion) {
-            'joy'       => ['color' => 'gold',  'item' => 'wings'],
-            'fear'      => ['color' => 'black', 'item' => 'mask'],
-            'calm'      => ['color' => 'blue',  'item' => 'cloud'],
-            'confused'  => ['color' => 'gray',  'item' => 'swirl'],
-            'anger'     => ['color' => 'red',   'item' => 'fire'],
+            'joy'        => ['color' => 'gold',   'item' => 'wings'],
+            'fear'       => ['color' => 'black',  'item' => 'mask'],
+            'calm'       => ['color' => 'blue',   'item' => 'cloud'],
+            'confused',
+            'confusion'  => ['color' => 'gray',   'item' => 'swirl'],
+            'anger'      => ['color' => 'red',    'item' => 'fire'],
 
             // 🆕 New emotions and their avatars
-            'sadness'   => ['color' => 'navy',    'item' => 'tear'],
-            'awe'       => ['color' => 'indigo',  'item' => 'star'],
-            'love'      => ['color' => 'pink',    'item' => 'heart'],
-            'curiosity' => ['color' => 'teal',    'item' => 'compass'],
-            'gratitude' => ['color' => 'amber',   'item' => 'quill'],
-            'pride'     => ['color' => 'purple',  'item' => 'crest'],
-            'relief'    => ['color' => 'green',   'item' => 'key'],
-            'nostalgia' => ['color' => 'silver',  'item' => 'moon'],
-            'surprise'  => ['color' => 'yellow',  'item' => 'bolt'],
-            'hope'      => ['color' => 'lime',    'item' => 'leaf'],
-            'courage'   => ['color' => 'maroon',  'item' => 'shield'],
-            'trust'     => ['color' => 'cyan',    'item' => 'anchor'],
+            'sadness'    => ['color' => 'navy',    'item' => 'tear'],
+            'awe'        => ['color' => 'indigo',  'item' => 'star'],
+            'love'       => ['color' => 'pink',    'item' => 'heart'],
+            'curiosity'  => ['color' => 'teal',    'item' => 'compass'],
+            'gratitude'  => ['color' => 'amber',   'item' => 'quill'],
+            'pride'      => ['color' => 'purple',  'item' => 'crest'],
+            'relief'     => ['color' => 'green',   'item' => 'key'],
+            'nostalgia'  => ['color' => 'silver',  'item' => 'moon'],
+            'surprise'   => ['color' => 'yellow',  'item' => 'bolt'],
+            'hope'       => ['color' => 'lime',    'item' => 'leaf'],
+            'courage'    => ['color' => 'maroon',  'item' => 'shield'],
+            'trust'      => ['color' => 'cyan',    'item' => 'anchor'],
 
             // Default fallback
-            default     => ['color' => 'gray',    'item' => 'mirror'],
+            default      => ['color' => 'gray',    'item' => 'mirror'],
         };
 
         /** @var User $user */
@@ -75,5 +78,44 @@ class AvatarController extends Controller
 
         return redirect('/test-avatar')
             ->with('message', 'Avatar generated based on your last dream emotion.');
+    }
+
+    // Add inside AvatarController (class scope)
+    private function normalizeEmotion(string $raw): string
+    {
+        $e = strtolower(trim($raw));
+        if ($e === '') return 'neutral';
+
+        $syn = [
+            'fear' => [
+                'horror','terror','terrified','fright','frightened','dread',
+                'scared','scary','panic','panicked','petrified','afraid',
+                'spooked','creepy','creeped out'
+            ],
+        ];
+
+        // Exact canonical
+        if (array_key_exists($e, $syn)) return $e;
+
+        // Direct synonym
+        foreach ($syn as $canon => $aliases) {
+            if (in_array($e, $aliases, true)) return $canon;
+        }
+
+        // Light fuzzy matching (helps with typos like "horor")
+        $candidates = array_merge(array_keys($syn), ...array_values($syn));
+        $best = null; $bestPct = 0.0;
+        foreach ($candidates as $cand) {
+            similar_text($e, $cand, $pct);
+            if ($pct > $bestPct) { $bestPct = $pct; $best = $cand; }
+        }
+        if ($best && $bestPct >= 80) {
+            if (array_key_exists($best, $syn)) return $best;
+            foreach ($syn as $canon => $aliases) {
+                if (in_array($best, $aliases, true)) return $canon;
+            }
+        }
+
+        return $e;
     }
 }

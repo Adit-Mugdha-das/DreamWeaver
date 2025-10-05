@@ -22,7 +22,7 @@ class DreamController extends Controller
         return view('dreams.create');
     }
 
-  public function store(Request $request)
+public function store(Request $request)
 {
     if ($request->expectsJson()) {
         // ✅ Handle AJAX request and use already-generated interpretations
@@ -41,35 +41,35 @@ class DreamController extends Controller
         $short = $data['short_interpretation'] ?? null;
 
         if ($emotion) {
+            // 🔧 Normalize BEFORE storing / mapping
+            $emotion = $this->normalizeEmotion($emotion);
             session(['last_emotion' => $emotion]);
-            $emotion = strtolower($emotion);
 
             // ✅ Map emotion to token and save
             $token = match($emotion) {
-    // existing
-    'joy'       => 'wings',
-    'fear'      => 'mask',
-    'calm'      => 'cloud',
-    'confusion'  => 'swirl',
-    'anger'     => 'fire',
+                // existing
+                'joy'                    => 'wings',
+                'fear'                   => 'mask',
+                'calm'                   => 'cloud',
+                'confusion', 'confused'  => 'swirl',
+                'anger'                  => 'fire',
 
-    // new
-    'sadness'   => 'tear',
-    'awe'       => 'star',
-    'love'      => 'heart',
-    'curiosity' => 'compass',
-    'gratitude' => 'quill',
-    'pride'     => 'crest',
-    'relief'    => 'key',
-    'nostalgia' => 'moon',
-    'surprise'  => 'bolt',
-    'hope'      => 'leaf',
-    'courage'   => 'shield',
-    'trust'     => 'anchor',
+                // new
+                'sadness'                => 'tear',
+                'awe'                    => 'star',
+                'love'                   => 'heart',
+                'curiosity'              => 'compass',
+                'gratitude'              => 'quill',
+                'pride'                  => 'crest',
+                'relief'                 => 'key',
+                'nostalgia'              => 'moon',
+                'surprise'               => 'bolt',
+                'hope'                   => 'leaf',
+                'courage'                => 'shield',
+                'trust'                  => 'anchor',
 
-    default     => 'mirror',
-};
-
+                default                  => 'mirror',
+            };
 
             /** @var \App\Models\User $user */
             $user = Auth::user();
@@ -104,35 +104,35 @@ class DreamController extends Controller
     $emotion = GeminiHelper::analyzeEmotion($validated['content']);
     $short = GeminiHelper::analyzeShort($validated['content']);
 
+    // 🔧 Normalize BEFORE storing / mapping
+    $emotion = $this->normalizeEmotion($emotion);
     session(['last_emotion' => $emotion]);
-    $emotion = strtolower($emotion);
 
     // ✅ Map emotion to token and save
     $token = match($emotion) {
-    // existing
-    'joy'       => 'wings',
-    'fear'      => 'mask',
-    'calm'      => 'cloud',
-    'confused'  => 'swirl',
-    'anger'     => 'fire',
+        // existing
+        'joy'                    => 'wings',
+        'fear'                   => 'mask',
+        'calm'                   => 'cloud',
+        'confusion', 'confused'  => 'swirl',
+        'anger'                  => 'fire',
 
-    // new
-    'sadness'   => 'tear',
-    'awe'       => 'star',
-    'love'      => 'heart',
-    'curiosity' => 'compass',
-    'gratitude' => 'quill',
-    'pride'     => 'crest',
-    'relief'    => 'key',
-    'nostalgia' => 'moon',
-    'surprise'  => 'bolt',
-    'hope'      => 'leaf',
-    'courage'   => 'shield',
-    'trust'     => 'anchor',
+        // new
+        'sadness'                => 'tear',
+        'awe'                    => 'star',
+        'love'                   => 'heart',
+        'curiosity'              => 'compass',
+        'gratitude'              => 'quill',
+        'pride'                  => 'crest',
+        'relief'                 => 'key',
+        'nostalgia'              => 'moon',
+        'surprise'               => 'bolt',
+        'hope'                   => 'leaf',
+        'courage'                => 'shield',
+        'trust'                  => 'anchor',
 
-    default     => 'mirror',
-};
-
+        default                  => 'mirror',
+    };
 
     /** @var \App\Models\User $user */
     $user = Auth::user();
@@ -416,6 +416,44 @@ public function shareLater(Request $request, Dream $dream)
 }
 
 
+// Add inside DreamController (class scope)
+private function normalizeEmotion(string $raw): string
+{
+    $e = strtolower(trim($raw));
+    if ($e === '') return 'neutral';
+
+    // Synonyms → canonical
+    $syn = [
+        'fear' => ['horror','terror','terrified','fright','frightened','dread','scared','scary','panic','panicked','petrified','afraid','spooked','creeped','creepy'],
+        // add more canonical groups here if you want them to map together
+        // 'joy' => ['happy','delight','glad','ecstatic','excited'],
+        // 'sadness' => ['sad','sorrow','blue','depressed','melancholy'],
+    ];
+
+    // Exact canonical hit
+    if (array_key_exists($e, $syn)) return $e;
+
+    // Direct synonym hit
+    foreach ($syn as $canon => $aliases) {
+        if (in_array($e, $aliases, true)) return $canon;
+    }
+
+    // Light fuzzy fallback (helps catch minor typos like "horor")
+    $candidates = array_merge(array_keys($syn), ...array_values($syn));
+    $best = null; $bestPct = 0.0;
+    foreach ($candidates as $cand) {
+        similar_text($e, $cand, $pct);
+        if ($pct > $bestPct) { $bestPct = $pct; $best = $cand; }
+    }
+    if ($best && $bestPct >= 80) {
+        if (array_key_exists($best, $syn)) return $best;
+        foreach ($syn as $canon => $aliases) {
+            if (in_array($best, $aliases, true)) return $canon;
+        }
+    }
+
+    return $e; // leave as-is (e.g., 'joy', 'anger', etc.)
+}
 
 
 
