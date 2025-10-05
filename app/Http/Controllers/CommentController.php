@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 
-
 class CommentController extends Controller
 {
     // 🟡 Update comment content
@@ -19,14 +18,20 @@ class CommentController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $request->validate([
+        // Validate and get data
+        $data = $request->validate([
             'content' => 'required|string|max:1000',
         ]);
 
-        $comment->content = $request->content;
+        // Use validated input instead of $request->content
+        $comment->content = $data['content'];               // or: $request->input('content') / $request->string('content')
         $comment->save();
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'content' => $comment->content,
+            'updated_at' => $comment->updated_at->toDateTimeString(),
+        ]);
     }
 
     // 🔴 Delete comment
@@ -35,7 +40,6 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($id);
 
         if ($comment->user_id !== Auth::id()) {
-
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
