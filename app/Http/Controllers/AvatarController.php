@@ -81,41 +81,56 @@ class AvatarController extends Controller
     }
 
     // Add inside AvatarController (class scope)
-    private function normalizeEmotion(string $raw): string
-    {
-        $e = strtolower(trim($raw));
-        if ($e === '') return 'neutral';
+   private function normalizeEmotion(string $raw): string
+{
+    $e = strtolower(trim($raw));
+    if ($e === '') return 'neutral';
 
-        $syn = [
-            'fear' => [
-                'horror','terror','terrified','fright','frightened','dread',
-                'scared','scary','panic','panicked','petrified','afraid',
-                'spooked','creepy','creeped out'
-            ],
-        ];
+    // ✅ Synonyms → canonical emotion mapping
+    $syn = [
+        'joy' => ['happy','delight','glad','ecstatic','excited','cheerful','elated','pleased','content','blissful','joyful','merry'],
+        'fear' => ['horror','terror','terrified','fright','frightened','dread','scared','scary','panic','panicked','petrified','afraid','spooked','creeped','creepy','creeped out','fearful','nervous','anxious'],
+        'sadness' => ['sad','sorrow','blue','depressed','melancholy','mournful','down','grief','heartbroken','lonely','tearful','despair','hopeless'],
+        'calm' => ['peaceful','serene','relaxed','composed','tranquil','soothing','quiet','still','untroubled','balanced'],
+        'anger' => ['mad','furious','rage','irritated','annoyed','enraged','outraged','resentful','hostile','infuriated','angry','frustrated'],
+        'confusion' => ['confused','puzzled','uncertain','doubtful','bewildered','perplexed','lost','disoriented','hesitant','unclear'],
+        'awe' => ['wonder','amazement','astonishment','admiration','reverence','marvel','wow'],
+        'love' => ['affection','fondness','devotion','adoration','passion','caring','romance','liking','attachment'],
+        'curiosity' => ['interested','inquisitive','exploring','investigative','questioning','wondering','nosy','seeking'],
+        'gratitude' => ['thankful','appreciative','grateful','obliged','indebted','acknowledging','recognition'],
+        'pride' => ['proud','satisfied','dignity','self-esteem','honor','confidence','selfrespect'],
+        'relief' => ['comfort','ease','assurance','reassured','release','freedom','unburdened'],
+        'nostalgia' => ['homesick','yearning','reminiscent','sentimental','longing','wistful','memories'],
+        'surprise' => ['shocked','astonished','startled','amazed','stunned','flabbergasted','unexpected'],
+        'hope' => ['optimism','faith','expectation','trusting','confident','aspiration','positive'],
+        'courage' => ['bravery','boldness','fearless','valiant','heroic','guts','determined','dauntless'],
+        'trust' => ['belief','confidence','faith','dependable','secure','assured','reliable'],
+    ];
 
-        // Exact canonical
-        if (array_key_exists($e, $syn)) return $e;
+    // ✅ Exact canonical
+    if (array_key_exists($e, $syn)) return $e;
 
-        // Direct synonym
-        foreach ($syn as $canon => $aliases) {
-            if (in_array($e, $aliases, true)) return $canon;
-        }
-
-        // Light fuzzy matching (helps with typos like "horor")
-        $candidates = array_merge(array_keys($syn), ...array_values($syn));
-        $best = null; $bestPct = 0.0;
-        foreach ($candidates as $cand) {
-            similar_text($e, $cand, $pct);
-            if ($pct > $bestPct) { $bestPct = $pct; $best = $cand; }
-        }
-        if ($best && $bestPct >= 80) {
-            if (array_key_exists($best, $syn)) return $best;
-            foreach ($syn as $canon => $aliases) {
-                if (in_array($best, $aliases, true)) return $canon;
-            }
-        }
-
-        return $e;
+    // ✅ Direct synonym match
+    foreach ($syn as $canon => $aliases) {
+        if (in_array($e, $aliases, true)) return $canon;
     }
+
+    // ✅ Light fuzzy matching (helps with typos like "horor" or "happpy")
+    $candidates = array_merge(array_keys($syn), ...array_values($syn));
+    $best = null; $bestPct = 0.0;
+    foreach ($candidates as $cand) {
+        similar_text($e, $cand, $pct);
+        if ($pct > $bestPct) { $bestPct = $pct; $best = $cand; }
+    }
+
+    if ($best && $bestPct >= 80) {
+        if (array_key_exists($best, $syn)) return $best;
+        foreach ($syn as $canon => $aliases) {
+            if (in_array($best, $aliases, true)) return $canon;
+        }
+    }
+
+    return $e; // leave as-is if unknown (e.g. 'neutral')
+}
+
 }

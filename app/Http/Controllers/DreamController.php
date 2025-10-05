@@ -422,29 +422,43 @@ private function normalizeEmotion(string $raw): string
     $e = strtolower(trim($raw));
     if ($e === '') return 'neutral';
 
-    // Synonyms → canonical
+    // ✅ Synonyms → canonical emotion mapping
     $syn = [
-        'fear' => ['horror','terror','terrified','fright','frightened','dread','scared','scary','panic','panicked','petrified','afraid','spooked','creeped','creepy'],
-        // add more canonical groups here if you want them to map together
-        // 'joy' => ['happy','delight','glad','ecstatic','excited'],
-        // 'sadness' => ['sad','sorrow','blue','depressed','melancholy'],
+        'joy' => ['happy','delight','glad','ecstatic','excited','cheerful','elated','pleased','content','blissful','joyful','merry'],
+        'fear' => ['horror','terror','terrified','fright','frightened','dread','scared','scary','panic','panicked','petrified','afraid','spooked','creeped','creepy','creeped out'],
+        'sadness' => ['sad','sorrow','blue','depressed','melancholy','mournful','down','grief','heartbroken','lonely','tearful'],
+        'calm' => ['peaceful','serene','relaxed','composed','tranquil','soothing','quiet','still','untroubled'],
+        'anger' => ['mad','furious','rage','irritated','annoyed','enraged','outraged','resentful','hostile','infuriated'],
+        'confusion' => ['confused','puzzled','uncertain','doubtful','bewildered','perplexed','lost','disoriented','hesitant'],
+        'awe' => ['wonder','amazement','astonishment','admiration','reverence','marvel'],
+        'love' => ['affection','fondness','devotion','adoration','passion','caring','romance','liking'],
+        'curiosity' => ['interested','inquisitive','exploring','investigative','questioning','wondering','nosy'],
+        'gratitude' => ['thankful','appreciative','grateful','obliged','indebted','acknowledging'],
+        'pride' => ['proud','satisfied','dignity','self-esteem','honor','confidence'],
+        'relief' => ['comfort','ease','assurance','reassured','release','freedom'],
+        'nostalgia' => ['homesick','yearning','reminiscent','sentimental','longing','wistful'],
+        'surprise' => ['shocked','astonished','startled','amazed','stunned','flabbergasted','unexpected'],
+        'hope' => ['optimism','faith','expectation','trusting','confident','aspiration'],
+        'courage' => ['bravery','boldness','fearless','valiant','heroic','guts','determined','dauntless'],
+        'trust' => ['belief','confidence','faith','dependable','secure','assured'],
     ];
 
-    // Exact canonical hit
+    // ✅ Exact canonical hit
     if (array_key_exists($e, $syn)) return $e;
 
-    // Direct synonym hit
+    // ✅ Direct synonym hit
     foreach ($syn as $canon => $aliases) {
         if (in_array($e, $aliases, true)) return $canon;
     }
 
-    // Light fuzzy fallback (helps catch minor typos like "horor")
+    // ✅ Light fuzzy fallback (helps catch typos like "horor")
     $candidates = array_merge(array_keys($syn), ...array_values($syn));
     $best = null; $bestPct = 0.0;
     foreach ($candidates as $cand) {
         similar_text($e, $cand, $pct);
         if ($pct > $bestPct) { $bestPct = $pct; $best = $cand; }
     }
+
     if ($best && $bestPct >= 80) {
         if (array_key_exists($best, $syn)) return $best;
         foreach ($syn as $canon => $aliases) {
@@ -452,9 +466,8 @@ private function normalizeEmotion(string $raw): string
         }
     }
 
-    return $e; // leave as-is (e.g., 'joy', 'anger', etc.)
+    return $e; // leave as-is (e.g., 'neutral' or unknown emotion)
 }
-
 
 
 }
