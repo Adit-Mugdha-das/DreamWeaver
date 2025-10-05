@@ -52,9 +52,7 @@
     .tab.active { background: rgba(147,51,234,.18); color:#fff; border-color: rgba(147,51,234,.35); }
     .section-title { font-size: 1rem; font-weight: 700; color:#a78bfa; margin: .5rem 0 .75rem; }
     .muted { color:#94a3b8; font-size:.8rem; }
-    .link {
-      color:#a78bfa; font-weight:600; text-decoration:none;
-    }
+    .link { color:#a78bfa; font-weight:600; text-decoration:none; }
     .link:hover { text-decoration: underline; }
   </style>
 </head>
@@ -69,8 +67,15 @@
   @php
     // Split notifications into Chat vs Activity (current page only)
     $all = collect($notifications);
-    $chat = $all->filter(function($n){ return ($n->data['type'] ?? null) === 'chat'; });
-    $activity = $all->reject(function($n){ return ($n->data['type'] ?? null) === 'chat'; });
+    $chat = $all->filter(fn($n) => ($n->data['type'] ?? null) === 'chat');
+    $activity = $all->reject(fn($n) => ($n->data['type'] ?? null) === 'chat');
+
+    // Group chat notifications by sender
+    $chatGroups = $chat->groupBy(fn($n) => $n->data['from_user_id'] ?? 'unknown');
+
+    // Preload sender names to avoid N+1 queries
+    $senderIds = $chatGroups->keys()->filter(fn($id) => is_numeric($id))->values();
+    $senderMap = \App\Models\User::whereIn('id', $senderIds)->pluck('name', 'id');
   @endphp
 
   <!-- Tabs -->
@@ -109,35 +114,63 @@
     @endif
   </section>
 
-  <!-- CHAT LIST -->
+  <!-- CHAT LIST (grouped by sender) -->
   <section x-show="tab==='chat'">
     @if($chat->isEmpty())
       <p class="muted">No chat notifications.</p>
     @else
       <div class="section-title">Direct Messages</div>
-      @foreach ($chat as $notification)
+
+      @foreach ($chatGroups as $fromId => $items)
         @php
-          $data = $notification->data ?? [];
-          $preview = $data['message'] ?? $data['body_preview'] ?? '(no message)';
-          $fromId = $data['from_user_id'] ?? null;
+          /** @var \Illuminate\Support\Collection $items */
+          $latest = $items->sortByDesc('created_at')->first();
+          $count  = $items->count();
+          $unread = $items->whereNull('read_at')->count();
+          $sender = is_numeric($fromId) ? ($senderMap[$fromId] ?? 'Unknown User') : 'Unknown User';
+          $preview = $latest->data['body_preview'] ?? $latest->data['message'] ?? '(no message)';
+          $chatUrl = is_numeric($fromId) ? route('chat.open', $fromId) : '#';
         @endphp
+
         <div class="card">
-          <div class="text-sm">
-            <span class="badge">CHAT</span>
-            {{ $preview }}
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="badge">CHAT</span>
+                <span class="font-semibold truncate">{{ $sender }}</span>
+                @if($count > 1)
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-violet-600/30 border border-violet-500/30">
+                    {{ $count }} messages
+                  </span>
+                @endif
+                @if($unread > 0)
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-600/30 border border-emerald-500/30">
+                    {{ $unread }} new
+                  </span>
+                @endif
+              </div>
+
+              <div class="mt-1 text-sm text-gray-200 truncate">
+                {{ $preview }}
+              </div>
+
+              <div class="muted mt-1">
+                {{ $latest->created_at->diffForHumans() }}
+              </div>
+            </div>
+
+            <div class="shrink-0">
+              <a href="{{ $chatUrl }}" class="link inline-flex items-center gap-1">
+                💬 <span>Open Chat</span>
+              </a>
+            </div>
           </div>
-          <div class="mt-2">
-            @if($fromId)
-              <a class="link inline-flex items-center gap-1" href="{{ route('chat.open', $fromId) }}">💬 Open Chat</a>
-            @endif
-          </div>
-          <div class="muted mt-1">{{ $notification->created_at->diffForHumans() }}</div>
         </div>
       @endforeach
     @endif
   </section>
 
-  <!-- Pagination (same paginator controls you had before) -->
+  <!-- Pagination (if the $notifications is a paginator) -->
   <div class="mt-6">
     {{ method_exists($notifications, 'links') ? $notifications->links() : '' }}
   </div>
