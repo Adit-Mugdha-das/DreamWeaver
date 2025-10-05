@@ -65,17 +65,31 @@
   <h1 class="text-3xl font-bold text-violet-400 mb-6 flex items-center gap-2">🔔 Your Notifications</h1>
 
   @forelse ($notifications as $notification)
+    @php
+      $data = $notification->data ?? [];
+      $type = $data['type'] ?? 'general';
+      $message = $data['message'] ?? $data['body_preview'] ?? $data['text'] ?? '(no message)';
+    @endphp
+
     <div class="notif-box">
       <div class="text-sm">
-        <span class="badge">
-          {{ strtoupper($notification->data['type']) }}
-        </span>
-        {{ $notification->data['message'] }}
+        <span class="badge">{{ strtoupper($type) }}</span>
+        {{ $message }}
       </div>
 
-      @if(isset($notification->data['content']))
+      @if(isset($data['content']))
         <div class="text-xs text-gray-400 mt-1">
-          {{ $notification->data['content'] }}
+          {{ $data['content'] }}
+        </div>
+      @endif
+
+      {{-- Special case: Chat notification --}}
+      @if($type === 'chat' && isset($data['from_user_id']))
+        <div class="mt-2">
+          <a href="{{ route('chat.open', $data['from_user_id']) }}"
+             class="inline-flex items-center text-sm text-fuchsia-400 hover:underline">
+             💬 Open Chat
+          </a>
         </div>
       @endif
 

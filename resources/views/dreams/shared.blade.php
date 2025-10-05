@@ -134,6 +134,14 @@
         <button onclick="showLikes({{ $dream->id }})" class="text-sm text-gray-400 hover:text-fuchsia-400">🧑 View Likers</button>
         <button @click="showComments = !showComments" class="text-gray-400 hover:text-fuchsia-400 transition">💬 Comment</button>
         <button onclick="copyLink({{ $dream->id }})" class="text-gray-400 hover:text-fuchsia-400 transition">🔗 Share</button>
+
+        {{-- Message button beside Like/Comment/Share (hidden on own posts) --}}
+        @unless($dream->user_id === auth()->id())
+          <a href="{{ route('chat.open', $dream->user_id) }}"
+             class="inline-flex items-center text-sm hover:underline">
+             💬 Message
+          </a>
+        @endunless
       </div>
 
       <!-- Comment Form + List -->

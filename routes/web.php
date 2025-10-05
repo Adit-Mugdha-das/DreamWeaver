@@ -12,7 +12,7 @@ use App\Models\Dream;
 use App\Http\Controllers\LibraryTextController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RiddleController;
-
+use App\Http\Controllers\ChatController;
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
  */
@@ -290,4 +290,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/riddles', [RiddleController::class, 'index'])->name('riddles.index');
     Route::post('/riddles/next', [RiddleController::class, 'next'])->name('riddles.next');
     Route::post('/riddles/{id}/solve', [RiddleController::class, 'solve'])->name('riddles.solve');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/u/{user}', [ChatController::class, 'open'])->name('chat.open');
+
+    Route::get('/chat/{conversation}/messages', [ChatController::class, 'fetch'])->name('chat.fetch');
+    Route::post('/chat/{conversation}/messages', [ChatController::class, 'send'])->name('chat.send');
+    Route::post('/chat/{conversation}/read', [ChatController::class, 'read'])->name('chat.read');
 });
