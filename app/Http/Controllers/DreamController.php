@@ -516,6 +516,35 @@ private function normalizeEmotion(string $raw): string
 
     return $e; // leave unknowns as-is
 }
+// app/Http/Controllers/DreamController.php
+public function similarByEmotion(\Illuminate\Http\Request $request)
+{
+    $emotion = trim((string) $request->query('emotion', ''));
+    abort_unless($emotion !== '', 400, 'emotion is required');
+
+    $norm = \Illuminate\Support\Str::upper($emotion);
+
+    $dreams = \App\Models\Dream::query()
+        ->where('user_id', \Illuminate\Support\Facades\Auth::id())
+        ->where(function ($q) use ($norm) {
+            // Case-insensitive match within emotion_summary text
+            $q->whereRaw('LOWER(COALESCE(emotion_summary, "")) LIKE ?', [
+                '%' . mb_strtolower($norm) . '%'
+            ]);
+
+            // If you later add a JSON column (emotion_tags), you can enable this:
+            // try { $q->orWhereJsonContains('emotion_tags', $norm); } catch (\Throwable $e) {}
+        })
+        ->latest()
+        ->take(30)
+        // Include content so we can show the original message
+        ->get(['id', 'title', 'created_at', 'emotion_summary', 'content']);
+
+    return view('dreams.partials.similar_by_emotion', [
+        'emotion' => $norm,
+        'dreams'  => $dreams,
+    ]);
+}
 
 
 }

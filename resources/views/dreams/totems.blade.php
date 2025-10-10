@@ -34,7 +34,6 @@
         linear-gradient(180deg,var(--bg-top),var(--bg-bottom) 70%);
     }
 
-    /* Background layers */
     #particles-bg{position:fixed; inset:0; z-index:-3;}
     #aurora{
       position:fixed; inset:0; z-index:-2; pointer-events:none;
@@ -57,7 +56,6 @@
 
     .wrap{max-width:1180px; margin:0 auto; padding:26px 24px 28px;}
 
-    /* Fixed Dream World button */
     .btn{
       background:rgba(255,255,255,.04); border:1px solid var(--border); color:var(--ink);
       border-radius:.8rem; padding:.55rem .9rem; font-weight:700;
@@ -75,7 +73,6 @@
       border-color: rgba(255,255,255,.22);
     }
 
-    /* Header */
     .title{ font-family:"Cinzel", serif; font-weight:700; letter-spacing:.5px; color:#f3f7ff; text-align:center }
     .divider{
       width:84px; height:3px; border-radius:2px; margin:.65rem auto 0;
@@ -83,7 +80,6 @@
     }
     .muted{color:var(--muted); text-align:center}
 
-    /* Search bar row */
     .bar{display:flex; flex-direction:column; gap:10px; margin-top:24px}
     @media (min-width:768px){ .bar{flex-direction:row; align-items:center} }
     .search{
@@ -92,7 +88,6 @@
     }
     .search::placeholder{color:#8b96a3}
 
-    /* Grid & Cards */
     #totemGrid{
       display:grid; gap:18px; margin-top:18px;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -105,7 +100,7 @@
       text-align:center; backdrop-filter: blur(10px);
       transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
       box-shadow:0 14px 36px rgba(0,0,0,.30);
-      position:relative; overflow:hidden; min-height:290px; /* container stays the same */
+      position:relative; overflow:hidden; min-height:290px;
     }
     .card::after{
       content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
@@ -115,18 +110,9 @@
     .card:hover{ transform: translateY(-4px); border-color: rgba(255,255,255,.16); box-shadow: 0 18px 44px rgba(0,0,0,.36) }
     .card:hover::after{ opacity:.9 }
 
-    /* ===== Bigger image ONLY (ring grows slightly to match) ===== */
-    .relic{
-      width: 206px;                /* ring wrapper grew a bit */
-      height: 206px;
-      margin: 0 auto;
-      position: relative;
-    }
+    .relic{ width:206px; height:206px; margin:0 auto; position:relative; }
     .relic::before{
-      content:"";
-      position:absolute;
-      inset:-14px;                 /* outer glow widened */
-      border-radius:20px;
+      content:""; position:absolute; inset:-14px; border-radius:20px;
       background: conic-gradient(
         from 0deg,
         rgba(144,180,255,.22) 0deg,
@@ -134,37 +120,17 @@
         rgba(217,194,143,.18) 240deg,
         rgba(144,180,255,.22) 360deg
       );
-      filter: blur(10px);
-      opacity:.55;
-      animation: spin 24s linear infinite;
-      z-index: 0;
+      filter: blur(10px); opacity:.55; animation: spin 24s linear infinite; z-index:0;
     }
     .relic::after{
-      content:"";
-      position:absolute;
-      inset:12px;                  /* inner halo kept slim to highlight bigger art */
-      border-radius: 16px;
-      background: radial-gradient(
-        60% 60% at 50% 50%,
-        rgba(144,180,255,.16),
-        rgba(111,185,199,.12) 40%,
-        transparent 72%
-      );
-      filter: blur(12px);
-      opacity:.85;
-      z-index: 0;
+      content:""; position:absolute; inset:12px; border-radius:16px;
+      background: radial-gradient(60% 60% at 50% 50%, rgba(144,180,255,.16), rgba(111,185,199,.12) 40%, transparent 72%);
+      filter: blur(12px); opacity:.85; z-index:0;
     }
     .token-img{
-      width: 188px;                /* IMAGE got bigger */
-      height: 188px;
-      border-radius: 14px;
-      object-fit: cover;
-      border: 1px solid var(--border);
-      box-shadow: 0 12px 28px rgba(0,0,0,.35);
-      position: relative;
-      z-index: 1;
-      background: #0b1520;
-      transition: transform .2s ease;
+      width:188px; height:188px; border-radius:14px; object-fit:cover;
+      border:1px solid var(--border); box-shadow:0 12px 28px rgba(0,0,0,.35);
+      position:relative; z-index:1; background:#0b1520; transition: transform .2s ease;
     }
     .card:hover .token-img{ transform: scale(1.03) }
     @keyframes spin{ to{ transform: rotate(360deg); } }
@@ -177,39 +143,29 @@
     }
     .card:hover .tip{ opacity:1 }
 
-    /* Smaller primary button */
     .btn-primary{
       background: rgba(217,194,143,.10);
       border:1px solid rgba(217,194,143,.35);
       color: var(--ink);
       border-radius:.75rem;
-      padding:.50rem .80rem;       /* smaller */
-      font-weight:700;             /* lighter weight than before */
-      font-size:.92rem;            /* slightly smaller text */
+      padding:.50rem .80rem;
+      font-weight:700;
+      font-size:.92rem;
       transition:background .18s ease, border-color .18s ease, transform .18s ease;
     }
     .btn-primary:hover{ background: rgba(217,194,143,.18); border-color: rgba(217,194,143,.5); transform: translateY(-1px) }
 
-    /* Modals */
     .modal-bg{ background: rgba(7,11,18,.75); backdrop-filter: blur(8px); }
     .modal-card{ background: var(--glass); border:1px solid var(--border); border-radius:18px; }
 
-    /* Image modal sizing (prevent huge zoom) */
     #zoomedImage{
-      max-width: 85vw;
-      max-height: 80vh;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      box-shadow: 0 18px 44px rgba(0,0,0,.45);
+      max-width: 85vw; max-height: 80vh; width:auto; height:auto; object-fit:contain;
+      border-radius:14px; border:1px solid var(--border); box-shadow:0 18px 44px rgba(0,0,0,.45);
     }
 
-    /* Keep things comfy on narrow screens */
     @media (max-width: 380px){
-      .relic{ width: 184px; height: 184px; }
-      .token-img{ width: 168px; height: 168px; }
+      .relic{ width:184px; height:184px; }
+      .token-img{ width:168px; height:168px; }
     }
   </style>
 </head>
@@ -238,32 +194,44 @@
 
     <!-- Grid -->
     @php
+      /*
+        meanings[token] = [prettyMeaning, exampleSnippet, BASE_EMOTION]
+        BASE_EMOTION must match what you store/query (e.g., FEAR/JOY/etc.)
+      */
       $meanings = [
-        'mirror' => ['Reflection & self-awareness', 'You looked into a mirror and saw your younger self.'],
-        'wings'  => ['Freedom or ambition',         'You flew above mountains, free from all fears.'],
-        'fire'   => ['Transformation or passion',   'You stood in a burning house but felt no pain.'],
-        'mask'   => ['Hidden emotions or identity', 'You wore a mask in a crowded room and no one noticed.'],
-        'cloud'  => ['Calm & stillness',            'You watched slow-moving clouds in complete silence.'],
-        'tear'   => ['Deep sadness or grief',       'You shed a tear that echoed across a silent field.'],
-        'moon'   => ['Nostalgia & memories',        'You walked under a full moon and remembered a past love.'],
-        'bolt'   => ['Sudden change or surprise',   'You were struck by lightning but felt alive.'],
-        'anchor' => ['Trust & grounding',           'You dropped anchor in stormy seas and found peace.'],
-        'quill'  => ['Gratitude & expression',      'You wrote a heartfelt letter under candlelight.'],
-        'compass'=> ['Curiosity & direction',       'You held a spinning compass pointing to the unknown.'],
-        'star'   => ['Awe & wonder',                'You stood beneath a sky full of falling stars.'],
-        'shield' => ['Courage & protection',        'You held a glowing shield against a dark force.'],
-        'leaf'   => ['Hope & renewal',              'A single green leaf grew in a barren land.'],
-        'crest'  => ['Pride & legacy',              'You found your family crest on an ancient tapestry.'],
-        'heart'  => ['Love & connection',           'You held a glowing heart that warmed the coldest night.'],
+        'mirror' => ['Reflection & self-awareness', 'You looked into a mirror and saw your younger self.', 'CURIOSITY'],
+        'wings'  => ['Freedom or ambition',         'You flew above mountains, free from all fears.',     'AMBITION'],
+        'fire'   => ['Transformation or passion',   'You stood in a burning house but felt no pain.',     'TRANSFORMATION'],
+        'mask'   => ['Hidden emotions or identity', 'You wore a mask in a crowded room and no one noticed.','FEAR'],
+        'cloud'  => ['Calm & stillness',            'You watched slow-moving clouds in complete silence.','CALM'],
+        'tear'   => ['Deep sadness or grief',       'You shed a tear that echoed across a silent field.','SADNESS'],
+        'moon'   => ['Nostalgia & memories',        'You walked under a full moon and remembered a past love.','NOSTALGIA'],
+        'bolt'   => ['Sudden change or surprise',   'You were struck by lightning but felt alive.','SURPRISE'],
+        'anchor' => ['Trust & grounding',           'You dropped anchor in stormy seas and found peace.','TRUST'],
+        'quill'  => ['Gratitude & expression',      'You wrote a heartfelt letter under candlelight.','GRATITUDE'],
+        'compass'=> ['Curiosity & direction',       'You held a spinning compass pointing to the unknown.','CURIOSITY'],
+        'star'   => ['Awe & wonder',                'You stood beneath a sky full of falling stars.','AWE'],
+        'shield' => ['Courage & protection',        'You held a glowing shield against a dark force.','PROTECTION'],
+        'leaf'   => ['Hope & renewal',              'A single green leaf grew in a barren land.','HOPE'],
+        'crest'  => ['Pride & legacy',              'You found your family crest on an ancient tapestry.','PRIDE'],
+        'heart'  => ['Love & connection',           'You held a glowing heart that warmed the coldest night.','LOVE'],
       ];
     @endphp
 
     <div id="totemGrid">
       @if(isset($tokens) && count($tokens))
         @foreach($tokens as $token)
-          @php $key = strtolower($token); @endphp
-          <article class="card" data-token="{{ $key }}" data-aos="fade-up" data-aos-delay="60">
-            <div class="tip">{{ $meanings[$key][0] ?? 'Symbolic dream totem' }}</div>
+          @php
+            $key = strtolower($token);
+            $pretty = $meanings[$key][0] ?? 'Symbolic dream totem';
+            $example = $dreamSnippets[$key] ?? ($meanings[$key][1] ?? 'No dream found.');
+            $baseEmotion = $meanings[$key][2] ?? strtoupper($key); // fallback
+          @endphp
+          <article class="card"
+                   data-token="{{ $key }}"
+                   data-emotion="{{ $baseEmotion }}"
+                   data-aos="fade-up" data-aos-delay="60">
+            <div class="tip">{{ $pretty }}</div>
 
             <div class="relic">
               <img src="/images/totems/{{ $key }}.png"
@@ -273,13 +241,11 @@
             </div>
 
             <h3 class="mt-3 text-lg font-extrabold">{{ ucfirst($token) }}</h3>
-            <p class="mt-1 text-sm muted">{{ $meanings[$key][0] ?? 'Symbolic meaning' }}</p>
+            <p class="mt-1 text-sm muted">{{ $pretty }}</p>
 
             <button
-              onclick="openModal('{{ ucfirst($token) }}',
-                                 '{{ $meanings[$key][0] ?? 'Symbolic meaning' }}',
-                                 `{{ $dreamSnippets[$key] ?? 'No dream found.' }}`)"
-              class="btn-primary mt-4">
+              class="btn-primary mt-4"
+              onclick="openModal('{{ ucfirst($token) }}','{{ $pretty }}', `{{ $example }}`, '{{ $baseEmotion }}')">
               View Meaning & Stories
             </button>
           </article>
@@ -318,7 +284,6 @@
   <script>
     AOS.init({ once:true });
 
-    // Constellations
     tsParticles.load("particles-bg", {
       fpsLimit: 60,
       background: { color: "transparent" },
@@ -334,14 +299,15 @@
       detectRetina: true
     });
 
-    // Modal logic
-    let currentEmotion = "";
-    function openModal(title, meaning, dream){
+    // ---- Modal logic ----
+    let currentEmotion = ""; // canonical label e.g. "FEAR"
+
+    function openModal(title, meaning, dream, baseEmotion){
       document.getElementById('modalTitle').innerText = title;
       document.getElementById('modalMeaning').innerText = meaning;
       document.getElementById('modalDream').innerText = dream;
       document.getElementById('moreDreamsResult').innerHTML = "";
-      currentEmotion = title.toLowerCase();
+      currentEmotion = String(baseEmotion || title).trim().toUpperCase(); // normalize
       document.getElementById('totemModal').classList.remove('hidden');
     }
     function closeModal(){ document.getElementById('totemModal').classList.add('hidden'); }
@@ -349,14 +315,17 @@
       const card=document.querySelector('#totemModal .modal-card'); if(!card.contains(e.target)) closeModal();
     });
 
+    // Fetch fresh matches on demand (server should return HTML partial)
     function loadMatchingDreams(){
-      fetch(`/dreams/emotion/${currentEmotion}`)
-        .then(r=>r.json())
-        .then(d=>{ document.getElementById('moreDreamsResult').innerHTML = d.html; })
-        .catch(()=>{ document.getElementById('moreDreamsResult').innerHTML = '<p class="text-red-300">Error loading dreams.</p>'; });
+      const url = `/dreams/similar?emotion=${encodeURIComponent(currentEmotion)}`;
+      document.getElementById('moreDreamsResult').innerHTML = '<p class="opacity-70 text-sm">Loading…</p>';
+      fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.text())
+        .then(html => { document.getElementById('moreDreamsResult').innerHTML = html; })
+        .catch(() => { document.getElementById('moreDreamsResult').innerHTML = '<p class="text-red-300">Error loading dreams.</p>'; });
     }
 
-    // Image zoom (constrained, no overscale)
+    // Image zoom
     function showImageModal(src){
       const img = document.getElementById('zoomedImage');
       img.src = src;

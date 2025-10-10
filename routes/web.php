@@ -13,6 +13,7 @@ use App\Http\Controllers\LibraryTextController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RiddleController;
 use App\Http\Controllers\ChatController;
+
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
  */
@@ -53,6 +54,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/dreams/interpret', [DreamController::class, 'interpret']);
     Route::get('/dreams/emotion/{emotion}', [DreamController::class, 'getByEmotion']);
 
+    // ✅ NEW: used by Totem modal -> /dreams/similar?emotion=FEAR
+    Route::get('/dreams/similar', [DreamController::class, 'similarByEmotion'])
+        ->name('dreams.similar');
+
     Route::delete('/dreams/{dream}', [DreamController::class, 'destroy'])->name('dreams.destroy');
     Route::get('/dashboard', [DreamController::class, 'showDashboard'])->name('dashboard');
     Route::get('/dreams/export/pdf', [DreamController::class, 'exportPdf'])->name('dreams.export.pdf');
@@ -61,67 +66,63 @@ Route::middleware('auth')->group(function () {
     // Avatar routes
     Route::post('/avatar/generate', [AvatarController::class, 'generate'])->name('avatar.generate');
 
-Route::get('/totems', function () {
-    /** @var \App\Models\User $user */
-    $user = Auth::user();
+    Route::get('/totems', function () {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
-    // Read tokens directly from saved user field
-    $tokens = $user->dream_tokens ?? [];
+        // Read tokens directly from saved user field
+        $tokens = $user->dream_tokens ?? [];
 
-    $meanings = [
-        'mirror' => ['🪞 Reflection & self-awareness', 'You looked into a mirror and saw your younger self.'],
-        'wings'  => ['🪽 Freedom or ambition', 'You flew above mountains, free from all fears.'],
-        'fire'   => ['🔥 Transformation or passion', 'You stood in a burning house but felt no pain.'],
-        'mask'   => ['🎭 Hidden emotions or identity', 'You wore a mask in a crowded room and no one noticed.'],
-        'cloud'  => ['☁️ Calm & clarity', 'You walked through mist and felt peace.'],
-        'swirl'  => ['🌀 Confusion or mystery', 'You spun endlessly in a dream maze.'],
-    ];
+        $meanings = [
+            'mirror' => ['🪞 Reflection & self-awareness', 'You looked into a mirror and saw your younger self.'],
+            'wings'  => ['🪽 Freedom or ambition', 'You flew above mountains, free from all fears.'],
+            'fire'   => ['🔥 Transformation or passion', 'You stood in a burning house but felt no pain.'],
+            'mask'   => ['🎭 Hidden emotions or identity', 'You wore a mask in a crowded room and no one noticed.'],
+            'cloud'  => ['☁️ Calm & clarity', 'You walked through mist and felt peace.'],
+            'swirl'  => ['🌀 Confusion or mystery', 'You spun endlessly in a dream maze.'],
+        ];
 
-    // Get dream snippets for unlocked tokens
-    $allDreams = $user->dreams;
-    $dreamSnippets = [];
-    foreach ($tokens as $token) {
-        $match = $allDreams->first(function ($dream) use ($token, $meanings) {
-            $emotionMap = [
-    // Existing
-    'wings'   => 'joy',
-    'mask'    => 'fear',
-    'cloud'   => 'calm',
-    'swirl'   => 'confused',
-    'fire'    => 'anger',
-    'mirror'  => 'neutral',  // fallback
+        // Get dream snippets for unlocked tokens
+        $allDreams = $user->dreams;
+        $dreamSnippets = [];
+        foreach ($tokens as $token) {
+            $match = $allDreams->first(function ($dream) use ($token, $meanings) {
+                $emotionMap = [
+                    // Existing
+                    'wings'   => 'joy',
+                    'mask'    => 'fear',
+                    'cloud'   => 'calm',
+                    'swirl'   => 'confused',
+                    'fire'    => 'anger',
+                    'mirror'  => 'neutral',  // fallback
 
-    // New
-    'tear'     => 'sadness',
-    'star'     => 'awe',
-    'heart'    => 'love',
-    'compass'  => 'curiosity',
-    'quill'    => 'gratitude',
-    'crest'    => 'pride',
-    'key'      => 'relief',
-    'moon'     => 'nostalgia',
-    'bolt'     => 'surprise',
-    'leaf'     => 'hope',
-    'shield'   => 'courage',
-    'anchor'   => 'trust',
-];
+                    // New
+                    'tear'     => 'sadness',
+                    'star'     => 'awe',
+                    'heart'    => 'love',
+                    'compass'  => 'curiosity',
+                    'quill'    => 'gratitude',
+                    'crest'    => 'pride',
+                    'key'      => 'relief',
+                    'moon'     => 'nostalgia',
+                    'bolt'     => 'surprise',
+                    'leaf'     => 'hope',
+                    'shield'   => 'courage',
+                    'anchor'   => 'trust',
+                ];
 
-            $expectedEmotion = $emotionMap[$token] ?? '';
-            return strtolower($dream->emotion_summary) === $expectedEmotion;
-        });
+                $expectedEmotion = $emotionMap[$token] ?? '';
+                return strtolower($dream->emotion_summary) === $expectedEmotion;
+            });
 
-        $dreamSnippets[$token] = $match ? \Illuminate\Support\Str::limit($match->content, 120) : 'No related dream found.';
-    }
+            $dreamSnippets[$token] = $match ? \Illuminate\Support\Str::limit($match->content, 120) : 'No related dream found.';
+        }
 
-    return view('dreams.totems', compact('tokens', 'meanings', 'dreamSnippets'));
-})->name('totems');
-  
+        return view('dreams.totems', compact('tokens', 'meanings', 'dreamSnippets'));
+    })->name('totems');
 
     // Dream Map
-    
     Route::get('/dream-map', [DreamController::class, 'showDreamMap'])->middleware('auth')->name('dream.map');
-
-
 
     // Portal page
     Route::get('/imagine', function () {
@@ -187,7 +188,6 @@ Route::get('/dream-world/sky/rebirth', function () {
     return view('dreams.sky-rebirth');
 })->middleware('auth')->name('sky.rebirth');
 
-
 Route::get('/dream-world/forest', [DreamController::class, 'showForestEntrance'])->middleware('auth')->name('forest.entrance');
 Route::get('/dream-world/forest/inside', function () {
     return view('dreams.forest-inside');
@@ -221,44 +221,11 @@ Route::get('/dream-world/forest/10', function () {
     return view('dreams.forest10');
 })->middleware('auth')->name('forest10');
 
-
-Route::get('/dream-world/cloud', [DreamController::class, 'showCloudEntrance'])
-    ->middleware('auth')
-    ->name('cloud.entrance');
-Route::get('/dream-world/cloud/2', function () {
-    return view('dreams.cloud2');
-})->middleware('auth')->name('cloud.2');
-Route::get('/dream-world/cloud/3d', function () {
-    return view('dreams.cloud-3d');
-})->middleware('auth')->name('cloud.3d');
-Route::get('/dream-world/cloud/4', function () {
-    return view('dreams.cloud4');
-})->middleware('auth')->name('cloud.4');
-Route::get('/dream-world/cloud/5', function () {
-    return view('dreams.cloud5');
-})->middleware('auth')->name('cloud.5');
-Route::get('/dream-world/cloud/6', function () {
-    return view('dreams.cloud6');
-})->middleware('auth')->name('cloud.6');
-Route::get('/dream-world/cloud/7', function () {
-    return view('dreams.cloud7');
-})->middleware('auth')->name('cloud.7');
-Route::get('/dream-world/cloud/8', function () {
-    return view('dreams.cloud8');
-})->middleware('auth')->name('cloud.8');
-Route::get('/dream-world/cloud/9', function () {
-    return view('dreams.cloud9');
-})->middleware('auth')->name('cloud.9');
-Route::get('/dream-world/cloud/10', function () {
-    return view('dreams.cloud10');
-})->middleware('auth')->name('cloud.10');
-
 Route::get('/dream-library', [LibraryTextController::class, 'index'])->name('library.index');
 Route::get('/dream-library/{id}', [LibraryTextController::class, 'show'])->name('library.show');
 
 Route::get('/library/{id}/download', [LibraryTextController::class, 'download'])->name('library.download');
 Route::get('/shared-dreams', [DreamController::class, 'sharedDreams'])->name('dreams.shared');
-
 
 Route::post('/dreams/share', [DreamController::class, 'share'])->name('dreams.share'); // Share only
 Route::middleware('auth')->group(function () {
