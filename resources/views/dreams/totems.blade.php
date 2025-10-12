@@ -301,7 +301,7 @@
 
     // ---- Modal logic ----
     let currentEmotion = ""; // canonical label e.g. "FEAR"
-
+ 
     function openModal(title, meaning, dream, baseEmotion){
       document.getElementById('modalTitle').innerText = title;
       document.getElementById('modalMeaning').innerText = meaning;
