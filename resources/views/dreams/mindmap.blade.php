@@ -105,7 +105,7 @@
     .btn-ghost:hover{ box-shadow: 0 12px 26px rgba(0,0,0,.35), 0 0 0 3px rgba(139,92,246,.18); }
 
     /* Preview */
-    .card-tight{ padding: 0; overflow: visible; }
+    .card-tight{ padding: 0; overflow: hidden; }
     .card-head{ padding: 1rem 1.25rem; border-bottom: 1px solid var(--stroke); }
     .mm-host{
       width:100%; height:820px; position:relative;
@@ -115,6 +115,10 @@
     }
     .mm-host svg{ width:100% !important; height:100% !important; display:block; overflow:visible !important; }
     .mm-host svg g{ overflow:visible !important; }
+    
+    /* 3D Graph specific - constrain to container */
+    #graph-3d { overflow: hidden !important; }
+    #graph-3d canvas { max-width: 100% !important; max-height: 100% !important; }
 
     small.muted{ color: var(--muted); }
     h1,h2{ text-shadow: 0 6px 24px rgba(0,0,0,.4); }
@@ -171,8 +175,17 @@
       <div class="card card-tight">
         <div class="card-head flex items-center justify-between">
           <div class="text-sm"><small class="muted">Live preview</small></div>
+          <div class="flex gap-2">
+            <button id="toggle2DBtn" class="btn btn-sm" onclick="switchTo2D()" style="background: var(--primary);">
+              🗺️ 2D Map
+            </button>
+            <button id="toggle3DBtn" class="btn btn-sm btn-ghost" onclick="switchTo3D()">
+              🌐 3D Force Graph
+            </button>
+          </div>
         </div>
         <div id="mm-view" class="mm-host"></div>
+        <div id="graph-3d" class="mm-host" style="display: none;"></div>
       </div>
     </div>
 
@@ -208,10 +221,13 @@
 
   {{-- Scripts --}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <!-- Swap to a 3D-ish network effect -->
+  <!-- 3D-ish background -->
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader"></script>
+  <!-- 3D Force Graph -->
+  <script src="https://unpkg.com/3d-force-graph@1.73.3/dist/3d-force-graph.min.js"></script>
+  <script src="https://unpkg.com/d3@7.8.5/dist/d3.min.js"></script>
 
   <script>
     // 3D-ish background (Vanta NET), tuned to our palette
@@ -221,7 +237,7 @@
       minHeight: 200.00, minWidth: 200.00, scale: 1.0, scaleMobile: 1.0,
       color: 0x8b5cf6,              // violet lines
       backgroundColor: 0x0b1220,    // deep base
-      points: 9.0,                   // density
+      points: 9.0,
       maxDistance: 22.0,
       spacing: 18.0
     });
@@ -254,6 +270,158 @@
       narrative: @json($dream->long_narrative ?? '')
     };
 
+    // ============ 3D Force Graph Variables ============
+    let currentMode = '2d'; // '2d' or '3d'
+    let graph3D = null;
+    const graph3DContainer = document.getElementById('graph-3d');
+
+    // ============ Mode Switching ============
+    function switchTo2D() {
+      currentMode = '2d';
+      host.style.display = 'block';
+      graph3DContainer.style.display = 'none';
+      document.getElementById('toggle2DBtn').style.background = 'var(--primary)';
+      document.getElementById('toggle2DBtn').classList.remove('btn-ghost');
+      document.getElementById('toggle3DBtn').style.background = '';
+      document.getElementById('toggle3DBtn').classList.add('btn-ghost');
+      render();
+    }
+
+    function switchTo3D() {
+      currentMode = '3d';
+      host.style.display = 'none';
+      graph3DContainer.style.display = 'block';
+      document.getElementById('toggle3DBtn').style.background = 'var(--primary)';
+      document.getElementById('toggle3DBtn').classList.remove('btn-ghost');
+      document.getElementById('toggle2DBtn').style.background = '';
+      document.getElementById('toggle2DBtn').classList.add('btn-ghost');
+      render3D();
+    }
+
+    // ===== Parse markdown -> graph data (keeps 2D color logic) =====
+    function parseMarkdownToGraph(markdown) {
+      const lines = markdown.split('\n').filter(l => l.trim());
+      const nodes = [];
+      const links = [];
+      const stack = [{ id: 0, level: -1, name: 'Root' }];
+      let nodeId = 1;
+
+      // Root node - prominent violet
+      nodes.push({ id: 0, name: 'Root', level: 0, color: '#8b5cf6' });
+
+      lines.forEach(line => {
+        const match = line.match(/^(\s*)-\s*(.+)$/);
+        if (!match) return;
+        
+        const indent = match[1].length;
+        const level = Math.floor(indent / 2);
+        const name = match[2].trim();
+        const lower = name.toLowerCase();
+
+        // Default muted color
+        let color = '#94a3b8';
+
+        // Category headings (exact match) first
+        if (/^people$/i.test(name))   color = THEME_COLORS.people;
+        else if (/^places$/i.test(name))   color = THEME_COLORS.places;
+        else if (/^symbols/i.test(name))   color = THEME_COLORS.symbols;
+        else if (/^emotions/i.test(name))  color = THEME_COLORS.emotions;
+        else {
+          // Otherwise scan for any theme keyword (same as 2D recolor)
+          for (const [keyword, c] of Object.entries(THEME_COLORS)) {
+            if (lower.includes(keyword)) { color = c; break; }
+          }
+        }
+
+        // Pop to current level
+        while (stack.length > 0 && stack[stack.length - 1].level >= level) stack.pop();
+
+        const parent = stack[stack.length - 1];
+        const node = { id: nodeId, name, level, color };
+        nodes.push(node);
+        links.push({ source: parent.id, target: nodeId });
+
+        stack.push({ id: nodeId, level, name });
+        nodeId++;
+      });
+
+      return { nodes, links };
+    }
+
+    // ===== Render 3D Force Graph (color-accurate) =====
+    function render3D() {
+      const markdown = (src.value || "").trim() || `- Dream
+  - People
+  - Places
+  - Symbols
+  - Emotions`;
+      const graphData = parseMarkdownToGraph(markdown);
+
+      if (graph3D) graph3D._destructor();
+
+      const width = graph3DContainer.clientWidth;
+      const height = graph3DContainer.clientHeight;
+
+      graph3D = ForceGraph3D()(graph3DContainer)
+        .width(width)
+        .height(height)
+        .graphData(graphData)
+        .nodeLabel('name')
+        .nodeColor(n => n.color || '#94a3b8')
+        .nodeVal(n => n.level === 0 ? 20 : 8)
+        .nodeOpacity(1)
+        .nodeResolution(16)
+        // ⭐ MeshBasicMaterial => exact hex color (no lighting washout)
+        .nodeThreeObject(node => {
+          const r = node.level === 0 ? 10 : 5;
+          const geo = new THREE.SphereGeometry(r, 32, 32);
+          const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(node.color || '#94a3b8') });
+          return new THREE.Mesh(geo, mat);
+        })
+        .nodeThreeObjectUpdate((obj, node) => {
+          if (obj && obj.material && obj.material.color) {
+            obj.material.color = new THREE.Color(node.color || '#94a3b8');
+          }
+        })
+        // Soft link tint towards target color
+        .linkColor(link => {
+          const tgt = typeof link.target === 'object' ? link.target : graphData.nodes.find(n => n.id === link.target);
+          const c = (tgt && tgt.color) ? tgt.color : '#8b5cf6';
+          const r = parseInt(c.slice(1,3),16), g=parseInt(c.slice(3,5),16), b=parseInt(c.slice(5,7),16);
+          return `rgba(${r},${g},${b},0.35)`;
+        })
+        .linkWidth(2)
+        .linkOpacity(0.6)
+        .backgroundColor('#020617')
+        .d3Force('charge', d3.forceCollide(25))
+        .d3Force('link').distance(80)
+        .enableNodeDrag(true)
+        .enableNavigationControls(true)
+        .showNavInfo(false)
+        .onNodeClick(node => {
+          const distance = 200;
+          const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
+          graph3D.cameraPosition(
+            { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
+            node,
+            1000
+          );
+        });
+
+      // smooth auto-rotate
+      let angle = 0;
+      setInterval(() => {
+        if (currentMode === '3d' && graph3D) {
+          angle += 0.3;
+          graph3D.cameraPosition({
+            x: Math.sin(angle) * 300,
+            z: Math.cos(angle) * 300
+          });
+        }
+      }, 100);
+    }
+
+    // ===== 2D markmap bits (unchanged) =====
     function applyGlow(t,color){
       t.setAttribute("fill",color); t.setAttribute("stroke",color);
       t.style.filter = `drop-shadow(0 0 6px ${color}66) drop-shadow(0 0 12px ${color}44)`;
@@ -324,13 +492,18 @@
       setTimeout(afterRenderAdjustments, 350);
     }
 
-    src.addEventListener('input', render);
+    // === Live updates: 2D or 3D based on current mode ===
+    src.addEventListener('input', () => {
+      if (currentMode === '2d') render();
+      else render3D();
+    });
+
     window.addEventListener('resize', () => setTimeout(afterRenderAdjustments, 100));
     document.addEventListener('DOMContentLoaded', render);
 
     document.getElementById('autoGenBtn').addEventListener('click', () => {
       const generated = autoGenerateMindMap();
-      if(generated){ src.value = generated; render(); }
+      if(generated){ src.value = generated; if (currentMode === '2d') render(); else render3D(); }
       else{ alert('No dream data to generate from.'); }
     });
 
@@ -347,7 +520,7 @@
       setTimeout(()=>{ const svg=c.querySelector('svg'); if(!svg) return; svg.style.width='100%'; svg.style.height='100%'; recolorMindmap(); }, 400);
     };
 
-    // Optional: AJAX save (unchanged from your build)
+    // Optional: AJAX save (your existing behavior – with reload)
     document.getElementById('mindmapForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
       const saveBtn=document.getElementById('saveBtn'); const saveStatus=document.getElementById('saveStatus');
