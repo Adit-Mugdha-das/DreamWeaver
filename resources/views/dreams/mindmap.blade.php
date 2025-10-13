@@ -126,7 +126,7 @@
   <div class="shell">
     <div class="flex items-center justify-between mb-8">
       <a href="{{ route('imagine.portal') }}" class="btn-ghost px-3 py-2">
-        ← Back to Dream World
+        ←Back
       </a>
       <h1 class="text-3xl font-bold text-center w-full">Dream Mind Map</h1>
       <span class="hidden md:block" aria-hidden="true"></span>
