@@ -120,6 +120,72 @@
     #graph-3d { overflow: hidden !important; }
     #graph-3d canvas { max-width: 100% !important; max-height: 100% !important; }
 
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--stroke);
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 900px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0,0,0,.5);
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .sample-item {
+      background: rgba(2,6,23,.75);
+      border: 1px solid var(--stroke);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .sample-item pre {
+      margin: 0.5rem 0 0 0;
+      padding: 1rem;
+      background: rgba(0,0,0,.5);
+      border-radius: 0.5rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--btn-grad);
+      border: none;
+      border-radius: 0.5rem;
+      color: white;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: transform 0.2s;
+    }
+    .copy-btn:hover {
+      transform: translateY(-2px);
+    }
+
     small.muted{ color: var(--muted); }
     h1,h2{ text-shadow: 0 6px 24px rgba(0,0,0,.4); }
   </style>
@@ -151,6 +217,7 @@
           <div class="flex items-center gap-3 mt-3">
             <button class="btn" type="submit" id="saveBtn">Save Mind Map</button>
             <button class="btn btn-ghost" type="button" id="autoGenBtn">Auto-Generate from Dream</button>
+            <button class="btn btn-ghost" type="button" id="sampleCodeBtn"> Sample Code</button>
             <span id="saveStatus" class="text-emerald-400 text-sm" style="display:none;"></span>
           </div>
         </form>
@@ -316,22 +383,9 @@
         const indent = match[1].length;
         const level = Math.floor(indent / 2);
         const name = match[2].trim();
-        const lower = name.toLowerCase();
 
-        // Default muted color
-        let color = '#94a3b8';
-
-        // Category headings (exact match) first
-        if (/^people$/i.test(name))   color = THEME_COLORS.people;
-        else if (/^places$/i.test(name))   color = THEME_COLORS.places;
-        else if (/^symbols/i.test(name))   color = THEME_COLORS.symbols;
-        else if (/^emotions/i.test(name))  color = THEME_COLORS.emotions;
-        else {
-          // Otherwise scan for any theme keyword (same as 2D recolor)
-          for (const [keyword, c] of Object.entries(THEME_COLORS)) {
-            if (lower.includes(keyword)) { color = c; break; }
-          }
-        }
+        // All non-root nodes are white in 3D
+        let color = '#ffffff';
 
         // Pop to current level
         while (stack.length > 0 && stack[stack.length - 1].level >= level) stack.pop();
@@ -539,6 +593,207 @@
     setInterval(afterRenderAdjustments, 1200);
     new MutationObserver(()=>relaxClip())
       .observe(document.getElementById('mm-view'), { childList:true, subtree:true });
+
+    // Sample Code Modal
+    const sampleCodes = [
+      {
+        title: "Dream Scenes Structure",
+        code: `- Dream
+  - Scene 1
+    - Forest
+    - Voice calling my name
+  - Scene 2
+    - Ocean
+    - Mirror on the sand
+  - Emotions
+    - Curiosity
+    - Fear`
+      },
+      {
+        title: "Symbolic Dream Analysis",
+        code: `- My Dream
+  - Key Symbols
+    - Flying Bird
+    - Locked Door
+    - Golden Key
+  - Interpretations
+    - Freedom seeking
+    - Hidden opportunities
+  - Emotions
+    - Hope
+    - Anxiety`
+      },
+      {
+        title: "Character-Based Dream",
+        code: `- Dream Journey
+  - People
+    - Mother
+    - Childhood Friend
+    - Stranger in Blue
+  - Locations
+    - Old House
+    - Garden
+  - Actions
+    - Searching
+    - Running
+  - Feelings
+    - Confusion
+    - Joy
+    - Sadness`
+      },
+      {
+        title: "Nightmare Structure",
+        code: `- Nightmare
+  - Setting
+    - Dark Hallway
+    - Endless Stairs
+  - Threats
+    - Shadow Figure
+    - Closing Walls
+  - Escape Attempts
+    - Finding Exits
+    - Calling for Help
+  - Emotions
+    - Fear
+    - Panic
+    - Helplessness`
+      },
+      {
+        title: "Lucid Dream Experience",
+        code: `- Lucid Dream
+  - Realization
+    - Reality Check
+    - Awareness Moment
+  - Control Actions
+    - Flying
+    - Shape-shifting
+    - Creating Objects
+  - Exploration
+    - New Worlds
+    - Meeting Dream Characters
+  - Emotions
+    - Excitement
+    - Wonder
+    - Calm`
+      },
+      {
+        title: "Recurring Dream Pattern",
+        code: `- Recurring Dream
+  - Common Elements
+    - School Hallway
+    - Missing Class
+    - Late for Exam
+  - Variations
+    - Different Teachers
+    - Changed Locations
+  - Underlying Themes
+    - Unpreparedness
+    - Performance Anxiety
+  - Emotions
+    - Stress
+    - Confusion
+    - Relief upon waking`
+      }
+    ];
+
+    document.getElementById('sampleCodeBtn').addEventListener('click', () => {
+      openSampleModal();
+    });
+
+    function openSampleModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.id = 'sampleModal';
+      
+      let samplesHTML = '';
+      sampleCodes.forEach((sample, index) => {
+        samplesHTML += `
+          <div class="sample-item">
+            <h3 style="color: var(--cyan); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">
+              ${sample.title}
+            </h3>
+            <button class="copy-btn" onclick="copySampleCode(${index})"> Copy</button>
+            <pre>${escapeHTML(sample.code)}</pre>
+          </div>
+        `;
+      });
+
+      modal.innerHTML = `
+        <div class="modal-content" onclick="event.stopPropagation()">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="color: var(--violet); font-size: 1.5rem; font-weight: bold;">Sample Mind Map Codes</h2>
+            <button onclick="closeSampleModal()" style="background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">&times;</button>
+          </div>
+          <div style="color: var(--muted); margin-bottom: 1rem;">
+            Click the copy button to use any of these templates for your dream mind map.
+          </div>
+          ${samplesHTML}
+        </div>
+      `;
+
+      modal.addEventListener('click', closeSampleModal);
+      document.body.appendChild(modal);
+    }
+
+    function closeSampleModal() {
+      const modal = document.getElementById('sampleModal');
+      if (modal) {
+        modal.remove();
+      }
+    }
+
+    window.copySampleCode = function(index) {
+      const code = sampleCodes[index].code;
+      const btn = event.target;
+      const originalText = btn.innerHTML;
+      
+      // Create a temporary textarea element
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      textarea.style.position = 'fixed';
+      textarea.style.top = '0';
+      textarea.style.left = '0';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      
+      try {
+        // Select and copy the text
+        textarea.select();
+        textarea.setSelectionRange(0, 99999); // For mobile devices
+        const successful = document.execCommand('copy');
+        
+        if (successful) {
+          // Show success feedback
+          btn.innerHTML = ' Copied!';
+          btn.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%)';
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+          }, 2000);
+        } else {
+          throw new Error('Copy command failed');
+        }
+      } catch (err) {
+        // Fallback: try modern clipboard API
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(() => {
+            btn.innerHTML = ' Copied!';
+            btn.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%)';
+            setTimeout(() => {
+              btn.innerHTML = originalText;
+              btn.style.background = '';
+            }, 2000);
+          }).catch(() => {
+            alert('Failed to copy. Please select and copy manually.');
+          });
+        } else {
+          alert('Failed to copy. Please select and copy manually.');
+        }
+      } finally {
+        // Remove the temporary textarea
+        document.body.removeChild(textarea);
+      }
+    };
   </script>
 </body>
 </html>
