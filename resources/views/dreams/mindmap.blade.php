@@ -89,6 +89,7 @@
 
           <div class="flex items-center gap-3 mt-3">
             <button class="btn" type="submit">Save Mind Map</button>
+            <button class="btn" type="button" id="autoGenBtn" style="background:#a855f7">Auto-Generate from Dream</button>
             @if(session('success'))
               <span class="text-emerald-400 text-sm">{{ session('success') }}</span>
             @endif
@@ -134,10 +135,34 @@
     const src   = document.getElementById('mm-src');
     const host  = document.getElementById('mm-view');
 
-    const THEME_COLORS = { people:"#60a5fa", places:"#f59e0b", symbols:"#a855f7", emotions:"#f43f5e" };
+    const THEME_COLORS = { 
+      people:"#60a5fa", 
+      places:"#f59e0b", 
+      symbols:"#a855f7", 
+      emotions:"#f43f5e",
+      // Emotion-based colors
+      joy:"#fbbf24", happy:"#fbbf24", excited:"#fbbf24",
+      fear:"#8b5cf6", scared:"#8b5cf6", anxious:"#8b5cf6", worried:"#8b5cf6",
+      sad:"#3b82f6", sadness:"#3b82f6", melancholy:"#3b82f6", depressed:"#3b82f6",
+      anger:"#ef4444", angry:"#ef4444", frustrated:"#ef4444", rage:"#ef4444",
+      love:"#ec4899", loving:"#ec4899", affection:"#ec4899", romantic:"#ec4899",
+      surprise:"#06b6d4", surprised:"#06b6d4", shocked:"#06b6d4", amazed:"#06b6d4",
+      calm:"#10b981", peaceful:"#10b981", serene:"#10b981", relaxed:"#10b981",
+      confusion:"#a855f7", confused:"#a855f7", uncertain:"#a855f7", lost:"#a855f7"
+    };
     const ALIGN_LEFT = true; // set false to center the map horizontally
 
     const escapeHTML = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+    // Dream data from PHP
+    const dreamData = {
+      title: @json($dream->title ?? ''),
+      content: @json($dream->content ?? ''),
+      emotion: @json($dream->emotion_summary ?? ''),
+      interpretation: @json($dream->short_interpretation ?? ''),
+      story: @json($dream->story_generation ?? ''),
+      narrative: @json($dream->long_narrative ?? '')
+    };
 
     function applyGlow(t,color){
       t.setAttribute("fill",color);
@@ -149,11 +174,103 @@
       document.querySelectorAll("#mm-view svg text").forEach(t=>{
         const label=(t.textContent||"").toLowerCase();
         t.removeAttribute("fill"); t.removeAttribute("stroke"); t.style.filter="";
-        if(label.includes("people"))   return applyGlow(t,THEME_COLORS.people);
-        if(label.includes("places"))   return applyGlow(t,THEME_COLORS.places);
-        if(label.includes("symbols"))  return applyGlow(t,THEME_COLORS.symbols);
-        if(label.includes("emotions")) return applyGlow(t,THEME_COLORS.emotions);
+        
+        // Check for emotion keywords first (more specific)
+        for(let [keyword, color] of Object.entries(THEME_COLORS)){
+          if(label.includes(keyword)){
+            applyGlow(t, color);
+            return;
+          }
+        }
       });
+    }
+
+    // Auto-generate mind map from dream data
+    function autoGenerateMindMap(){
+      if(!dreamData.content && !dreamData.emotion) return null;
+      
+      let markdown = `- ${dreamData.title || 'My Dream'}\n`;
+      
+      // Extract emotions from emotion_summary
+      if(dreamData.emotion){
+        const emotions = extractEmotions(dreamData.emotion);
+        if(emotions.length > 0){
+          markdown += `  - Emotions\n`;
+          emotions.forEach(e => markdown += `    - ${e}\n`);
+        }
+      }
+      
+      // Extract key elements from interpretation
+      if(dreamData.interpretation){
+        const symbols = extractSymbols(dreamData.interpretation);
+        if(symbols.length > 0){
+          markdown += `  - Symbols & Meanings\n`;
+          symbols.forEach(s => markdown += `    - ${s}\n`);
+        }
+      }
+      
+      // Extract themes from story
+      if(dreamData.story){
+        const themes = extractThemes(dreamData.story);
+        if(themes.length > 0){
+          markdown += `  - Themes\n`;
+          themes.forEach(th => markdown += `    - ${th}\n`);
+        }
+      }
+      
+      // Add content summary
+      if(dreamData.content){
+        const contentLines = dreamData.content.split(/[.!?]/).filter(l => l.trim().length > 10).slice(0, 3);
+        if(contentLines.length > 0){
+          markdown += `  - Dream Content\n`;
+          contentLines.forEach(line => {
+            const trimmed = line.trim().substring(0, 60);
+            markdown += `    - ${trimmed}${trimmed.length === 60 ? '...' : ''}\n`;
+          });
+        }
+      }
+      
+      return markdown;
+    }
+
+    function extractEmotions(text){
+      const emotionKeywords = ['joy', 'happy', 'fear', 'scared', 'sad', 'anger', 'angry', 
+        'love', 'surprise', 'calm', 'anxious', 'excited', 'peaceful', 'confused', 'worried'];
+      const found = [];
+      const lower = text.toLowerCase();
+      
+      emotionKeywords.forEach(keyword => {
+        if(lower.includes(keyword) && !found.includes(keyword)){
+          found.push(keyword.charAt(0).toUpperCase() + keyword.slice(1));
+        }
+      });
+      
+      return found.slice(0, 5); // Limit to 5 emotions
+    }
+
+    function extractSymbols(text){
+      // Look for common patterns like "X represents Y" or "X symbolizes Y"
+      const patterns = [
+        /([A-Z][a-z]+(?:\s+[a-z]+)?)\s+(?:represents|symbolizes|means|suggests|indicates)\s+([^,.;]+)/gi,
+        /(?:represents|symbolizes|means)\s+([^,.;]+)/gi
+      ];
+      
+      const symbols = [];
+      patterns.forEach(pattern => {
+        let match;
+        while((match = pattern.exec(text)) !== null && symbols.length < 5){
+          const symbol = match[1] ? `${match[1]}: ${match[2]}` : match[1] || match[0];
+          if(symbol.length < 60) symbols.push(symbol.substring(0, 60));
+        }
+      });
+      
+      return symbols;
+    }
+
+    function extractThemes(text){
+      // Extract first few sentences as themes
+      const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 20 && s.trim().length < 100);
+      return sentences.slice(0, 4);
     }
 
     // Go to deepest content group
@@ -252,6 +369,17 @@
     window.addEventListener('resize', () => setTimeout(afterRenderAdjustments, 100));
     document.addEventListener('DOMContentLoaded', render);
 
+    // Auto-generate button
+    document.getElementById('autoGenBtn').addEventListener('click', () => {
+      const generated = autoGenerateMindMap();
+      if(generated){
+        src.value = generated;
+        render();
+      } else {
+        alert('No dream data available to generate mind map. Please add dream content first.');
+      }
+    });
+
     // keep colors/clip fresh if nodes open/close
     setInterval(afterRenderAdjustments, 1200);
 
@@ -259,31 +387,45 @@
     new MutationObserver(() => { relaxClip(); })
       .observe(document.getElementById('mm-view'), { childList: true, subtree: true });
 
-    // -------- PNG EXPORT (no SVG file) --------
+    // -------- PNG EXPORT (Fixed to capture actual content) --------
     document.getElementById("exportBtn").onclick = () => {
       const svg = document.querySelector("#mm-view svg");
       if(!svg){ alert("Please render the mind map first."); return; }
 
-      // Serialize SVG
-      const xml = new XMLSerializer().serializeToString(svg);
-
-      // Make an image from the SVG XML
-      const img = new Image();
-      const vb  = svg.viewBox && svg.viewBox.baseVal ? svg.viewBox.baseVal : null;
-      const w   = vb ? vb.width  : host.clientWidth;
-      const h   = vb ? vb.height : host.clientHeight;
+      // Get the content group and its bounding box
+      const g = getContentGroup(svg);
+      if(!g){ alert("No content to export."); return; }
+      
+      const bbox = g.getBBox();
+      const padding = 40;
+      
+      // Create a clone of the SVG for export
+      const svgClone = svg.cloneNode(true);
+      
+      // Set proper dimensions based on content
+      const exportWidth = bbox.width + padding * 2;
+      const exportHeight = bbox.height + padding * 2;
+      
+      svgClone.setAttribute('width', exportWidth);
+      svgClone.setAttribute('height', exportHeight);
+      svgClone.setAttribute('viewBox', `${bbox.x - padding} ${bbox.y - padding} ${exportWidth} ${exportHeight}`);
+      svgClone.style.background = '#020617';
+      
+      // Serialize the cloned SVG
+      const xml = new XMLSerializer().serializeToString(svgClone);
 
       // Higher-res export (2x)
       const scale = 2;
       const canvas = document.createElement('canvas');
-      canvas.width  = Math.max(1, Math.floor(w * scale));
-      canvas.height = Math.max(1, Math.floor(h * scale));
+      canvas.width  = Math.max(1, Math.floor(exportWidth * scale));
+      canvas.height = Math.max(1, Math.floor(exportHeight * scale));
       const ctx = canvas.getContext('2d');
 
       // Background color (match live area)
       ctx.fillStyle = '#020617';
-      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      const img = new Image();
       img.onload = () => {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         const url = canvas.toDataURL('image/png');
@@ -291,6 +433,10 @@
         a.href = url;
         a.download = 'dream_mindmap.png';
         a.click();
+      };
+
+      img.onerror = () => {
+        alert("Export failed. Please try again.");
       };
 
       // Important: proper data URL encoding

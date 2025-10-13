@@ -20,7 +20,8 @@ class Dream extends Model
         'story_generation',
         'long_narrative',
         'user_id',
-        'is_shared' // ✅ Added field to support public sharing
+        'is_shared', // ✅ Added field to support public sharing
+        'mindmap_md' // ✅ Mind map markdown
     ];
 
     /**
