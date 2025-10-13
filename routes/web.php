@@ -13,6 +13,7 @@ use App\Http\Controllers\LibraryTextController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RiddleController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\MindMapController;
 
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
@@ -266,4 +267,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat/{conversation}/messages', [ChatController::class, 'fetch'])->name('chat.fetch');
     Route::post('/chat/{conversation}/messages', [ChatController::class, 'send'])->name('chat.send');
     Route::post('/chat/{conversation}/read', [ChatController::class, 'read'])->name('chat.read');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dreams/{dream}/mindmap', [MindMapController::class, 'show'])->name('mindmap.show');
+    Route::post('/dreams/{dream}/mindmap', [MindMapController::class, 'save'])->name('mindmap.save');
 });

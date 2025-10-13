@@ -98,15 +98,17 @@
       box-shadow: 0 12px 40px rgba(255, 255, 255, 0.2);
     }
 
-    .portal-card img {
+    .portal-card img, .portal-card svg {
       width: 100%;
       height: 100%;
       object-fit: cover;
       filter: brightness(0.8);
       transition: filter 0.3s ease;
+      display: block;
     }
 
-    .portal-card:hover img {
+    .portal-card:hover img,
+    .portal-card:hover svg {
       filter: brightness(1);
     }
 
@@ -157,6 +159,16 @@
     <div class="portal-heading" data-aos="zoom-in" data-aos-delay="100">Welcome to Your Dream World</div>
     <div class="portal-subtext" data-aos="fade-up" data-aos-delay="300">Wander through the magical realm your dreams have shaped...</div>
 
+    @php
+      // Compute a sensible Mind Map link:
+      // 1) If user has dreams, open latest dream's mind map
+      // 2) Else, send to your dreams index (adjust this route if different)
+      $latestDream = \App\Models\Dream::where('user_id', auth()->id())->latest()->first();
+      $mindmapUrl = $latestDream
+          ? route('mindmap.show', $latestDream)
+          : (Route::has('dreams.index') ? route('dreams.index') : url('/dreams'));
+    @endphp
+
     <div class="card-row" data-aos="fade-up" data-aos-delay="600">
       <a href="http://127.0.0.1:8000/test-avatar" class="portal-card" data-aos="zoom-in" data-aos-delay="800">
         <img src="/images/avatar-icon.png" alt="Your Dream Avatar">
@@ -193,6 +205,42 @@
           <span class="card-button">Solve →</span>
         </div>
       </a>
+
+      {{-- NEW: Mind Map card --}}
+      <a href="{{ $mindmapUrl }}" class="portal-card" data-aos="zoom-in" data-aos-delay="1600">
+        {{-- Inline SVG so you don’t need an image asset --}}
+        <svg viewBox="0 0 640 480" preserveAspectRatio="xMidYMid slice" aria-label="Dream Mind Map">
+          <defs>
+            <linearGradient id="mmg" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#14b8a6"/>
+              <stop offset="100%" stop-color="#ec4899"/>
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="#0f172a"/>
+          <g opacity="0.25">
+            <circle cx="100" cy="100" r="60" fill="url(#mmg)"/>
+            <circle cx="520" cy="140" r="80" fill="url(#mmg)"/>
+            <circle cx="300" cy="360" r="90" fill="url(#mmg)"/>
+          </g>
+          <g stroke="url(#mmg)" stroke-width="6" fill="none">
+            <path d="M120,110 C220,120 340,140 520,160"/>
+            <path d="M300,360 C260,300 180,220 120,110"/>
+            <path d="M520,160 C480,240 400,300 300,360"/>
+          </g>
+          <g fill="#ffffff">
+            <circle cx="120" cy="110" r="10"/>
+            <circle cx="520" cy="160" r="10"/>
+            <circle cx="300" cy="360" r="10"/>
+          </g>
+        </svg>
+
+        <div class="card-overlay">
+          <h3>Dream Mind Map</h3>
+          <p>Visualize and connect the symbols, places, and emotions in your dream.</p>
+          <span class="card-button">Open →</span>
+        </div>
+      </a>
+      {{-- /Mind Map card --}}
     </div>
   </div>
 
