@@ -14,6 +14,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RiddleController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MindMapController;
+use App\Http\Controllers\DreamArtController;
 
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
@@ -138,6 +139,12 @@ Route::middleware('auth')->group(function () {
     // Support
     Route::get('/support', [SupportController::class, 'showNearbySupport'])->name('support');
     Route::post('/get-nearby', [SupportController::class, 'getNearby'])->name('support.nearby');
+
+    // Dream Art Generator
+    Route::get('/dreams/{dream}/art', [DreamArtController::class, 'show'])->name('dream.art.show');
+    Route::post('/dreams/{dream}/art/generate-prompt', [DreamArtController::class, 'generatePrompt'])->name('dream.art.generate-prompt');
+    Route::post('/dreams/{dream}/art', [DreamArtController::class, 'store'])->name('dream.art.store');
+    Route::delete('/dream-art/{art}', [DreamArtController::class, 'destroy'])->name('dream.art.destroy');
 });
 
 /**

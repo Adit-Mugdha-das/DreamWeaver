@@ -241,6 +241,47 @@
         </div>
       </a>
       {{-- /Mind Map card --}}
+      
+      {{-- NEW: Dream Art Generator card --}}
+      @php
+        $latestDreamForArt = \App\Models\Dream::where('user_id', auth()->id())->latest()->first();
+        $artUrl = $latestDreamForArt
+            ? route('dream.art.show', $latestDreamForArt)
+            : (Route::has('dreams.index') ? route('dreams.index') : url('/dreams'));
+      @endphp
+      <a href="{{ $artUrl }}" class="portal-card" data-aos="zoom-in" data-aos-delay="1800">
+        {{-- Inline SVG art palette icon --}}
+        <svg viewBox="0 0 640 480" preserveAspectRatio="xMidYMid slice" aria-label="Dream Art Generator">
+          <defs>
+            <linearGradient id="artg" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#ec4899"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="#0f172a"/>
+          <g opacity="0.3">
+            <circle cx="200" cy="150" r="40" fill="#ef4444"/>
+            <circle cx="300" cy="120" r="35" fill="#f59e0b"/>
+            <circle cx="400" cy="140" r="45" fill="#10b981"/>
+            <circle cx="250" cy="250" r="50" fill="#06b6d4"/>
+            <circle cx="380" cy="280" r="40" fill="#8b5cf6"/>
+            <circle cx="320" cy="350" r="38" fill="#ec4899"/>
+          </g>
+          <path d="M200,350 Q250,250 350,200 Q450,180 500,300" 
+                stroke="url(#artg)" 
+                stroke-width="8" 
+                fill="none" 
+                opacity="0.6"/>
+          <circle cx="500" cy="300" r="15" fill="url(#artg)"/>
+        </svg>
+
+        <div class="card-overlay">
+          <h3>Dream Art Generator</h3>
+          <p>Generate AI art prompts from your dreams. Use with DALL-E, Midjourney, or Stable Diffusion.</p>
+          <span class="card-button">Generate Prompt</span>
+        </div>
+      </a>
+      {{-- /Dream Art card --}}
     </div>
   </div>
 

@@ -118,4 +118,16 @@ class GeminiHelper
 
         return $out;
     }
+
+    public static function generateArtPrompt($text)
+    {
+        $prompt = "You are an AI art prompt generator. Based on this dream description, create a detailed, vivid, and artistic image generation prompt (for DALL-E or Midjourney style). Focus on visual imagery, colors, mood, symbolism, and surreal elements. Keep it under 300 characters.\n\nDream:\n{$text}\n\nArt Prompt:";
+
+        $data = self::callApi($prompt);
+
+        $out = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'A surreal dreamscape with ethereal colors and symbolic elements floating in space';
+        Log::info('Gemini art prompt response', ['out' => $out]);
+
+        return $out;
+    }
 }
