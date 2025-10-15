@@ -158,6 +158,40 @@
     .modal-bg{ background: rgba(7,11,18,.75); backdrop-filter: blur(8px); }
     .modal-card{ background: var(--glass); border:1px solid var(--border); border-radius:18px; }
 
+    /* Scrollable container for similar dreams */
+    #moreDreamsResult {
+      max-height: 400px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 8px;
+    }
+
+    /* Custom scrollbar styling */
+    #moreDreamsResult::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #moreDreamsResult::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    #moreDreamsResult::-webkit-scrollbar-thumb {
+      background: rgba(144, 180, 255, 0.4);
+      border-radius: 10px;
+      transition: background 0.2s ease;
+    }
+
+    #moreDreamsResult::-webkit-scrollbar-thumb:hover {
+      background: rgba(144, 180, 255, 0.6);
+    }
+
+    /* For Firefox */
+    #moreDreamsResult {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(144, 180, 255, 0.4) rgba(255, 255, 255, 0.05);
+    }
+
     #zoomedImage{
       max-width: 85vw; max-height: 80vh; width:auto; height:auto; object-fit:contain;
       border-radius:14px; border:1px solid var(--border); box-shadow:0 18px 44px rgba(0,0,0,.45);
