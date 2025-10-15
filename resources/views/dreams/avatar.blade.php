@@ -165,12 +165,42 @@
       background: rgba(30, 41, 59, 0.7);
       padding: 1rem;
       border-radius: 0.75rem;
-      transition: transform 0.3s;
+      transition: all 0.3s ease;
       backdrop-filter: blur(6px);
+      position: relative;
     }
 
     .saved-avatar-card:hover {
       transform: scale(1.05);
+    }
+
+    .saved-avatar-card:hover .delete-btn {
+      opacity: 1;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .delete-btn:hover {
+      background: rgba(220, 38, 38, 1);
+      transform: scale(1.1);
     }
 
     .saved-avatar-img {
@@ -348,7 +378,8 @@ $imageMap = [
       <div class="avatar-grid">
         @foreach($savedAvatars as $saved)
           @php $savedImg = $imageMap[$saved['item']] ?? $imageMap['default']; @endphp
-          <div class="saved-avatar-card">
+          <div class="saved-avatar-card" data-avatar-id="{{ $saved->id }}">
+            <button class="delete-btn" onclick="deleteAvatar({{ $saved->id }})" title="Delete avatar">×</button>
             <div onclick="openModal('{{ asset('avatar/' . $savedImg) }}')" style="cursor: pointer;">
   <img src="{{ asset('avatar/' . $savedImg) }}" class="saved-avatar-img" alt="Saved Avatar">
 </div>
@@ -390,6 +421,51 @@ $imageMap = [
   function closeModal(event) {
     if (event.target.id === 'avatarModal') {
       document.getElementById('avatarModal').style.display = 'none';
+    }
+  }
+
+  async function deleteAvatar(avatarId) {
+    if (!confirm('Are you sure you want to delete this avatar?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/avatar/${avatarId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Fade out and remove the card
+        const card = document.querySelector(`[data-avatar-id="${avatarId}"]`);
+        if (card) {
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.8)';
+          setTimeout(() => {
+            card.remove();
+            
+            // Check if there are any avatars left
+            const remainingCards = document.querySelectorAll('.saved-avatar-card');
+            if (remainingCards.length === 0) {
+              const section = document.getElementById('savedAvatarsSection');
+              if (section) {
+                section.innerHTML = '<p class="text-gray-400 text-sm text-center mt-4">No saved avatars yet.</p>';
+              }
+            }
+          }, 300);
+        }
+      } else {
+        alert(data.message || 'Failed to delete avatar');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while deleting the avatar');
     }
   }
 </script>

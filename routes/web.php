@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
 
     // Avatar routes
     Route::post('/avatar/generate', [AvatarController::class, 'generate'])->name('avatar.generate');
+    Route::delete('/avatar/{avatar}', [AvatarController::class, 'destroy'])->name('avatar.destroy');
 
     Route::get('/totems', function () {
         /** @var \App\Models\User $user */

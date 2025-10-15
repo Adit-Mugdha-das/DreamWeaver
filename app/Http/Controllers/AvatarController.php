@@ -70,14 +70,26 @@ class AvatarController extends Controller
         $user->avatar_config = $avatar;
         $user->save();
 
-        Avatar::create([
-            'user_id' => $user->id,
-            'color'   => $avatar['color'],
-            'item'    => $avatar['item'],
-        ]);
+        // Check if this avatar combination already exists for this user
+        $existingAvatar = Avatar::where('user_id', $user->id)
+            ->where('color', $avatar['color'])
+            ->where('item', $avatar['item'])
+            ->first();
+
+        // Only create if it doesn't exist
+        if (!$existingAvatar) {
+            Avatar::create([
+                'user_id' => $user->id,
+                'color'   => $avatar['color'],
+                'item'    => $avatar['item'],
+            ]);
+            $message = 'Avatar generated based on your last dream emotion.';
+        } else {
+            $message = 'Avatar updated! This design was already in your collection.';
+        }
 
         return redirect('/test-avatar')
-            ->with('message', 'Avatar generated based on your last dream emotion.');
+            ->with('message', $message);
     }
 
     // Add inside AvatarController (class scope)
@@ -132,5 +144,26 @@ class AvatarController extends Controller
 
     return $e; // leave as-is if unknown (e.g. 'neutral')
 }
+
+    /**
+     * Delete a saved avatar.
+     */
+    public function destroy(Avatar $avatar)
+    {
+        // Ensure user can only delete their own avatars
+        if ($avatar->user_id !== Auth::id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $avatar->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Avatar deleted successfully'
+        ]);
+    }
 
 }
