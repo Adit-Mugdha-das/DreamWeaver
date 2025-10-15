@@ -103,11 +103,11 @@
       <!-- Left: Controls -->
       <div class="card card-pad">
         <h2 class="text-2xl font-bold" style="color:var(--violet); margin-bottom:.8rem">{{ $dream->title }}</h2>
-        <p class="muted" style="margin-bottom:1.5rem; font-size:.95rem">Create artwork from your dream using OpenAI's image model.</p>
+        <p class="muted" style="margin-bottom:1.5rem; font-size:.95rem">Create artwork from your dream </p>
 
         <!-- Generate Section -->
         <div style="margin-bottom:1.5rem">
-          <div class="section-title">Generate</div>
+        
           <button id="generateBtn" class="btn" onclick="generateImage()">Generate Image</button>
           
           <div id="status" class="status">
@@ -115,7 +115,7 @@
               <div class="spinner"></div>
               <div>
                 <strong style="color:var(--cyan)">Creating your image…</strong>
-                <div class="muted" style="font-size:.9rem">This usually takes 10–30 seconds.</div>
+                <div class="muted" style="font-size:.9rem">This may take 30-60 seconds. Please be patient.</div>
               </div>
             </div>
           </div>
@@ -228,7 +228,8 @@
         const res = await fetch('{{ route('dream.art.generate-image', $dream) }}', {
           method: 'POST',
           headers: { 
-            'Content-Type': 'application/json', 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'X-CSRF-TOKEN': '{{ csrf_token() }}' 
           },
           body: JSON.stringify(requestBody)

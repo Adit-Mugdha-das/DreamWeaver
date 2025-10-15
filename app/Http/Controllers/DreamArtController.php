@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
 
 class DreamArtController extends Controller
 {
@@ -68,6 +70,9 @@ class DreamArtController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        // Increase PHP execution time for this request
+        set_time_limit(120);
+
         try {
             // Check if custom prompt is provided
             $customPrompt = $request->input('custom_prompt');
@@ -90,7 +95,7 @@ class DreamArtController extends Controller
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $apiKey,
                 'Content-Type' => 'application/json',
-            ])->timeout(60)->post('https://api.openai.com/v1/images/generations', [
+            ])->timeout(90)->post('https://api.openai.com/v1/images/generations', [
                 'model' => 'dall-e-3',
                 'prompt' => $prompt,
                 'n' => 1,
@@ -100,7 +105,9 @@ class DreamArtController extends Controller
             ]);
 
             if (!$response->successful()) {
-                throw new \Exception('OpenAI API error: ' . $response->body());
+                $errorBody = $response->body();
+                Log::error('OpenAI API Error: ' . $errorBody);
+                throw new \Exception('OpenAI API error: ' . $errorBody);
             }
 
             $data = $response->json();
@@ -110,8 +117,18 @@ class DreamArtController extends Controller
                 throw new \Exception('No image URL returned from API');
             }
 
-            // Download and save the image
-            $imageContent = file_get_contents($imageUrl);
+            // Download and save the image with timeout
+            $context = stream_context_create([
+                'http' => [
+                    'timeout' => 30
+                ]
+            ]);
+            $imageContent = @file_get_contents($imageUrl, false, $context);
+            
+            if ($imageContent === false) {
+                throw new \Exception('Failed to download image from OpenAI');
+            }
+
             $filename = 'dream_art_' . time() . '_' . Str::random(10) . '.png';
             $path = 'dream_arts/' . $filename;
             Storage::disk('public')->put($path, $imageContent);
@@ -124,7 +141,7 @@ class DreamArtController extends Controller
                 'prompt' => $prompt,
                 'image_path' => $path,
                 'style' => 'ai-generated',
-                'description' => $customPrompt ? 'Custom prompt' : 'Generated using DALL-E 3',
+                'description' => $customPrompt ? 'Custom prompt' : null,
             ]);
 
             return response()->json([
@@ -136,6 +153,7 @@ class DreamArtController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            Log::error('Image generation error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to generate image: ' . $e->getMessage(),
