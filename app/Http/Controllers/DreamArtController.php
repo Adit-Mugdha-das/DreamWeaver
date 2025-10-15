@@ -62,17 +62,24 @@ class DreamArtController extends Controller
     /**
      * Generate actual image using OpenAI DALL-E API
      */
-    public function generateImage(Dream $dream)
+    public function generateImage(Dream $dream, Request $request)
     {
         if ($dream->user_id !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
 
         try {
-            $dreamText = $this->prepareDreamText($dream);
+            // Check if custom prompt is provided
+            $customPrompt = $request->input('custom_prompt');
             
-            // Generate artistic prompt using Gemini
-            $prompt = GeminiHelper::generateArtPrompt($dreamText);
+            if ($customPrompt && trim($customPrompt) !== '') {
+                // Use custom prompt directly for DALL-E
+                $prompt = trim($customPrompt);
+            } else {
+                // Generate prompt from dream using Gemini
+                $dreamText = $this->prepareDreamText($dream);
+                $prompt = GeminiHelper::generateArtPrompt($dreamText);
+            }
 
             // Call OpenAI DALL-E API
             $apiKey = env('OPENAI_API_KEY');
@@ -117,7 +124,7 @@ class DreamArtController extends Controller
                 'prompt' => $prompt,
                 'image_path' => $path,
                 'style' => 'ai-generated',
-                'description' => 'Generated using DALL-E 3',
+                'description' => $customPrompt ? 'Custom prompt' : 'Generated using DALL-E 3',
             ]);
 
             return response()->json([
@@ -184,14 +191,33 @@ class DreamArtController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        // Delete image file if exists
-        if ($art->image_path && Storage::disk('public')->exists($art->image_path)) {
-            Storage::disk('public')->delete($art->image_path);
+        try {
+            // Delete image file if exists
+            if ($art->image_path && Storage::disk('public')->exists($art->image_path)) {
+                Storage::disk('public')->delete($art->image_path);
+            }
+
+            $art->delete();
+
+            // Return JSON for AJAX requests, redirect for form submissions
+            if (request()->wantsJson() || request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Dream art deleted successfully!'
+                ]);
+            }
+
+            return back()->with('success', 'Dream art deleted successfully!');
+        } catch (\Exception $e) {
+            if (request()->wantsJson() || request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to delete: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()->with('error', 'Failed to delete artwork');
         }
-
-        $art->delete();
-
-        return back()->with('success', 'Dream art deleted successfully!');
     }
 
     /**
