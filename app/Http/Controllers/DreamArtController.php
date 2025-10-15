@@ -8,6 +8,8 @@ use App\Helpers\GeminiHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class DreamArtController extends Controller
 {
@@ -53,6 +55,83 @@ class DreamArtController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to generate prompt: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Generate actual image using OpenAI DALL-E API
+     */
+    public function generateImage(Dream $dream)
+    {
+        if ($dream->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        try {
+            $dreamText = $this->prepareDreamText($dream);
+            
+            // Generate artistic prompt using Gemini
+            $prompt = GeminiHelper::generateArtPrompt($dreamText);
+
+            // Call OpenAI DALL-E API
+            $apiKey = env('OPENAI_API_KEY');
+            if (!$apiKey) {
+                throw new \Exception('OpenAI API key not configured');
+            }
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $apiKey,
+                'Content-Type' => 'application/json',
+            ])->timeout(60)->post('https://api.openai.com/v1/images/generations', [
+                'model' => 'dall-e-3',
+                'prompt' => $prompt,
+                'n' => 1,
+                'size' => '1024x1024',
+                'quality' => 'standard',
+                'response_format' => 'url',
+            ]);
+
+            if (!$response->successful()) {
+                throw new \Exception('OpenAI API error: ' . $response->body());
+            }
+
+            $data = $response->json();
+            $imageUrl = $data['data'][0]['url'] ?? null;
+
+            if (!$imageUrl) {
+                throw new \Exception('No image URL returned from API');
+            }
+
+            // Download and save the image
+            $imageContent = file_get_contents($imageUrl);
+            $filename = 'dream_art_' . time() . '_' . Str::random(10) . '.png';
+            $path = 'dream_arts/' . $filename;
+            Storage::disk('public')->put($path, $imageContent);
+
+            // Save to database
+            $art = DreamArt::create([
+                'user_id' => Auth::id(),
+                'dream_id' => $dream->id,
+                'title' => $dream->title . ' - Generated Art',
+                'prompt' => $prompt,
+                'image_path' => $path,
+                'style' => 'ai-generated',
+                'description' => 'Generated using DALL-E 3',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Image generated successfully',
+                'image_url' => asset('storage/' . $path),
+                'prompt' => $prompt,
+                'art_id' => $art->id,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate image: ' . $e->getMessage(),
             ], 500);
         }
     }
