@@ -72,7 +72,7 @@
       padding: 2rem;
     }
 
-    /* Updated Layout: 3 Cards per Row */
+    /* 3 cards per row */
     .card-row {
       margin-top: 3rem;
       display: grid;
@@ -83,17 +83,12 @@
       max-width: 1200px;
     }
 
-    /* Responsive Adjustments */
+    /* Responsive */
     @media (max-width: 1024px) {
-      .card-row {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .card-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
     @media (max-width: 640px) {
-      .card-row {
-        grid-template-columns: 1fr;
-      }
+      .card-row { grid-template-columns: 1fr; }
     }
 
     .portal-card {
@@ -115,7 +110,7 @@
       box-shadow: 0 12px 40px rgba(255, 255, 255, 0.2);
     }
 
-    .portal-card img, .portal-card svg {
+    .portal-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -123,11 +118,7 @@
       transition: filter 0.3s ease;
       display: block;
     }
-
-    .portal-card:hover img,
-    .portal-card:hover svg {
-      filter: brightness(1);
-    }
+    .portal-card:hover img { filter: brightness(1); }
 
     .card-overlay {
       position: absolute;
@@ -162,9 +153,7 @@
       transition: background 0.3s ease;
     }
 
-    .card-button:hover {
-      background: #f472b6;
-    }
+    .card-button:hover { background: #f472b6; }
   </style>
 </head>
 <body>
@@ -182,6 +171,11 @@
       $latestDream = \App\Models\Dream::where('user_id', auth()->id())->latest()->first();
       $mindmapUrl = $latestDream
           ? route('mindmap.show', $latestDream)
+          : (Route::has('dreams.index') ? route('dreams.index') : url('/dreams'));
+
+      $latestDreamForArt = \App\Models\Dream::where('user_id', auth()->id())->latest()->first();
+      $artUrl = $latestDreamForArt
+          ? route('dream.art.show', $latestDreamForArt)
           : (Route::has('dreams.index') ? route('dreams.index') : url('/dreams'));
     @endphp
 
@@ -226,33 +220,9 @@
         </div>
       </a>
 
-      <!-- Mind Map -->
+      <!-- Mind Map (now using image) -->
       <a href="{{ $mindmapUrl }}" class="portal-card" data-aos="zoom-in" data-aos-delay="1600">
-        <svg viewBox="0 0 640 480" preserveAspectRatio="xMidYMid slice" aria-label="Dream Mind Map">
-          <defs>
-            <linearGradient id="mmg" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stop-color="#14b8a6"/>
-              <stop offset="100%" stop-color="#ec4899"/>
-            </linearGradient>
-          </defs>
-          <rect width="100%" height="100%" fill="#0f172a"/>
-          <g opacity="0.25">
-            <circle cx="100" cy="100" r="60" fill="url(#mmg)"/>
-            <circle cx="520" cy="140" r="80" fill="url(#mmg)"/>
-            <circle cx="300" cy="360" r="90" fill="url(#mmg)"/>
-          </g>
-          <g stroke="url(#mmg)" stroke-width="6" fill="none">
-            <path d="M120,110 C220,120 340,140 520,160"/>
-            <path d="M300,360 C260,300 180,220 120,110"/>
-            <path d="M520,160 C480,240 400,300 300,360"/>
-          </g>
-          <g fill="#ffffff">
-            <circle cx="120" cy="110" r="10"/>
-            <circle cx="520" cy="160" r="10"/>
-            <circle cx="300" cy="360" r="10"/>
-          </g>
-        </svg>
-
+        <img src="/images/mindmap-icon.png" alt="Dream Mind Map">
         <div class="card-overlay">
           <h3>Dream Mind Map</h3>
           <p>Visualize and connect the symbols, places, and emotions in your dream.</p>
@@ -260,35 +230,9 @@
         </div>
       </a>
 
-      <!-- Dream Art -->
-      @php
-        $latestDreamForArt = \App\Models\Dream::where('user_id', auth()->id())->latest()->first();
-        $artUrl = $latestDreamForArt
-            ? route('dream.art.show', $latestDreamForArt)
-            : (Route::has('dreams.index') ? route('dreams.index') : url('/dreams'));
-      @endphp
-
+      <!-- Dream Art (now using image) -->
       <a href="{{ $artUrl }}" class="portal-card" data-aos="zoom-in" data-aos-delay="1800">
-        <svg viewBox="0 0 640 480" preserveAspectRatio="xMidYMid slice" aria-label="Dream Art Generator">
-          <defs>
-            <linearGradient id="artg" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stop-color="#ec4899"/>
-              <stop offset="100%" stop-color="#8b5cf6"/>
-            </linearGradient>
-          </defs>
-          <rect width="100%" height="100%" fill="#0f172a"/>
-          <g opacity="0.3">
-            <circle cx="200" cy="150" r="40" fill="#ef4444"/>
-            <circle cx="300" cy="120" r="35" fill="#f59e0b"/>
-            <circle cx="400" cy="140" r="45" fill="#10b981"/>
-            <circle cx="250" cy="250" r="50" fill="#06b6d4"/>
-            <circle cx="380" cy="280" r="40" fill="#8b5cf6"/>
-            <circle cx="320" cy="350" r="38" fill="#ec4899"/>
-          </g>
-          <path d="M200,350 Q250,250 350,200 Q450,180 500,300" stroke="url(#artg)" stroke-width="8" fill="none" opacity="0.6"/>
-          <circle cx="500" cy="300" r="15" fill="url(#artg)"/>
-        </svg>
-
+        <img src="/images/art-icon.png" alt="Dream Art Generator">
         <div class="card-overlay">
           <h3>Dream Art Generator</h3>
           <p>Generate AI art prompts from your dreams.</p>
