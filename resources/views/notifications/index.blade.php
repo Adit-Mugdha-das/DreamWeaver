@@ -58,7 +58,7 @@
 </head>
 <body x-data="notifTabs()">
 
-  <a href="{{ url('/welcome') }}" class="back-btn">← Back to Home</a>
+  <a href="{{ route('dreams.shared') }}" class="back-btn">← Back to Shared Realm</a>
 
   <div class="flex items-center justify-between">
     <h1 class="text-3xl font-bold text-violet-400 flex items-center gap-2">🔔 Your Notifications</h1>
