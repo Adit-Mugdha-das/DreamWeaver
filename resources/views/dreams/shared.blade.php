@@ -197,6 +197,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// Copy link to clipboard
+function copyLink(dreamId) {
+  const url = `${window.location.origin}/dreams/${dreamId}`;
+  navigator.clipboard.writeText(url).then(() => {
+    alert('🔗 Link copied to clipboard!');
+  }).catch(err => {
+    console.error('Failed to copy link:', err);
+    // Fallback for older browsers
+    const textArea = document.createElement('textarea');
+    textArea.value = url;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      alert('🔗 Link copied to clipboard!');
+    } catch (err) {
+      alert('Failed to copy link. Please try again.');
+    }
+    document.body.removeChild(textArea);
+  });
+}
 </script>
 
 <script>
