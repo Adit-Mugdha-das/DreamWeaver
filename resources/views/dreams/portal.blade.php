@@ -63,6 +63,29 @@
       box-shadow: 0 0 20px rgba(255,255,255,0.3);
     }
 
+    .profile-btn {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      padding: 0.6rem 1.2rem;
+      color: white;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .profile-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+    }
+
     .center-container {
       display: flex;
       flex-direction: column;
@@ -160,6 +183,13 @@
   <div id="vanta-bg"></div>
 
   <a href="{{ url('/welcome') }}" class="home-btn">🏠 Home</a>
+  
+  <a href="{{ route('profile.edit') }}" class="profile-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+    Profile
+  </a>
 
   <div class="center-container" data-aos="fade-up">
     <div class="portal-heading" data-aos="zoom-in" data-aos-delay="100">Welcome to Your Dream World</div>

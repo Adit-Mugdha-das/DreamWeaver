@@ -15,6 +15,7 @@ use App\Http\Controllers\RiddleController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MindMapController;
 use App\Http\Controllers\DreamArtController;
+use App\Http\Controllers\ProfileController;
 
 /**
  * 🧼 Always force logout and redirect to login when visiting "/"
@@ -68,6 +69,12 @@ Route::middleware('auth')->group(function () {
     // Avatar routes
     Route::post('/avatar/generate', [AvatarController::class, 'generate'])->name('avatar.generate');
     Route::delete('/avatar/{avatar}', [AvatarController::class, 'destroy'])->name('avatar.destroy');
+
+    // Profile routes
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::delete('/profile/picture', [ProfileController::class, 'deleteProfilePicture'])->name('profile.picture.delete');
 
     Route::get('/totems', function () {
         /** @var \App\Models\User $user */

@@ -30,6 +30,10 @@ class User extends Authenticatable
         'email',
         'password',
         'recovery_email', // custom field
+        'profile_picture',
+        'bio',
+        'location',
+        'website',
     ];
 
     /**

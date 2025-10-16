@@ -57,6 +57,16 @@
    </span>
 </a>
 
+<!-- Profile Button -->
+<a href="{{ route('profile.edit') }}"
+   class="fixed top-4 right-20 z-50 flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold transition-all duration-200 hover:scale-105 shadow-lg"
+   style="text-shadow: 0 0 5px rgba(255,255,255,0.5);">
+   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+   </svg>
+   <span class="hidden sm:inline">Profile</span>
+</a>
+
 
 
 <div class="relative px-4 py-10">
@@ -95,14 +105,28 @@
       
       <!-- User Info -->
       <div class="flex items-center gap-4 mb-4">
-        <div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-inner border border-white/10">
-  {{ strtoupper(substr($dream->user->name, 0, 1)) }}
-</div>
+        @if($dream->user->profile_picture)
+          <img src="{{ asset('storage/' . $dream->user->profile_picture) }}" 
+               alt="{{ $dream->user->name }}" 
+               class="w-12 h-12 rounded-full object-cover shadow-inner border border-white/10">
+        @else
+          <div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-inner border border-white/10">
+            {{ strtoupper(substr($dream->user->name, 0, 1)) }}
+          </div>
+        @endif
 
-        <div>
+        <div class="flex-1">
           <p class="font-semibold text-white text-base">{{ $dream->user->name }}</p>
-          <p class="text-xs text-gray-400">Shared • {{ $dream->created_at->diffForHumans() }}</p>
+          @if($dream->user->bio)
+            <p class="text-xs text-gray-400 line-clamp-1">{{ $dream->user->bio }}</p>
+          @else
+            <p class="text-xs text-gray-400">Shared • {{ $dream->created_at->diffForHumans() }}</p>
+          @endif
         </div>
+
+        @if($dream->user->location)
+          <span class="text-xs text-gray-500">📍 {{ $dream->user->location }}</span>
+        @endif
       </div>
 
       <!-- Title -->
