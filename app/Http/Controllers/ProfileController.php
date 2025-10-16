@@ -52,7 +52,9 @@ class ProfileController extends Controller
         }
 
         // Update user
-        $user->update($validated);
+        /** @var \App\Models\User $user */
+            $user = Auth::user();
+            $user->update($validated);
 
         return redirect()->route('profile.edit')
             ->with('success', 'Profile updated successfully! ✨');
@@ -67,7 +69,7 @@ class ProfileController extends Controller
             'current_password' => ['required', 'current_password'],
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
-
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $user->password = Hash::make($request->password);
         $user->save();
@@ -86,7 +88,7 @@ class ProfileController extends Controller
         if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
             Storage::disk('public')->delete($user->profile_picture);
         }
-
+        /** @var \App\Models\User $user */
         $user->profile_picture = null;
         $user->save();
 
