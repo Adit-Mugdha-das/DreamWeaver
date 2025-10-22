@@ -43,10 +43,22 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
+        // Get the remember cookie name
+        $rememberCookie = Auth::getRecallerName();
+        
+        // Logout the user
         Auth::logout();
+        
+        // Invalidate the session
         $request->session()->invalidate();
+        
+        // Regenerate the CSRF token
         $request->session()->regenerateToken();
-        return redirect('/login');
+        
+        // Clear the remember me cookie by setting it to expire
+        $cookie = cookie()->forget($rememberCookie);
+        
+        return redirect('/login')->withCookie($cookie);
     }
 
     public function showRegisterForm()

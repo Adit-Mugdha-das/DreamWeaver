@@ -112,4 +112,16 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Remember Me Token Lifetime
+    |--------------------------------------------------------------------------
+    |
+    | This defines how long (in minutes) the "remember me" token should last.
+    | Default is 10 hours (600 minutes).
+    |
+    */
+
+    'remember_duration' => env('AUTH_REMEMBER_DURATION', 600), // 10 hours
+
 ];

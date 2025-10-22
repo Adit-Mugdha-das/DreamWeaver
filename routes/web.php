@@ -18,12 +18,12 @@ use App\Http\Controllers\DreamArtController;
 use App\Http\Controllers\ProfileController;
 
 /**
- * 🧼 Always force logout and redirect to login when visiting "/"
+ * 🏠 Root route - redirect to welcome if authenticated, otherwise to login
  */
 Route::get('/', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+    if (Auth::check()) {
+        return redirect('/welcome');
+    }
     return redirect('/login');
 });
 

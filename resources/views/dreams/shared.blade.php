@@ -55,7 +55,7 @@
    </span>
 </a>
 
-<!-- 👤 Profile Button (matches Back button style) -->
+<!-- � Profile Button (matches Back button style) -->
 <a href="{{ route('profile.edit') }}"
    class="fixed top-5 right-20 z-10 px-5 py-2 rounded-xl bg-black/80 backdrop-blur border border-white/10
           text-white font-semibold hover:bg-white/10 hover:scale-105 transition-all shadow-md

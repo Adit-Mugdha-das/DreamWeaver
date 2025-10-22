@@ -205,6 +205,13 @@
         <span class="password-toggle" onclick="togglePassword()">👁️</span>
       </div>
 
+      <div class="remember-me">
+        <label for="remember">
+          <input type="checkbox" name="remember" id="remember" checked>
+          Remember me for 10 hours
+        </label>
+      </div>
+
       <button type="submit">Login</button>
 
       <a href="{{ route('password.request') }}" class="forgot-link">Forgot your password?</a>
