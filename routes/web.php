@@ -238,6 +238,38 @@ Route::get('/dream-world/forest/10', function () {
     return view('dreams.forest10');
 })->middleware('auth')->name('forest10');
 
+
+Route::get('/dream-world/cloud', [DreamController::class, 'showCloudEntrance'])
+    ->middleware('auth')
+    ->name('cloud.entrance');
+Route::get('/dream-world/cloud/2', function () {
+    return view('dreams.cloud2');
+})->middleware('auth')->name('cloud.2');
+Route::get('/dream-world/cloud/3d', function () {
+    return view('dreams.cloud-3d');
+})->middleware('auth')->name('cloud.3d');
+Route::get('/dream-world/cloud/4', function () {
+    return view('dreams.cloud4');
+})->middleware('auth')->name('cloud.4');
+Route::get('/dream-world/cloud/5', function () {
+    return view('dreams.cloud5');
+})->middleware('auth')->name('cloud.5');
+Route::get('/dream-world/cloud/6', function () {
+    return view('dreams.cloud6');
+})->middleware('auth')->name('cloud.6');
+Route::get('/dream-world/cloud/7', function () {
+    return view('dreams.cloud7');
+})->middleware('auth')->name('cloud.7');
+Route::get('/dream-world/cloud/8', function () {
+    return view('dreams.cloud8');
+})->middleware('auth')->name('cloud.8');
+Route::get('/dream-world/cloud/9', function () {
+    return view('dreams.cloud9');
+})->middleware('auth')->name('cloud.9');
+Route::get('/dream-world/cloud/10', function () {
+    return view('dreams.cloud10');
+})->middleware('auth')->name('cloud.10');
+
 Route::get('/dream-library', [LibraryTextController::class, 'index'])->name('library.index');
 Route::get('/dream-library/{id}', [LibraryTextController::class, 'show'])->name('library.show');
 
