@@ -15,7 +15,8 @@ class Dream extends Model
     protected $fillable = [
         'title',
         'content',
-        'emotion_summary',
+        'emotion_summary',      // Original detailed emotion from AI
+        'emotion_category',     // Normalized category for avatar/totem
         'short_interpretation',
         'story_generation',
         'long_narrative',

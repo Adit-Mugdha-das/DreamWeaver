@@ -122,7 +122,8 @@ Route::middleware('auth')->group(function () {
                 ];
 
                 $expectedEmotion = $emotionMap[$token] ?? '';
-                return strtolower($dream->emotion_summary) === $expectedEmotion;
+                // Use emotion_category for matching (normalized emotion)
+                return strtolower($dream->emotion_category ?? $dream->emotion_summary) === $expectedEmotion;
             });
 
             $dreamSnippets[$token] = $match ? \Illuminate\Support\Str::limit($match->content, 120) : 'No related dream found.';
@@ -130,6 +131,9 @@ Route::middleware('auth')->group(function () {
 
         return view('dreams.totems', compact('tokens', 'meanings', 'dreamSnippets'));
     })->name('totems');
+
+    // Delete totem
+    Route::delete('/totems/{token}', [DreamController::class, 'deleteTotem'])->middleware('auth')->name('totems.delete');
 
     // Dream Map
     Route::get('/dream-map', [DreamController::class, 'showDreamMap'])->middleware('auth')->name('dream.map');

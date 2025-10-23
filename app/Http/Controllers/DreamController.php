@@ -40,13 +40,15 @@ public function store(Request $request)
         $emotion   = $data['emotion_summary'] ?? null;
         $short     = $data['short_interpretation'] ?? null;
 
+        // Store both original emotion and normalized category
+        $emotionCategory = null;
         if ($emotion) {
-            // 🔧 Normalize BEFORE storing / mapping
-            $emotion = $this->normalizeEmotion($emotion);
-            session(['last_emotion' => $emotion]);
+            // 🔧 Normalize to get the category for avatar/totem mapping
+            $emotionCategory = $this->normalizeEmotion($emotion);
+            session(['last_emotion' => $emotionCategory]);
 
-            // ✅ Map emotion to token and save
-            $token = match($emotion) {
+            // ✅ Map emotion CATEGORY to token and save
+            $token = match($emotionCategory) {
                 // existing
                 'joy'                    => 'wings',
                 'fear'                   => 'mask',
@@ -84,7 +86,8 @@ public function store(Request $request)
         $dream = Dream::create([
             'title' => $data['title'],
             'content' => $data['content'],
-            'emotion_summary' => $emotion,
+            'emotion_summary' => $emotion,        // Original detailed emotion (despair, hopeless, etc)
+            'emotion_category' => $emotionCategory, // Normalized category (sadness, fear, joy, etc)
             'short_interpretation' => $short,
             'story_generation' => $data['story_generation'] ?? null,
             'long_narrative' => $data['long_narrative'] ?? null,
@@ -169,10 +172,17 @@ public function store(Request $request)
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        // Calculate emotion category if emotion exists
+        $emotionCategory = null;
+        if (!empty($data['emotion_summary'])) {
+            $emotionCategory = $this->normalizeEmotion($data['emotion_summary']);
+        }
+
         $dream = Dream::create([
             'title' => $data['title'],
             'content' => $data['content'],
-            'emotion_summary' => $data['emotion_summary'] ?? null,
+            'emotion_summary' => $data['emotion_summary'] ?? null,  // Original emotion
+            'emotion_category' => $emotionCategory,                 // Normalized category
             'short_interpretation' => $data['short_interpretation'] ?? null,
             'story_generation' => $data['story_generation'] ?? null,
             'long_narrative' => $data['long_narrative'] ?? null,
@@ -204,6 +214,8 @@ public function store(Request $request)
         switch ($type) {
             case 'emotion':
                 $result = GeminiHelper::analyzeEmotion($data['content']);
+                // ✅ Return the ORIGINAL emotion for display (rich and varied)
+                // We'll normalize it when saving, not here
                 break;
             case 'short':
                 $result = GeminiHelper::analyzeShort($data['content']);
@@ -238,15 +250,51 @@ public function store(Request $request)
         return redirect()->route('dreams.index')->with('success', 'Dream deleted successfully.');
     }
 
+    /**
+     * Delete a totem from user's collection
+     */
+    public function deleteTotem(Request $request, $token)
+    {
+        try {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            
+            // Get current tokens
+            $currentTokens = $user->dream_tokens ?? [];
+            
+            // Remove the specified token
+            $updatedTokens = array_values(array_filter($currentTokens, function($t) use ($token) {
+                return strtolower($t) !== strtolower($token);
+            }));
+            
+            // Save updated tokens
+            $user->dream_tokens = $updatedTokens;
+            $user->save();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Totem deleted successfully'
+            ]);
+            
+        } catch (\Throwable $e) {
+            Log::error('Totem deletion failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete totem'
+            ], 500);
+        }
+    }
+
     
 public function showDashboard()
 {
     $dreams = Dream::where('user_id', Auth::id())->get();
 
-    // Normalize and group emotions
+    // Normalize and group emotions by category
     $emotionCounts = $dreams->groupBy(function ($dream) {
-        $emotion = strtolower(trim($dream->emotion_summary ?? 'unknown'));
-        return Str::title($emotion); // e.g., joy, fear → Joy, Fear
+        // Use emotion_category for grouping, fallback to emotion_summary for old dreams
+        $emotion = strtolower(trim($dream->emotion_category ?? $dream->emotion_summary ?? 'unknown'));
+        return Str::title($emotion); // e.g., sadness, fear → Sadness, Fear
     })->map->count();
 
     // Group dreams by exact day
@@ -311,7 +359,9 @@ public function getByEmotion($emotion)
     $user = Auth::user();
 
     $matchedDreams = $user->dreams->filter(function ($dream) use ($emotion) {
-        return strtolower($dream->emotion_summary) === strtolower($emotion);
+        // Use emotion_category for matching (normalized emotion)
+        $category = $dream->emotion_category ?? $dream->emotion_summary;
+        return strtolower($category) === strtolower($emotion);
     });
 
     if ($matchedDreams->isEmpty()) {
@@ -522,18 +572,13 @@ public function similarByEmotion(\Illuminate\Http\Request $request)
     $emotion = trim((string) $request->query('emotion', ''));
     abort_unless($emotion !== '', 400, 'emotion is required');
 
-    $norm = \Illuminate\Support\Str::upper($emotion);
+    $norm = \Illuminate\Support\Str::lower($emotion);
 
     $dreams = \App\Models\Dream::query()
         ->where('user_id', \Illuminate\Support\Facades\Auth::id())
         ->where(function ($q) use ($norm) {
-            // Case-insensitive match within emotion_summary text
-            $q->whereRaw('LOWER(COALESCE(emotion_summary, "")) LIKE ?', [
-                '%' . mb_strtolower($norm) . '%'
-            ]);
-
-            // If you later add a JSON column (emotion_tags), you can enable this:
-            // try { $q->orWhereJsonContains('emotion_tags', $norm); } catch (\Throwable $e) {}
+            // Match by emotion_category (normalized) for consistent grouping
+            $q->whereRaw('LOWER(COALESCE(emotion_category, emotion_summary, "")) = ?', [$norm]);
         })
         ->latest()
         ->take(30)

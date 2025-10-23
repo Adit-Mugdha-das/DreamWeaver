@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Dream Totems</title>
 
   <!-- Tailwind (CDN) -->
@@ -98,7 +99,8 @@
       border-radius: 16px;
       padding: 22px 20px;
       text-align:center; backdrop-filter: blur(10px);
-      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+      position: relative; /* For positioning delete button */
+      transition:transform .18s ease, box-shadow .18s ease;
       box-shadow:0 14px 36px rgba(0,0,0,.30);
       position:relative; overflow:hidden; min-height:290px;
     }
@@ -142,6 +144,37 @@
       opacity:0; pointer-events:none; transition:opacity .15s ease; box-shadow:0 10px 22px rgba(0,0,0,.32);
     }
     .card:hover .tip{ opacity:1 }
+
+    /* Delete button styles */
+    .delete-totem-btn{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 28px;
+      height: 28px;
+      background: rgba(220, 38, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      z-index: 10;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1;
+    }
+    .card:hover .delete-totem-btn{
+      opacity: 1;
+    }
+    .delete-totem-btn:hover{
+      background: rgba(239, 68, 68, 0.95);
+      transform: scale(1.1);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
 
     .btn-primary{
       background: rgba(217,194,143,.10);
@@ -265,6 +298,14 @@
                    data-token="{{ $key }}"
                    data-emotion="{{ $baseEmotion }}"
                    data-aos="fade-up" data-aos-delay="60">
+            
+            <!-- Delete button (visible on hover) -->
+            <button class="delete-totem-btn" 
+                    onclick="event.stopPropagation(); deleteTotem('{{ $key }}', this)"
+                    title="Delete totem">
+              ×
+            </button>
+
             <div class="tip">{{ $pretty }}</div>
 
             <div class="relic">
@@ -386,6 +427,50 @@
     }
     search.addEventListener('input', applyFilter);
     clearBtn.addEventListener('click', ()=>{ search.value=''; applyFilter(); });
+
+    // Delete totem function
+    function deleteTotem(token, buttonElement) {
+      if (!confirm(`Are you sure you want to delete the "${token}" totem? This will remove it from your collection.`)) {
+        return;
+      }
+
+      const card = buttonElement.closest('.card');
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+      fetch(`/totems/${token}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken,
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Fade out and remove the card
+          card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.8)';
+          
+          setTimeout(() => {
+            card.remove();
+            
+            // Check if no totems left
+            const remainingCards = grid.querySelectorAll('.card');
+            if (remainingCards.length === 0) {
+              grid.innerHTML = '<p class="muted text-center mt-10">You haven\'t collected any tokens yet. Submit a dream to begin.</p>';
+            }
+          }, 300);
+        } else {
+          alert('Failed to delete totem: ' + (data.message || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while deleting the totem.');
+      });
+    }
   </script>
 </body>
 </html>

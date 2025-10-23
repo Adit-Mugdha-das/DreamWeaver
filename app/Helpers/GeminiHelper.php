@@ -72,7 +72,29 @@ class GeminiHelper
 
     public static function analyzeEmotion($text)
     {
-        $prompt = "Analyze the emotional tone of this dream and return only a single-word emotion like fear, joy, sadness, etc.: \n\n{$text}";
+        $prompt = "Analyze the emotional tone of this dream and return only a single-word emotion. Choose the MOST SPECIFIC and ACCURATE emotion from this list:
+
+Joy family: joy, happy, delight, ecstatic, excited, cheerful, elated, pleased, content, blissful, merry, gleeful
+Fear family: fear, horror, terror, terrified, fright, frightened, dread, scared, panic, panicked, petrified, afraid, spooked, creepy, nervous, anxious
+Sadness family: sadness, sad, sorrow, depressed, melancholy, mournful, grief, heartbroken, lonely, tearful, despair, hopeless
+Calm family: calm, peaceful, serene, relaxed, composed, tranquil, soothing, quiet, still, balanced
+Anger family: anger, mad, furious, rage, irritated, annoyed, enraged, outraged, resentful, hostile, infuriated, frustrated
+Confusion family: confusion, confused, puzzled, uncertain, doubtful, bewildered, perplexed, lost, disoriented, hesitant
+Awe family: awe, wonder, amazement, astonishment, admiration, reverence, marvel
+Love family: love, affection, fondness, devotion, adoration, passion, caring, romance
+Curiosity family: curiosity, interested, inquisitive, exploring, investigative, questioning, wondering, seeking
+Gratitude family: gratitude, thankful, appreciative, grateful, obliged
+Pride family: pride, proud, satisfied, dignity, honor, confidence
+Relief family: relief, comfort, ease, assurance, reassured, release, freedom
+Nostalgia family: nostalgia, homesick, yearning, reminiscent, sentimental, longing, wistful
+Surprise family: surprise, shocked, astonished, startled, amazed, stunned, flabbergasted, unexpected
+Hope family: hope, optimism, faith, expectation, trusting, aspiration, positive
+Courage family: courage, bravery, boldness, fearless, valiant, heroic, determined, dauntless
+Trust family: trust, belief, confidence, dependable, secure, assured, reliable
+
+Return ONLY the single most fitting emotion word from the list above. Dream text:
+
+{$text}";
 
         $data = self::callApi($prompt);
 
@@ -80,7 +102,7 @@ class GeminiHelper
         $out = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'No emotion detected';
         Log::info('Gemini emotion response', ['out' => $out]);
 
-        return $out;
+        return trim($out);
     }
 
     public static function analyzeShort($text)

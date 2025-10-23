@@ -208,7 +208,7 @@
       <div class="remember-me">
         <label for="remember">
           <input type="checkbox" name="remember" id="remember" checked>
-          Remember me for 10 hours
+          Remember me
         </label>
       </div>
 
