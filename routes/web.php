@@ -13,6 +13,7 @@ use App\Http\Controllers\LibraryTextController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RiddleController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\DreamDNAController;
 use App\Http\Controllers\MindMapController;
 use App\Http\Controllers\DreamArtController;
 use App\Http\Controllers\ProfileController;
@@ -278,6 +279,12 @@ Route::get('/dream-library', [LibraryTextController::class, 'index'])->name('lib
 Route::get('/dream-library/{id}', [LibraryTextController::class, 'show'])->name('library.show');
 
 Route::get('/library/{id}/download', [LibraryTextController::class, 'download'])->name('library.download');
+
+// Dream DNA Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/dream-dna', [DreamDNAController::class, 'show'])->name('dna.show');
+    Route::post('/dream-dna/recompute', [DreamDNAController::class, 'recompute'])->name('dna.recompute');
+});
 Route::get('/shared-dreams', [DreamController::class, 'sharedDreams'])->name('dreams.shared');
 
 Route::post('/dreams/share', [DreamController::class, 'share'])->name('dreams.share'); // Share only

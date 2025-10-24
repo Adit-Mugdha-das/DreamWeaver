@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="200" cy="200" r="180" fill="url(#gradient1)" opacity="0.1"/>
+  <circle cx="200" cy="200" r="150" fill="none" stroke="url(#gradient1)" stroke-width="2" opacity="0.3"/>
+  
+  <!-- DNA Helix - Left Strand -->
+  <path d="M 150 50 Q 120 100 150 150 Q 180 200 150 250 Q 120 300 150 350" 
+        fill="none" stroke="url(#gradient1)" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- DNA Helix - Right Strand -->
+  <path d="M 250 50 Q 280 100 250 150 Q 220 200 250 250 Q 280 300 250 350" 
+        fill="none" stroke="url(#gradient2)" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Base pairs (connecting lines) -->
+  <line x1="150" y1="70" x2="250" y2="70" stroke="#6366f1" stroke-width="4" opacity="0.8"/>
+  <line x1="150" y1="110" x2="250" y2="110" stroke="#8b5cf6" stroke-width="4" opacity="0.8"/>
+  <line x1="150" y1="150" x2="250" y2="150" stroke="#a855f7" stroke-width="4" opacity="0.8"/>
+  <line x1="150" y1="190" x2="250" y2="190" stroke="#c084fc" stroke-width="4" opacity="0.8"/>
+  <line x1="150" y1="230" x2="250" y2="230" stroke="#ec4899" stroke-width="4" opacity="0.8"/>
+  <line x1="150" y1="270" x2="250" y2="270" stroke="#f472b6" stroke-width="4" opacity="0.8"/>
+  <line x1="150" y1="310" x2="250" y2="310" stroke="#fb923c" stroke-width="4" opacity="0.8"/>
+  <line x1="150" y1="350" x2="250" y2="350" stroke="#f59e0b" stroke-width="4" opacity="0.8"/>
+  
+  <!-- Gene nodes -->
+  <circle cx="150" cy="70" r="6" fill="#a855f7"/>
+  <circle cx="250" cy="70" r="6" fill="#ec4899"/>
+  <circle cx="150" cy="150" r="6" fill="#a855f7"/>
+  <circle cx="250" cy="150" r="6" fill="#ec4899"/>
+  <circle cx="150" cy="230" r="6" fill="#a855f7"/>
+  <circle cx="250" cy="230" r="6" fill="#ec4899"/>
+  <circle cx="150" cy="310" r="6" fill="#a855f7"/>
+  <circle cx="250" cy="310" r="6" fill="#ec4899"/>
+  
+  <!-- Glow effect -->
+  <circle cx="200" cy="200" r="160" fill="none" stroke="url(#gradient1)" stroke-width="1" opacity="0.4">
+    <animate attributeName="r" values="160;165;160" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0.6;0.4" dur="3s" repeatCount="indefinite"/>
+  </circle>
+</svg>

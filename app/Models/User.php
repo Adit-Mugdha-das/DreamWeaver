@@ -15,6 +15,7 @@ use App\Models\Like;
 use App\Models\Comment;
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Models\DreamDNA;
 
 class User extends Authenticatable
 {
@@ -107,5 +108,13 @@ class User extends Authenticatable
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class);
+    }
+
+    /**
+     * 🧬 User's Dream DNA (Neural Signature).
+     */
+    public function dreamDNA()
+    {
+        return $this->hasOne(DreamDNA::class);
     }
 }

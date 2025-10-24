@@ -95,15 +95,15 @@
       padding: 2rem;
     }
 
-    /* 3 cards per row */
+    /* 4 cards per row on large screens, 2 on medium, 1 on small */
     .card-row {
       margin-top: 3rem;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 2rem;
       justify-items: center;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1400px;
     }
 
     /* Responsive */
@@ -267,6 +267,16 @@
           <h3>Dream Art Generator</h3>
           <p>Generate AI art prompts from your dreams.</p>
           <span class="card-button">Generate →</span>
+        </div>
+      </a>
+
+      <!-- Dream DNA (NEW) -->
+      <a href="{{ route('dna.show') }}" class="portal-card" data-aos="zoom-in" data-aos-delay="2000">
+        <img src="/images/dna-icon.svg" alt="Dream DNA" style="filter: brightness(0.9) drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));">
+        <div class="card-overlay" style="background: linear-gradient(to top, rgba(168, 85, 247, 0.95), rgba(236, 72, 153, 0.7));">
+          <h3>🧬 Dream DNA</h3>
+          <p>Discover your unique neural signature and genetic dream patterns.</p>
+          <span class="card-button" style="background: linear-gradient(135deg, #a855f7, #ec4899); box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);">Explore →</span>
         </div>
       </a>
     </div>

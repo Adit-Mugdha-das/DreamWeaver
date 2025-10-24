@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Dream DNA - Neural Signature</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    
+    <!-- Three.js for 3D DNA helix -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: #0a0c1b;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        #fractal-dna-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            top: 0;
+            left: 0;
+        }
+
+        .dna-helix-container {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .gene-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .gene-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(168, 85, 247, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+
+        .gene-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            transition: width 0.6s ease;
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        .glow-text {
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .gradient-border {
+            position: relative;
+            background: linear-gradient(145deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1));
+            border: 2px solid transparent;
+            border-radius: 1rem;
+            background-clip: padding-box;
+        }
+
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 1rem;
+            padding: 2px;
+            background: linear-gradient(145deg, #a855f7, #ec4899);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mutation-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin: 0.25rem;
+        }
+
+        .dna-button {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dna-button:hover {
+            background: rgba(168, 85, 247, 0.15);
+            box-shadow: 
+                inset 0 0 20px rgba(168, 85, 247, 0.4),
+                inset 0 0 40px rgba(236, 72, 153, 0.2),
+                0 0 25px rgba(168, 85, 247, 0.3);
+            border-color: rgba(168, 85, 247, 0.6);
+        }
+
+        .dna-button-pink {
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dna-button-pink:hover {
+            background: rgba(236, 72, 153, 0.15);
+            box-shadow: 
+                inset 0 0 20px rgba(236, 72, 153, 0.4),
+                inset 0 0 40px rgba(168, 85, 247, 0.2),
+                0 0 25px rgba(236, 72, 153, 0.3);
+            border-color: rgba(236, 72, 153, 0.6);
+        }
+    </style>
+</head>
+<body x-data="dreamDNA()" x-init="init()">
+    <!-- Fractal DNA Helix + Quantum Threads Background -->
+    <canvas id="fractal-dna-bg"></canvas>
+
+    <!-- Navigation -->
+    <div class="fixed top-4 left-4 z-50 flex gap-3">
+        <a href="{{ route('welcome') }}" 
+           class="px-4 py-2 bg-black/50 hover:bg-purple-600/80 border border-purple-400/30 rounded-lg font-semibold transition">
+            ← Home
+        </a>
+        <button @click="recompute()" 
+                class="px-4 py-2 dna-button rounded-lg font-semibold">
+            Recompute DNA
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-6 py-20">
+        
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold mb-4 glow-text" style="color: {{ $profile['color'] }}">
+                {{ $profile['title'] }}
+            </h1>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                {{ $profile['description'] }}
+            </p>
+            <div class="mt-6 text-sm text-gray-400">
+                Last Updated: {{ $dna->last_computed_at ? $dna->last_computed_at->diffForHumans() : 'Never' }}
+            </div>
+        </div>
+
+        <!-- DNA Health Score -->
+        <div class="gradient-border p-8 mb-12">
+            <div class="text-center">
+                <div class="text-lg text-gray-400 mb-2">DNA Health Score</div>
+                <div class="stat-number pulse">{{ $healthScore }}</div>
+                <div class="text-sm text-gray-500">Based on {{ $dna->total_dreams_analyzed }} dreams analyzed</div>
+                
+                <!-- Progress Bar -->
+                <div class="mt-6 w-full max-w-md mx-auto h-4 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-1000" 
+                         style="width: {{ $healthScore }}%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3D DNA Helix Visualization -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-center">
+                <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    Your Dream Genome
+                </span>
+            </h2>
+            <div id="dna-helix" class="dna-helix-container"></div>
+            <p class="text-center text-sm text-gray-400 mt-4">
+                3D visualization of your subconscious neural signature
+            </p>
+        </div>
+
+        <!-- Gene Categories Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            
+            <!-- Emotion Genes -->
+            <div class="gene-card">
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    Emotion Genes
+                </h3>
+                <div class="space-y-3">
+                    @forelse($helixData['emotions'] as $emotion)
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="capitalize">{{ $emotion['name'] }}</span>
+                                <span class="text-purple-400">{{ $emotion['percentage'] }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="gene-bar h-2" style="width: {{ $emotion['percentage'] }}%"></div>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 text-sm">No emotion data yet. Record more dreams!</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Symbol Genes -->
+            <div class="gene-card">
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    Symbol Genes
+                </h3>
+                <div class="space-y-3">
+                    @forelse($helixData['symbols'] as $symbol)
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="capitalize">{{ $symbol['name'] }}</span>
+                                <span class="text-pink-400">{{ $symbol['percentage'] }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="gene-bar h-2" style="width: {{ $symbol['percentage'] }}%; background: linear-gradient(90deg, #ec4899, #f59e0b)"></div>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 text-sm">No symbol patterns detected yet.</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Color Genes -->
+            <div class="gene-card">
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    Color Genes
+                </h3>
+                <div class="flex flex-wrap gap-3">
+                    @forelse($helixData['colors'] as $color)
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full mb-2 border-2 border-white/20" 
+                                 style="background: {{ $color['name'] }}"></div>
+                            <div class="text-xs capitalize">{{ $color['name'] }}</div>
+                            <div class="text-xs text-gray-400">{{ $color['frequency'] }}x</div>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 text-sm">No color patterns detected yet.</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Archetype Genes -->
+            <div class="gene-card">
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    Archetype Genes
+                </h3>
+                <div class="space-y-2">
+                    @forelse($helixData['archetypes'] as $archetype)
+                        <div class="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                            <span class="capitalize font-medium">{{ $archetype['name'] }}</span>
+                            <span class="text-sm text-purple-400">{{ $archetype['frequency'] }} occurrences</span>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 text-sm">No archetype patterns detected yet.</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        <!-- DNA Statistics -->
+        <div class="gradient-border p-8 mb-12">
+            <h3 class="text-2xl font-bold mb-6 text-center">DNA Statistics</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-purple-400">{{ $dna->total_dreams_analyzed }}</div>
+                    <div class="text-sm text-gray-400 mt-1">Dreams Analyzed</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-pink-400 capitalize">{{ $dna->dominant_emotion ?? 'N/A' }}</div>
+                    <div class="text-sm text-gray-400 mt-1">Dominant Emotion</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-400 capitalize">{{ $dna->dominant_color ?? 'N/A' }}</div>
+                    <div class="text-sm text-gray-400 mt-1">Dominant Color</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-cyan-400">{{ $dna->evolution_score }}</div>
+                    <div class="text-sm text-gray-400 mt-1">Evolution Score</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mutations Timeline -->
+        @if(!empty($dna->mutations))
+        <div class="gene-card mb-12">
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                DNA Mutations Detected
+            </h3>
+            <div class="space-y-3">
+                @foreach($dna->mutations as $mutation)
+                    <div class="mutation-badge">
+                        <span>{{ ucfirst($mutation['type'] ?? 'unknown') }}</span>
+                        <span class="text-gray-400">→</span>
+                        <span class="capitalize">{{ $mutation['from'] ?? 'unknown' }}</span>
+                        <span class="text-purple-400">→</span>
+                        <span class="capitalize font-bold">{{ $mutation['to'] ?? 'unknown' }}</span>
+                        <span class="text-xs text-gray-500">({{ \Carbon\Carbon::parse($mutation['timestamp'])->diffForHumans() }})</span>
+                    </div>
+                @endforeach
+            </div>
+            <p class="text-sm text-gray-400 mt-4">
+                Mutations represent significant shifts in your dream patterns over time.
+            </p>
+        </div>
+        @endif
+
+        <!-- Chart Visualizations -->
+        <div class="grid grid-cols-1 gap-6 mb-12">
+            <div class="gene-card">
+                <canvas id="symbolChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="text-center gene-card">
+            <h3 class="text-2xl font-bold mb-4">Evolve Your Dream DNA</h3>
+            <p class="text-gray-300 mb-6">
+                Your Dream DNA evolves with every dream you record. The more you dream, the richer your genetic signature becomes.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="{{ route('dreams.create') }}" 
+                   class="px-6 py-3 dna-button rounded-lg font-semibold">
+                    Record New Dream
+                </a>
+                <a href="{{ route('dreams.index') }}" 
+                   class="px-6 py-3 dna-button-pink rounded-lg font-semibold">
+                    View Dream History
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function dreamDNA() {
+            return {
+                helixData: @json($helixData),
+                
+                init() {
+                    this.initFractalDNABackground();
+                    this.initDNAHelix();
+                    this.initCharts();
+                },
+
+                initFractalDNABackground() {
+                    const canvas = document.getElementById('fractal-dna-bg');
+                    if (!canvas) {
+                        console.error('Canvas element not found');
+                        return;
+                    }
+                    
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Set canvas size
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    
+                    // Initial background fill
+                    ctx.fillStyle = '#0a0c1b';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Resize handler
+                    window.addEventListener('resize', () => {
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                    });
+                    
+                    // STANDARD background particles (consistent for everyone)
+                    const particleCount = 80;
+                    const speedMultiplier = 0.5;
+                    const particleColor = { r: 168, g: 85, b: 247 }; // Standard purple
+                    const connectionDistance = 150;
+                    
+                    // Particle system for quantum threads
+                    class Particle {
+                        constructor() {
+                            this.x = Math.random() * canvas.width;
+                            this.y = Math.random() * canvas.height;
+                            this.vx = (Math.random() - 0.5) * speedMultiplier;
+                            this.vy = (Math.random() - 0.5) * speedMultiplier;
+                            this.radius = Math.random() * 2 + 1;
+                            this.alpha = Math.random() * 0.5 + 0.3;
+                        }
+                        
+                        update() {
+                            this.x += this.vx;
+                            this.y += this.vy;
+                            
+                            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                        }
+                        
+                        draw() {
+                            ctx.beginPath();
+                            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                            ctx.fillStyle = `rgba(${particleColor.r}, ${particleColor.g}, ${particleColor.b}, ${this.alpha})`;
+                            ctx.fill();
+                        }
+                    }
+                    
+                    // Create particles
+                    const particles = [];
+                    for (let i = 0; i < particleCount; i++) {
+                        particles.push(new Particle());
+                    }
+                    
+                    function drawQuantumThreads() {
+                        // Draw connections between nearby particles
+                        for (let i = 0; i < particles.length; i++) {
+                            for (let j = i + 1; j < particles.length; j++) {
+                                const dx = particles[i].x - particles[j].x;
+                                const dy = particles[i].y - particles[j].y;
+                                const distance = Math.sqrt(dx * dx + dy * dy);
+                                
+                                if (distance < connectionDistance) {
+                                    const opacity = (1 - distance / connectionDistance) * 0.3;
+                                    ctx.strokeStyle = `rgba(${particleColor.r}, ${particleColor.g}, ${particleColor.b}, ${opacity})`;
+                                    ctx.lineWidth = 0.5;
+                                    ctx.beginPath();
+                                    ctx.moveTo(particles[i].x, particles[i].y);
+                                    ctx.lineTo(particles[j].x, particles[j].y);
+                                    ctx.stroke();
+                                }
+                            }
+                        }
+                    }
+                    
+                    function animateBackground() {
+                        // Clear with fade effect
+                        ctx.fillStyle = 'rgba(10, 12, 27, 0.1)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        
+                        // Update and draw quantum thread particles
+                        particles.forEach(particle => {
+                            particle.update();
+                            particle.draw();
+                        });
+                        
+                        // Draw quantum threads
+                        drawQuantumThreads();
+                        
+                        requestAnimationFrame(animateBackground);
+                    }
+                    
+                    animateBackground();
+                },
+
+                initDNAHelix() {
+                    const container = document.getElementById('dna-helix');
+                    if (!container) {
+                        console.error('DNA helix container not found');
+                        return;
+                    }
+                    
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+                    
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                    container.appendChild(renderer.domElement);
+
+                    // PROFESSIONAL DNA STRUCTURE - Always looks like real DNA
+                    const turns = 4;           // Standard DNA turns
+                    const pointsPerTurn = 50;  // Smooth helix
+                    const radius = 2;          // Standard radius
+                    const height = 10;         // Standard height
+                    const rotationSpeed = 0.005; // Smooth rotation
+                    
+                    // PERSONALIZED COLORS from user's actual color genes
+                    const userColors = [];
+                    
+                    if (this.helixData.colors.length > 0) {
+                        // Map user's detected colors to hex values
+                        const colorMap = {
+                            'red': 0xef4444,
+                            'blue': 0x3b82f6,
+                            'green': 0x10b981,
+                            'yellow': 0xfbbf24,
+                            'purple': 0xa855f7,
+                            'orange': 0xf97316,
+                            'pink': 0xec4899,
+                            'black': 0x4b5563,
+                            'white': 0xf3f4f6,
+                            'gray': 0x6b7280,
+                            'brown': 0x92400e,
+                            'gold': 0xfbbf24,
+                            'silver': 0xd1d5db,
+                            'violet': 0x8b5cf6,
+                            'indigo': 0x6366f1,
+                            'cyan': 0x06b6d4,
+                        };
+                        
+                        // Get all user's color genes
+                        this.helixData.colors.forEach(colorGene => {
+                            const colorName = colorGene.name.toLowerCase();
+                            if (colorMap[colorName]) {
+                                userColors.push(colorMap[colorName]);
+                            }
+                        });
+                    }
+                    
+                    // Default colors if no color genes yet
+                    if (userColors.length === 0) {
+                        userColors.push(0xa855f7, 0xec4899); // purple, pink
+                    }
+                    
+                    // Use first color for strand 1, last color for strand 2
+                    const color1 = userColors[0];
+                    const color2 = userColors[userColors.length - 1];
+
+                    // Create FIRST STRAND with user's first color
+                    const helixGeometry = new THREE.BufferGeometry();
+                    const helixMaterial = new THREE.LineBasicMaterial({ 
+                        color: color1,
+                        linewidth: 2
+                    });
+
+                    const points = [];
+                    for (let i = 0; i < turns * pointsPerTurn; i++) {
+                        const angle = (i / pointsPerTurn) * Math.PI * 2;
+                        const y = (i / (turns * pointsPerTurn)) * height - height / 2;
+                        
+                        points.push(new THREE.Vector3(
+                            Math.cos(angle) * radius,
+                            y,
+                            Math.sin(angle) * radius
+                        ));
+                    }
+
+                    helixGeometry.setFromPoints(points);
+                    const helix1 = new THREE.Line(helixGeometry, helixMaterial);
+                    scene.add(helix1);
+
+                    // Second strand (opposite) with personalized color
+                    const helix2Geometry = new THREE.BufferGeometry();
+                    const helix2Material = new THREE.LineBasicMaterial({ 
+                        color: color2,
+                        linewidth: 2
+                    });
+
+                    const points2 = [];
+                    for (let i = 0; i < turns * pointsPerTurn; i++) {
+                        const angle = (i / pointsPerTurn) * Math.PI * 2 + Math.PI;
+                        const y = (i / (turns * pointsPerTurn)) * height - height / 2;
+                        
+                        points2.push(new THREE.Vector3(
+                            Math.cos(angle) * radius,
+                            y,
+                            Math.sin(angle) * radius
+                        ));
+                    }
+
+                    helix2Geometry.setFromPoints(points2);
+                    const helix2 = new THREE.Line(helix2Geometry, helix2Material);
+                    scene.add(helix2);
+
+                    // Add BASE PAIRS (connecting bars) with user's color genes
+                    // Each bar will cycle through all user colors
+                    let colorIndex = 0;
+                    for (let i = 0; i < turns * pointsPerTurn; i += 5) {
+                        const barGeometry = new THREE.BufferGeometry();
+                        
+                        // Cycle through all user's colors for base pairs
+                        const barColor = userColors[colorIndex % userColors.length];
+                        const barMaterial = new THREE.LineBasicMaterial({ 
+                            color: barColor,
+                            opacity: 0.7,
+                            transparent: true
+                        });
+                        
+                        barGeometry.setFromPoints([points[i], points2[i]]);
+                        const bar = new THREE.Line(barGeometry, barMaterial);
+                        scene.add(bar);
+                        
+                        colorIndex++;
+                    }
+
+                    camera.position.z = 8;
+                    camera.position.y = 2;
+
+                    // Animation loop for DNA helix
+                    function animateHelix() {
+                        requestAnimationFrame(animateHelix);
+                        
+                        helix1.rotation.y += rotationSpeed;
+                        helix2.rotation.y += rotationSpeed;
+                        
+                        scene.children.forEach((child, index) => {
+                            if (index > 1) { // Bars only
+                                child.rotation.y += rotationSpeed;
+                            }
+                        });
+
+                        renderer.render(scene, camera);
+                    }
+
+                    animateHelix();
+                },
+
+                initCharts() {
+                    // Symbol Chart
+                    const symbolCtx = document.getElementById('symbolChart');
+                    if (symbolCtx && this.helixData.symbols.length > 0) {
+                        new Chart(symbolCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: this.helixData.symbols.map(s => s.name),
+                                datasets: [{
+                                    label: 'Frequency',
+                                    data: this.helixData.symbols.map(s => s.frequency),
+                                    backgroundColor: 'rgba(168, 85, 247, 0.6)',
+                                    borderColor: 'rgba(168, 85, 247, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    x: { ticks: { color: 'white' } },
+                                    y: { ticks: { color: 'white' }, beginAtZero: true }
+                                },
+                                plugins: {
+                                    legend: { 
+                                        labels: { color: 'white' },
+                                        display: false
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Symbol Frequency',
+                                        color: 'white',
+                                        font: { size: 16 }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                },
+
+                async recompute() {
+                    try {
+                        const response = await fetch('{{ route("dna.recompute") }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            alert('✅ ' + data.message);
+                            location.reload();
+                        }
+                    } catch (error) {
+                        alert('❌ Failed to recompute DNA. Please try again.');
+                        console.error(error);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

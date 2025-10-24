@@ -318,7 +318,7 @@ public function showDashboard()
     {
         $user = Auth::user();
         $dreams = $user->dreams;
-
+        // uses dompdf library to convert html to pdf
         $pdf = Pdf::loadView('dreams.export_pdf', compact('dreams', 'user'));
         return $pdf->download('my_dreams.pdf');
     }
