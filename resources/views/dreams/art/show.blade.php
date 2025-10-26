@@ -103,7 +103,10 @@
       <!-- Left: Controls -->
       <div class="card card-pad">
         <h2 class="text-2xl font-bold" style="color:var(--violet); margin-bottom:.8rem">{{ $dream->title }}</h2>
-        <p class="muted" style="margin-bottom:1.5rem; font-size:.95rem">Create artwork from your dream </p>
+        <p class="muted" style="margin-bottom:.5rem; font-size:.95rem">Create artwork from your dream</p>
+        <p class="muted" style="margin-bottom:1.5rem; font-size:.85rem; padding:.5rem; background:rgba(139,92,246,.1); border-radius:.5rem; border:1px solid rgba(139,92,246,.2)">
+          <strong>Note:</strong> Generated art is saved to this dream's gallery below. Each dream has its own art collection.
+        </p>
 
         <!-- Generate Section -->
         <div style="margin-bottom:1.5rem">
@@ -182,7 +185,11 @@
         </div>
       @else
         <div id="gallery" class="gallery"></div>
-        <div class="card card-pad muted" style="text-align:center">No artwork yet.</div>
+        <div class="card card-pad muted" style="text-align:center; padding:2rem">
+          <div style="font-size:3rem; margin-bottom:1rem; opacity:0.5">🎨</div>
+          <p style="font-size:1.1rem; margin-bottom:0.5rem">No artwork yet for this dream</p>
+          <p style="font-size:0.9rem; opacity:0.7">Generate your first image above to start building your art gallery!</p>
+        </div>
       @endif
     </section>
   </div>
@@ -239,6 +246,17 @@
         
         if (!data.success) throw new Error(data.message || 'Generation failed');
 
+        // Verify art_id is returned
+        if (!data.art_id) {
+          console.error('No art_id in response:', data);
+          throw new Error('Image generated but not saved properly. Please try again.');
+        }
+
+        console.log('Image generated successfully:', {
+          art_id: data.art_id,
+          image_url: data.image_url
+        });
+
         // Store data
         currentArtId = data.art_id;
         currentImageUrl = data.image_url;
@@ -279,6 +297,25 @@
       saveBtn.innerHTML = '<span class="spinner"></span> Saving…';
 
       try {
+        // Verify the image is saved by checking with backend
+        const verifyRes = await fetch(`/dream-art/${currentArtId}/verify`, {
+          method: 'GET',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        });
+
+        if (!verifyRes.ok) {
+          throw new Error('Failed to verify saved image. Please try generating again.');
+        }
+
+        const verifyData = await verifyRes.json();
+        if (!verifyData.exists) {
+          throw new Error('Image was not properly saved. Please try generating again.');
+        }
+
         // Image is already saved on backend, just show confirmation and reload
         saveBtn.innerHTML = '✓ Saved!';
         saveBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';

@@ -133,16 +133,35 @@ class DreamArtController extends Controller
             $path = 'dream_arts/' . $filename;
             Storage::disk('public')->put($path, $imageContent);
 
-            // Save to database
-            $art = DreamArt::create([
-                'user_id' => Auth::id(),
-                'dream_id' => $dream->id,
-                'title' => $dream->title . ' - Generated Art',
-                'prompt' => $prompt,
-                'image_path' => $path,
-                'style' => 'ai-generated',
-                'description' => $customPrompt ? 'Custom prompt' : null,
-            ]);
+            // Save to database with explicit error handling
+            try {
+                $art = DreamArt::create([
+                    'user_id' => Auth::id(),
+                    'dream_id' => $dream->id,
+                    'title' => $dream->title . ' - Generated Art',
+                    'prompt' => $prompt,
+                    'image_path' => $path,
+                    'style' => 'ai-generated',
+                    'description' => $customPrompt ? 'Custom prompt' : null,
+                ]);
+
+                Log::info('Dream art saved successfully', [
+                    'art_id' => $art->id,
+                    'user_id' => Auth::id(),
+                    'dream_id' => $dream->id,
+                    'image_path' => $path
+                ]);
+            } catch (\Exception $dbError) {
+                // If DB save fails, clean up the file
+                Storage::disk('public')->delete($path);
+                Log::error('Failed to save dream art to database', [
+                    'error' => $dbError->getMessage(),
+                    'user_id' => Auth::id(),
+                    'dream_id' => $dream->id,
+                    'image_path' => $path
+                ]);
+                throw new \Exception('Failed to save artwork to database: ' . $dbError->getMessage());
+            }
 
             return response()->json([
                 'success' => true,
@@ -197,6 +216,23 @@ class DreamArtController extends Controller
             'success' => true,
             'message' => 'Dream art saved successfully!',
             'art' => $art,
+        ]);
+    }
+
+    /**
+     * Verify if a dream art exists
+     */
+    public function verify(DreamArt $art)
+    {
+        if ($art->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $exists = $art->exists && $art->image_path && Storage::disk('public')->exists($art->image_path);
+
+        return response()->json([
+            'exists' => $exists,
+            'art_id' => $art->id,
         ]);
     }
 

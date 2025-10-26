@@ -158,6 +158,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dreams/{dream}/art/generate-prompt', [DreamArtController::class, 'generatePrompt'])->name('dream.art.generate-prompt');
     Route::post('/dreams/{dream}/art/generate-image', [DreamArtController::class, 'generateImage'])->name('dream.art.generate-image');
     Route::post('/dreams/{dream}/art', [DreamArtController::class, 'store'])->name('dream.art.store');
+    Route::get('/dream-art/{art}/verify', [DreamArtController::class, 'verify'])->name('dream.art.verify');
     Route::delete('/dream-art/{art}', [DreamArtController::class, 'destroy'])->name('dream.art.destroy');
 });
 
