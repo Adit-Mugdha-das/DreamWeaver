@@ -198,6 +198,35 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Show likers modal
+async function showLikes(dreamId) {
+  try {
+    const res = await fetch(`/dreams/${dreamId}/likes`);
+    const data = await res.json();
+    
+    if (data.likes && data.likes.length > 0) {
+      let likersList = data.likes.map(user => 
+        `<div class="flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg">
+          <div class="w-10 h-10 bg-fuchsia-600/70 rounded-full flex items-center justify-center font-bold text-white">
+            ${user.name.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <p class="font-semibold text-white">${user.name}</p>
+            ${user.bio ? `<p class="text-xs text-gray-400">${user.bio}</p>` : ''}
+          </div>
+        </div>`
+      ).join('');
+      
+      alert(`❤️ Liked by ${data.likes.length} user${data.likes.length > 1 ? 's' : ''}:\n\n${data.likes.map(u => u.name).join('\n')}`);
+    } else {
+      alert('No likes yet. Be the first to like this dream! 💜');
+    }
+  } catch (error) {
+    console.error('Error fetching likes:', error);
+    alert('Failed to load likes. Please try again.');
+  }
+}
+
 // Copy link to clipboard
 function copyLink(dreamId) {
   const url = `${window.location.origin}/dreams/${dreamId}`;

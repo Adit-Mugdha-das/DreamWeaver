@@ -447,8 +447,15 @@ public function comment(Request $request, Dream $dream)
 public function getLikes($id)
 {
     $dream = Dream::with('likes.user')->findOrFail($id);
-    $users = $dream->likes->pluck('user.name');
-    return response()->json(['users' => $users]);
+    $users = $dream->likes->map(function($like) {
+        return [
+            'id' => $like->user->id,
+            'name' => $like->user->name,
+            'bio' => $like->user->bio ?? null,
+            'avatar' => $like->user->avatar ?? null,
+        ];
+    });
+    return response()->json(['likes' => $users]);
 }
 
 public function shareLater(Request $request, Dream $dream)
