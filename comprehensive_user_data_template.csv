@@ -1,0 +1,11 @@
+User_ID,Registration_Date,Total_Dreams,Active_Days,Still_Active_Week2,Dreams_With_Emotions,DNA_Viewed,DNA_Recomputed,DNA_Personality,Evolution_Score,Health_Score,Dominant_Emotion,Art_Generated,Mindmaps_Created,Dream_Maps_Created,Totems_Collected,Totems_Deleted,Riddles_Attempted,Riddles_Solved,Riddle_Success_Rate,Avatar_Created,Avatar_Updated,Sky_Temple_Visited,Sky_Chapters_Completed,Forest_Visited,Forest_Chapters_Completed,Cloud_Kingdom_Visited,Cloud_Chapters_Completed,Total_Story_Chapters,Shared_Dreams,Likes_Given,Comments_Given,Messages_Sent,Messages_Received,Notifications_Clicked,Library_Texts_Viewed,Library_PDFs_Downloaded,Support_Locator_Used,Tutorial_Completed,Dreams_Exported_PDF,Individual_Dream_Downloads,Features_Used_Count,Avg_Session_Minutes,Total_Logins
+U001,2025-12-01,8,12,Yes,7,Yes,1,Vigilant Dreamer,68,72,Fear,3,1,1,4,0,5,4,80%,Yes,2,Yes,6,Yes,8,No,0,14,2,15,4,3,2,8,5,2,No,Yes,1,0,12,45,18
+U002,2025-12-01,5,8,Yes,5,Yes,0,Radiant Dreamer,52,58,Joy,1,0,0,2,0,3,2,67%,No,0,No,0,Yes,4,No,0,4,0,8,2,0,0,4,2,1,No,No,0,0,7,28,12
+U003,2025-12-02,12,14,Yes,10,Yes,2,Reflective Dreamer,78,85,Sadness,6,3,2,6,1,8,7,88%,Yes,3,Yes,9,Yes,10,Yes,7,26,5,22,7,8,6,15,8,4,Yes,Yes,2,1,15,62,24
+U004,2025-12-02,3,4,No,2,No,0,-,0,0,-,0,0,0,0,0,1,0,0%,No,0,No,0,No,0,No,0,0,0,2,0,0,0,1,0,0,No,No,0,0,3,12,5
+U005,2025-12-03,7,10,Yes,6,Yes,1,Shadow Explorer,61,65,Fear,2,1,1,3,0,4,3,75%,Yes,1,No,0,Yes,5,No,0,5,1,12,3,2,1,6,3,1,No,Yes,0,0,10,38,15
+U006,2025-12-03,1,1,No,0,No,0,-,0,0,-,0,0,0,0,0,0,0,0%,No,0,No,0,No,0,No,0,0,0,0,0,0,0,0,0,0,No,No,0,0,1,8,2
+U007,2025-12-04,9,11,Yes,8,Yes,1,Seeker Dreamer,72,76,Surprise,4,2,1,5,0,6,5,83%,Yes,2,Yes,5,Yes,7,Yes,3,15,3,18,5,4,3,10,6,3,Yes,Yes,1,0,13,52,20
+U008,2025-12-04,6,9,Yes,5,Yes,0,Radiant Dreamer,58,62,Joy,2,1,0,2,0,3,2,67%,No,0,No,0,No,0,Yes,5,5,1,10,2,1,1,5,3,1,No,No,0,0,8,32,14
+U009,2025-12-05,11,13,Yes,9,Yes,2,Reflective Dreamer,75,82,Sadness,5,2,2,5,0,7,6,86%,Yes,3,Yes,8,Yes,9,No,0,17,4,20,6,6,5,12,7,3,Yes,Yes,1,1,14,58,22
+U010,2025-12-05,4,6,No,3,Yes,0,Balanced Dreamer,45,48,Joy,1,0,0,1,0,2,1,50%,No,0,No,0,Yes,2,No,0,2,0,5,1,0,0,2,1,0,No,No,0,0,6,22,8
