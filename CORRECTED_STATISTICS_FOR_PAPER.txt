@@ -1,0 +1,296 @@
+================================================================================
+CORRECTED STATISTICAL RESULTS FOR RESEARCH PAPER
+================================================================================
+Dataset: combined_user_data_NEW.csv
+N = 147 users
+Date: December 6, 2025
+
+================================================================================
+1. SAMPLE & SEGMENTATION ✅
+================================================================================
+
+YOUR VERSION (ORIGINAL):
+------------------------
+N (users) = 147
+User segments:
+  Drop-off: 41 users
+  Moderate: 59 users
+  High Engagement: 47 users
+Retention (Retained / Still_Active_Week2):
+  Retained / Active at Week 2: 69.4%
+  Not retained: 30.6%
+
+VERIFIED VERSION (CORRECT):
+---------------------------
+N (users) = 147 ✅
+User segments:
+  Drop-off: 41 users ✅
+  Moderate: 59 users ✅
+  High Engagement: 47 users ✅
+Retention (Retained / Still_Active_Week2):
+  Retained / Active at Week 2: 69.4% ✅
+  Not retained: 30.6% ✅
+
+📌 PAPER SENTENCE (USE AS-IS):
+"Our final behavioral dataset comprised 147 users, categorized as drop-off 
+(n = 41), moderately engaged (n = 59), and highly engaged (n = 47). Overall, 
+69.4% of users were still active by Week 2, indicating relatively strong 
+retention for a two-week, app-based study."
+
+================================================================================
+2. OVERALL USAGE & ENGAGEMENT ⚠️
+================================================================================
+
+YOUR VERSION (ORIGINAL):
+------------------------
+Total_Dreams: Mean = 6.18, SD = 3.78, range = 0–14
+Active_Days: Mean = 7.18, SD = 4.38, range = 1–14
+Dreams_With_Emotions: Mean = 5.20, SD = 3.72
+Dreams_With_Story: Mean = 3.30, SD = 2.64, median = 4
+Totems_Collected: Mean = 2.92, SD = 2.17
+Riddles_Attempted: Mean = 4.35, SD = 3.64
+Riddles_Solved: Mean = 2.65, SD = 2.23
+Avg_Session_Minutes: Mean = 33.43 minutes, SD = 18.93, range = 1–70
+Total_Logins: Mean = 9.60, SD = 6.14, range = 1–22
+Features_Used_Count: Mean = 9.65, SD = 5.85, range = 0–18
+Engagement_Index (0–100 composite): Mean = 39.84, SD = 27.56, range ≈ 0.91–95.52
+
+VERIFIED VERSION (CORRECTED):
+-----------------------------
+Total_Dreams: Mean = 6.18, SD = 3.78, range = 0–13 ⚠️ (was 0–14)
+Active_Days: Mean = 7.18, SD = 4.38, range = 1–14 ✅
+Dreams_With_Emotions: Mean = 5.20, SD = 3.72 ✅
+Dreams_With_Story: Mean = 3.30, SD = 2.64, median = 4 ✅
+Totems_Collected: Mean = 2.92, SD = 2.17 ✅
+Riddles_Attempted: Mean = 4.35, SD = 3.64 ✅
+Riddles_Solved: Mean = 2.65, SD = 2.23 ✅
+Avg_Session_Minutes: Mean = 33.43 minutes, SD = 18.93, range = 1–70 ✅
+Total_Logins: Mean = 9.60, SD = 6.14, range = 1–22 ✅
+Features_Used_Count: Mean = 9.65, SD = 5.85, range = 0–18 ✅
+Engagement_Index (0–100 composite): Mean = 39.84, SD = 27.56, range = 0.91–95.52 ✅
+
+📌 PAPER SENTENCE (CORRECTED):
+"On average, participants submitted 6.18 dreams (SD = 3.78, range = 0–13) over 
+7.18 active days (SD = 4.38). They engaged with multiple features of DreamWeaver, 
+using a mean of 9.65 features (SD = 5.85), attempting 4.35 riddles (SD = 3.64), 
+and spending an average of 33.43 minutes per session (SD = 18.93). The composite 
+engagement index averaged 39.84 (SD = 27.56) on a 0–100 scale, indicating a broad 
+spread from very light to very intensive users."
+
+================================================================================
+3. EVOLUTION & HEALTH SCORES ❌ MAJOR CORRECTIONS
+================================================================================
+
+YOUR VERSION (ORIGINAL):
+------------------------
+Evolution_Score_Day1: mean ≈ 40.56, SD ≈ 8.39
+Evolution_Score (final): mean ≈ 48.06, SD ≈ 28.32
+Evolution_Score_Change: mean ≈ 7.50, SD ≈ 30.68
+
+Health_Score_Day1: mean ≈ 41.35, SD ≈ 8.27
+Health_Score (final): mean ≈ 49.64, SD ≈ 28.56
+Health_Score_Change: mean ≈ 8.28, SD ≈ 31.08
+
+VERIFIED VERSION (CORRECTED):
+-----------------------------
+Evolution_Score_Day1: Mean = 40.56, SD = 8.39 ✅
+Evolution_Score (final): Mean = 48.06, SD = 28.32 ✅
+Evolution_Score_Change: Mean = 7.50, SD = 21.16 ❌ (was 30.68)
+
+Health_Score_Day1: Mean = 41.71, SD = 9.49 ⚠️ (was 41.35, SD = 8.27)
+Health_Score (final): Mean = 50.48, SD = 30.09 ⚠️ (was 49.64, SD = 28.56)
+Health_Score_Change: Mean = 8.77, SD = 21.91 ❌ (was 8.28, SD = 31.08)
+
+📌 PAPER SENTENCE (CORRECTED):
+"Across all users, both evolution and health indices showed a positive average 
+trajectory over the study period, with mean Evolution_Score increasing from 
+40.56 to 48.06 (ΔM = +7.50, SD = 21.16) and Health_Score increasing from 
+41.71 to 50.48 (ΔM = +8.77, SD = 21.91)."
+
+================================================================================
+4. SEGMENT-LEVEL DIFFERENCES ✅
+================================================================================
+
+YOUR VERSION (ORIGINAL):
+------------------------
+Engagement_Index (core measure):
+  Drop-off: 7.61
+  Moderate: 35.92
+  High Engagement: 72.87
+
+Total_Dreams (mean):
+  Drop-off: 2-ish (exact from earlier file, now slightly shifted but similar)
+  Moderate: mid-range (~5–6)
+  High Engagement: high (~10+)
+
+Evolution_Score_Change (mean):
+  Drop-off: strongly negative or small (from earlier: around –20)
+  Moderate: moderately positive
+  High Engagement: strongly positive
+
+Health_Score_Change (mean):
+  Similar pattern: drop-off ≈ negative, moderate ≈ +15, high ≈ +25+
+
+VERIFIED VERSION (EXACT VALUES):
+--------------------------------
+Engagement_Index:
+  Drop-off: M = 7.61 ✅
+  Moderate: M = 35.92 ✅
+  High Engagement: M = 72.87 ✅
+
+Total_Dreams:
+  Drop-off: M = 1.88 ✅
+  Moderate: M = 5.54 ✅
+  High Engagement: M = 10.72 ✅
+
+Evolution_Score_Change:
+  Drop-off: M = -21.85 ✅
+  Moderate: M = 12.25 ✅
+  High Engagement: M = 27.15 ✅
+
+Health_Score_Change:
+  Drop-off: M = -22.51 ✅
+  Moderate: M = 14.46 ✅ (very close to your "+15")
+  High Engagement: M = 28.91 ✅ (close to your "+25+")
+
+📌 PAPER SENTENCE (USE AS-IS):
+"As expected, engagement differed markedly across user segments. The engagement 
+index was lowest among drop-off users (M = 7.61), intermediate among moderate 
+users (M = 35.92), and highest among highly engaged users (M = 72.87). Evolution 
+and health change scores followed the same pattern, with high-engagement users 
+showing the largest positive changes (Evolution: M = 27.15; Health: M = 28.91), 
+moderate users showing moderate gains (Evolution: M = 12.25; Health: M = 14.46), 
+and drop-off users showing negative changes (Evolution: M = -21.85; Health: M = -22.51)."
+
+================================================================================
+5. CORRELATIONS BETWEEN BEHAVIOR & OUTCOMES ⚠️
+================================================================================
+
+YOUR VERSION (ORIGINAL):
+------------------------
+Correlations with Engagement_Index:
+  Total_Dreams ↔ Engagement_Index: r ≈ 0.98
+  Active_Days ↔ Engagement_Index: r ≈ 0.98
+  Dreams_With_Emotions ↔ Engagement_Index: r ≈ 0.99
+  Dreams_With_Story ↔ Engagement_Index: r ≈ 0.83
+  Totems_Collected ↔ Engagement_Index: r ≈ 0.99
+  Riddles_Attempted ↔ Engagement_Index: r ≈ 0.99
+  Riddles_Solved ↔ Engagement_Index: r ≈ 0.95
+  Avg_Session_Minutes ↔ Engagement_Index: r ≈ 0.96
+  Total_Logins ↔ Engagement_Index: r ≈ 0.98
+  Features_Used_Count ↔ Engagement_Index: r ≈ 0.96
+  Evolution_Score ↔ Engagement_Index: r ≈ 0.93
+  Health_Score ↔ Engagement_Index: r ≈ 0.97
+  Evolution_Score_Change ↔ Engagement_Index: r ≈ 0.97
+  Health_Score_Change ↔ Engagement_Index: r ≈ 0.97
+
+Correlations with Evolution_Score_Change:
+  Evolution_Score_Change ↔ Health_Score_Change: r ≈ 0.97
+  Evolution_Score_Change ↔ Features_Used_Count: r ≈ 0.93
+  Evolution_Score_Change ↔ Avg_Session_Minutes: r ≈ 0.93
+  Evolution_Score_Change ↔ Active_Days: r ≈ 0.91–0.92
+  Evolution_Score_Change ↔ Totems_Collected: r ≈ 0.94–0.96
+
+VERIFIED VERSION (EXACT VALUES):
+--------------------------------
+Correlations with Engagement_Index:
+  Total_Dreams: r = 0.982 ✅
+  Active_Days: r = 0.981 ✅
+  Dreams_With_Emotions: r = 0.992 ✅
+  Dreams_With_Story: r = 0.817 ⚠️ (was 0.83)
+  Totems_Collected: r = 0.985 ✅
+  Riddles_Attempted: r = 0.988 ✅
+  Riddles_Solved: r = 0.949 ✅
+  Avg_Session_Minutes: r = 0.965 ✅
+  Total_Logins: r = 0.976 ⚠️ (was 0.98)
+  Features_Used_Count: r = 0.962 ✅
+  Evolution_Score: r = 0.928 ✅
+  Health_Score: r = 0.931 ⚠️ (was 0.97)
+  Evolution_Score_Change: r = 0.884 ❌ (was 0.97)
+  Health_Score_Change: r = 0.887 ❌ (was 0.97)
+
+Correlations with Evolution_Score_Change:
+  Health_Score_Change: r = 0.969 ✅
+  Features_Used_Count: r = 0.931 ✅
+  Avg_Session_Minutes: r = 0.919 ⚠️ (was 0.93)
+  Active_Days: r = 0.920 ✅
+  Totems_Collected: r = 0.904 ⚠️ (was 0.94–0.96)
+
+📌 PAPER SENTENCE (CORRECTED):
+"The engagement index was strongly and positively correlated with almost all 
+behavioral metrics. Users with higher engagement submitted more dreams (r = .98), 
+explored more features (r = .96), solved more riddles (r = .95), spent longer in 
+sessions (r = .97), and logged in more frequently (r = .98). Engagement was also 
+positively correlated with final evolution and health scores (r = .93 and r = .93, 
+respectively) and their changes over time (r = .88 for both), suggesting that 
+deeper interaction with DreamWeaver is associated with stronger positive evolution 
+in the dream DNA and health-related indices."
+
+Alternative (more conservative):
+"The engagement index was strongly and positively correlated with almost all 
+behavioral metrics (all |r| > .81). Users with higher engagement demonstrated 
+greater activity across all features, including dream submission, feature 
+exploration, riddle solving, session duration, and login frequency. Engagement 
+was also positively associated with both final scores (Evolution: r = .93; 
+Health: r = .93) and positive changes over time (Evolution Change: r = .88; 
+Health Change: r = .89)."
+
+📌 SECOND PAPER SENTENCE (CORRECTED):
+"Change in Evolution_Score was strongly associated with Health_Score_Change 
+(r = .97) and a wide range of engagement features, including features used 
+(r = .93), time spent (r = .92), active days (r = .92), and totems collected 
+(r = .90). This indicates that the more users engaged with interactive elements 
+such as totems and story-based interpretations, the more their dream DNA evolved 
+in a positive direction."
+
+================================================================================
+6. ANOVA: ENGAGEMENT_INDEX BY SEGMENT ✅
+================================================================================
+
+YOUR VERSION (ORIGINAL):
+------------------------
+F(2, 144) ≈ 422.74
+p < .001
+Group means:
+  Drop-off: M = 7.61
+  Moderate: M = 35.92
+  High Engagement: M = 72.87
+
+VERIFIED VERSION (EXACT VALUES):
+--------------------------------
+F(2, 144) = 422.74 ✅
+p < .001 ✅ (actual p = 0.0000000000)
+Group means:
+  Drop-off: M = 7.61 ✅
+  Moderate: M = 35.92 ✅
+  High Engagement: M = 72.87 ✅
+
+📌 PAPER SENTENCE (USE AS-IS):
+"A one-way ANOVA revealed a strong effect of user segment on engagement 
+(F(2,144) = 422.74, p < .001). Highly engaged users (M = 72.87) showed 
+significantly higher engagement scores than both moderate users (M = 35.92) 
+and drop-off users (M = 7.61), with moderate users also significantly more 
+engaged than drop-off users."
+
+================================================================================
+SUMMARY OF ALL CHANGES NEEDED
+================================================================================
+
+SECTION 1: ✅ NO CHANGES - Use as written
+SECTION 2: ⚠️ Change Total_Dreams range from "0–14" to "0–13"
+SECTION 3: ❌ CRITICAL UPDATES:
+  - Evolution_Score_Change SD: 21.16 (not 30.68)
+  - Health_Score_Change: Mean = 8.77, SD = 21.91 (not 8.28, SD = 31.08)
+  - Health_Score_Day1: Mean = 41.71, SD = 9.49 (not 41.35, SD = 8.27)
+  - Health_Score final: Mean = 50.48, SD = 30.09 (not 49.64, SD = 28.56)
+SECTION 4: ✅ NO CHANGES - Use exact values provided above
+SECTION 5: ⚠️ UPDATE correlations:
+  - Health_Score with Engagement: r = .93 (not .97)
+  - Evolution_Score_Change with Engagement: r = .88 (not .97)
+  - Health_Score_Change with Engagement: r = .89 (not .97)
+  - Use more conservative language or exact values from above
+SECTION 6: ✅ NO CHANGES - Use as written
+
+================================================================================
+END OF CORRECTED STATISTICS
+================================================================================
