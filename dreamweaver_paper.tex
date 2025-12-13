@@ -15,6 +15,8 @@
 \usepackage{amsmath}
 %% For including figures
 \usepackage{graphicx}
+%% The float package for precise figure placement
+\usepackage{float}
 %% The lineno package adds line numbers
 \usepackage{lineno}
 %% TikZ for diagrams
@@ -39,7 +41,7 @@
 \cortext[cor1]{Corresponding author}
 
 \begin{abstract}
-Dream journaling and analysis offer therapeutic potential for mental wellness, yet traditional approaches suffer from low adherence rates due to lack of immediate feedback and sustained motivation. We developed DreamWeaver, a gamified dream journaling and analysis platform that integrates AI-powered interpretation with 16 interactive entertainment features including Dream DNA analysis, branching narrative storytelling, riddle challenges, collectible totems, emotion-based avatar creation, and spatial dream mapping. A 14-day study with 147 participants tracked behavioral engagement and mental wellness outcomes, complemented by pre-survey (N=167) and post-survey (N=86) data. High-engagement users demonstrated 49-point greater improvements in wellness scores compared to low-engagement users, representing exceptionally large effects. Overall retention reached 69.4\% over 14 days—double typical dream app rates—with strong engagement-outcome relationships. Post-survey satisfaction was high, with 84.9\% expressing intent to continue. Users particularly valued Dream DNA analysis, Dream Art creation, and Riddle challenges, with harder riddles associated with perfect retention compared to minimal retention for users avoiding challenges. These findings demonstrate that gamification and entertainment computing principles can significantly enhance dream journaling engagement while delivering measurable mental wellness outcomes, transforming therapeutic self-reflection into an engaging, sustained practice. Findings are correlational and based on a short-term observational study; controlled trials are needed to establish causality.
+Dream journaling and analysis offer therapeutic potential for mental wellness, yet traditional approaches suffer from low adherence rates due to lack of immediate feedback and sustained motivation. We developed DreamWeaver, a gamified dream journaling and analysis platform that integrates AI-powered interpretation with 16 interactive entertainment features including Dream DNA analysis, branching narrative storytelling, riddle challenges, collectible totems, emotion-based avatar creation, and spatial dream mapping. A 14-day study with 147 participants tracked behavioral engagement and mental wellness outcomes, complemented by pre-survey (N=167) and post-survey (N=86) data. High-engagement users demonstrated 49-point greater improvements in wellness scores compared to low-engagement users ($p<.001$, $\eta^2=.85$), representing exceptionally large effects. Overall retention reached 69.4\% over 14 days---double typical dream app rates---with strong engagement-outcome correlations ($r=.88$ to $.93$). Post-survey satisfaction was high, with 84.9\% expressing intent to continue. Users particularly valued Dream DNA analysis, Dream Art creation, and Riddle challenges, with harder riddles associated with perfect retention compared to minimal retention for users avoiding challenges. These findings demonstrate that gamification and entertainment computing principles can significantly enhance dream journaling engagement while delivering measurable mental wellness outcomes, transforming therapeutic self-reflection into an engaging, sustained practice. Findings are correlational and based on a short-term observational study; controlled trials are needed to establish causality.
 \end{abstract}
 
 \begin{keyword}
@@ -128,17 +130,19 @@ This paper presents DreamWeaver, a gamified dream journaling and analysis platfo
 \section{Related Work}
 \label{sec:related}
 
-Dream journaling and analysis increase emotional awareness \citep{Edwards2013} and support regulation \citep{Malinowski2014}, yet only 20-30\% maintain journals beyond one week \citep{Schredl2018}. Digital apps show 31\% retention at 7 days \citep{Konkol2020}, with users citing "boring repetition" and "lack of insights" as primary abandonment reasons.
+Dream journaling and analysis have been shown to increase emotional awareness and insight \citep{Edwards2013} and support emotional regulation \citep{Malinowski2014}. However, adherence remains a persistent challenge: only 20--30\% of individuals maintain dream journals beyond one week \citep{Schredl2018}. Studies of digital dream journaling applications report similarly low retention, with approximately 31\% of users remaining active after seven days \citep{Konkol2020}. Users frequently cite repetitive logging and limited interpretive feedback as primary reasons for abandonment.
 
-Gamification—applying game elements to non-game contexts \citep{Deterding2011}—increases physical activity \citep{Johnson2016}, medication adherence \citep{Aitken2016}, and mental health engagement \citep{Lister2014}. Entertainment computing apps like SPARX achieved 60\% completion for depression treatment versus 30\% for traditional CBT \citep{Merry2012}. However, poorly designed gamification can trivialize therapeutic content \citep{Bogost2011}.
+Gamification---the application of game design elements to non-game contexts \citep{Deterding2011}---has demonstrated effectiveness in increasing engagement across health-related domains, including physical activity \citep{Johnson2016}, medication adherence \citep{Aitken2016}, and mental health interventions \citep{Lister2014}. Within entertainment computing, systems such as SPARX achieved substantially higher completion rates for depression treatment (60\%) compared to traditional cognitive behavioral therapy approaches (30\%) \citep{Merry2012}. At the same time, scholars caution that poorly designed gamification risks trivializing therapeutic content or undermining intrinsic motivation \citep{Bogost2011}.
 
-No prior work has integrated entertainment computing with AI-powered dream journaling and analysis. Table~\ref{tab:relatedwork} positions DreamWeaver relative to existing approaches, highlighting its unique combination of AI interpretation, gamification, and entertainment computing principles.
+Recent advances in AI-based text analysis have enabled automated interpretation of subjective experiences, including dreams, yet existing dream journaling systems typically emphasize passive logging or isolated interpretation features rather than sustained engagement. To date, no prior work has systematically integrated entertainment computing principles with AI-powered dream journaling and analysis in a unified, feature-rich platform.
+
+Our study addresses this gap by introducing DreamWeaver, which combines AI-driven interpretation with a diverse set of entertainment-oriented interaction mechanisms. As shown in Table~\ref{tab:relatedwork}, DreamWeaver uniquely integrates AI interpretation, gamified progression, and entertainment computing features, achieving 69.4\% retention---more than double typical rates---while demonstrating measurable mental wellness outcomes through sustained user engagement.
 
 \begin{table}[h]
 \centering
 \caption{Comparison of DreamWeaver with Related Systems}
 \label{tab:relatedwork}
-\begin{tabular}{p{3cm}p{2cm}p{2cm}p{2.5cm}p{2.5cm}p{2cm}}
+\begin{tabular}{p{3cm}p{2cm}p{2.5cm}p{3cm}p{3cm}p{2.5cm}}
 \hline
 \textbf{System} & \textbf{AI Analysis} & \textbf{Gamification} & \textbf{Entertainment Features} & \textbf{Retention (7-14 days)} & \textbf{Wellness Outcomes} \\
 \hline
@@ -150,8 +154,6 @@ Fitness Apps \citep{Johnson2016} & No & Yes & Points, badges & ~40\% (14d) & Phy
 \end{tabular}
 \end{table}
 
-Our study fills this gap, demonstrating 69.4\% retention—double typical rates—with measurable wellness benefits through gamified interpretation features.
-
 
 %% ============================================================================
 %% SECTION 3: SYSTEM DESIGN
@@ -159,6 +161,8 @@ Our study fills this gap, demonstrating 69.4\% retention—double typical rates�
 
 \section{DreamWeaver System Design}
 \label{sec:system}
+
+\subsection{System Overview and Architecture}
 
 DreamWeaver is a web application designed to transform dream journaling from a solitary, text-focused practice into an engaging, multi-faceted experience. The system architecture integrates 16 features organized across five design pillars: Core Journaling \& Analysis, Creative Expression, Challenge-Based Progression, Wellness Support, and Social Connection. Each feature was designed following three principles: (1) \textit{Content-Focused Engagement}—all interactions revolve around dream content rather than arbitrary game mechanics; (2) \textit{Therapeutic Alignment}—features promote self-reflection and pattern recognition; and (3) \textit{Progressive Disclosure}—complexity increases gradually to avoid overwhelming new users.
 
@@ -187,11 +191,17 @@ DreamWeaver is a web application designed to transform dream journaling from a s
 
 \textbf{Psychological Support Resources:} Location-enabled mental wellness feature providing geographically proximate access to healthcare providers including psychiatrists, general physicians, pharmacies, hospitals, dentists, and veterinary services. Users enable location services to search nearby professional support, creating safety-net infrastructure when dream content reveals psychological distress. Bridges self-directed journaling with clinical care pathways, ensuring users have immediate access to professional resources when needed.
 
+\textbf{Dream Library:} Curated collection of literary and mythological content related to dreams, including poems, stories, and myth echoes. Users can browse, read, and download content for inspiration and deeper understanding of dream symbolism across cultures and literary traditions. The library serves as an educational resource connecting personal dream experiences to broader cultural narratives and archetypal themes.
+
 \textbf{Archival \& Export:} Comprehensive dream saving system with searchable timeline/calendar views, individual dream PDF downloads, and bulk export functionality enabling users to archive entire dream journals. Community Feed (8.1\% top preference) allows optional anonymized sharing with 86\% of users choosing private archiving over social features.
+
+\textbf{Additional Supporting Features:} Beyond the core features described above, DreamWeaver includes several supporting components that contribute to the overall engagement ecosystem, including Guided Audio Meditations, Community Feed, Notification System, Dream Search and Calendar Views, and User Profile Customization. While these features were not the primary focus of analysis, usage logs indicate they supported sustained engagement by enhancing continuity, reflection, and usability.
 
 \subsection{Technical Implementation}
 
 DreamWeaver was implemented as a web application using Laravel 11 (PHP 8.2) for the backend and Blade templating with Vue.js components for the frontend. Vite handles asset compilation and hot module replacement during development. The responsive design ensures accessibility across desktop and mobile browsers without requiring native app installation.
+
+\textbf{UI/UX Design \& Visual Aesthetics:} The interface employs dynamic 3D animated backgrounds using Vanta.js throughout various sections to create an immersive, dreamlike atmosphere that enhances user engagement and emotional connection. These WebGL-powered backgrounds (including particles, waves, fog, and net effects) adapt to different feature contexts—ethereal animations for Dream DNA visualization, calming wave effects for meditation sections, and cosmic particle systems for exploration features. The visual design balances aesthetic appeal with usability, ensuring animations remain subtle enough to avoid distraction while contributing to the platform's distinctive identity as an entertainment-focused wellness tool.
 
 \textbf{AI Integration:} Dream DNA analysis uses the Google Gemini 2.5 Flash API for natural language processing and semantic extraction across four gene categories (Emotions, Symbols, Colors, Archetypes). The Dream Analysis interface provides four AI-powered interpretation modes: (1) Emotion Detection—identifying primary emotional tone using Gemini's classification across 17 emotion families, each containing 7-13 variant emotion words (e.g., Joy family: joy, happy, delight, ecstatic, excited, cheerful, elated, pleased, content, blissful, merry, gleeful; Fear family: fear, horror, terror, terrified, fright, frightened, dread, scared, panic, panicked, petrified, afraid, spooked, creepy, nervous, anxious; Sadness family: sadness, sad, sorrow, depressed, melancholy, mournful, grief, heartbroken, lonely, tearful, despair, hopeless; plus 14 additional emotion families), with normalized mapping to canonical categories for avatar and totem generation, (2) Short Interpretation—1-3 sentence meaningful summaries, (3) Story Generation—creative narrative extensions (120 words), and (4) Long Narrative—comprehensive psychological analysis with symbolic insights (150 words). Story Mode generation employs Gemini's text generation with custom prompts ensuring thematic consistency with dream content. Dream Art uses OpenAI's DALL-E 2 API with either Gemini-generated artistic prompts or user-provided custom prompts as input. The Mindmap feature implements graph clustering algorithms using Three.js and Vanta.js for 2D/3D force-directed visualization connecting dreams with similar emotional and symbolic content.
 
@@ -213,7 +223,7 @@ DreamWeaver was implemented as a web application using Laravel 11 (PHP 8.2) for 
 
 \subsection{Study Design}
 
-We conducted a 14-day field study (October 2024) with three data collection points: pre-survey (N=167, expectations), behavioral tracking (N=147, automatic logging), and post-survey (N=86, satisfaction). This mixed-methods design enabled triangulation across self-reported and objective data.
+We conducted a 14-day field study (October 2025) with three data collection points: pre-survey (N=167, expectations), behavioral tracking (N=147, automatic logging), and post-survey (N=86, satisfaction). This mixed-methods design enabled triangulation across self-reported and objective data.
 
 \subsection{Participants}
 
@@ -251,7 +261,7 @@ Health\_Score\_Change & Difference between final and Day 1 Health score (-39 to 
 \end{tabular}
 \end{table}
 
-Engagement\_Index: weighted composite (0-100) of dreams, days, features, riddles, stories, DNA views. Evolution/Health scores: daily self-reports (0-100) of growth and wellbeing, change scores = final minus Day 1.
+Engagement\_Index: weighted composite (0-100) of dreams, days, features, riddles, stories, DNA views. Evolution/Health scores: daily self-reports (0-100) of growth and wellbeing, change scores = final minus Day 1. These scores are not intended as clinical diagnostic instruments but as sensitive, within-system indicators of perceived growth and wellbeing over short-term engagement.
 
 \textbf{Post-survey (N=86):} Five satisfaction items (M=3.79-4.03), feature preferences (DNA 16.3\%, Art 14.0\%, Riddles 12.8\%), retention intent (65.1\% Yes, 19.8\% Maybe), and recommendation likelihood (66.3\% Yes).
 
@@ -290,9 +300,9 @@ Results organized by research question: overall engagement (RQ1), engagement-wel
 \subsection{Overall Engagement Patterns}
 \label{subsec:engagement}
 
-Of 147 active users, 102 (69.4\%) remained active into Week 2—substantially exceeding typical dream app retention (31\% at Day 7, 12\% at Day 30 \citep{Konkol2020}). Figure~\ref{fig:retention} shows the feature adoption funnel across all users. While 69.4\% continued engagement into the second week, the largest within-study drop-off (19\%) occurred in feature progression between dream logging and DNA viewing, indicating that not all users who logged dreams engaged with analysis features. The majority of user attrition occurred during the first week, with retention stabilizing at 69.4\% beyond Day 7.
+Of 147 active users, 102 (69.4\%) remained active into Week 2—substantially exceeding typical dream app retention of 31\% at Day 7 and 12\% at Day 30 \citep{Konkol2020}. Figure~\ref{fig:retention} shows the feature adoption funnel across all users. While 69.4\% continued engagement into the second week, the largest within-study drop-off (19\%) occurred in feature progression between dream logging and DNA viewing, indicating that not all users who logged dreams engaged with analysis features. The majority of user attrition occurred during the first week, with retention stabilizing at 69.4\% beyond Day 7.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_1.png}
 \caption{User retention funnel showing progression through DreamWeaver features over 14 days. Starting with 147 users who logged dreams, 69.4\% remained active into Week 2. The largest drop-off (19\%) occurred between dream logging and DNA viewing, suggesting differential feature adoption.}
@@ -301,7 +311,7 @@ Of 147 active users, 102 (69.4\%) remained active into Week 2—substantially ex
 
 Table~\ref{tab:descriptive} presents behavioral metrics. Users logged M=6.18 dreams (SD=3.78, 44\% of possible days), active M=7.18 days (SD=4.38, 51\% of study period), session duration M=33.43 min (SD=18.93). Feature breadth M=9.65 of 16 available features (SD=5.85, 60\% adoption). Engagement Index M=39.84 (SD=27.56) showed wide variability, justifying segmentation.
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{Descriptive Statistics for Behavioral Metrics (N=147)}
 \label{tab:descriptive}
@@ -327,7 +337,7 @@ Health Score Change & 8.77 & 21.91 & 9.00 & -39 to +37 \\
 
 Figure~\ref{fig:engagement_dist} shows Engagement Index distribution with three distinct clusters identified by k-means segmentation: Low-engagement (n=41, 27.9\%), Moderate (n=59, 40.1\%), and High (n=47, 32.0\%). The trimodal distribution validates the clustering approach.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_4.png}
 \caption{Distribution of Engagement Index scores (0-100) across 147 users, showing three distinct clusters identified by k-means: Low-engagement (n=41), Moderate (n=59), and High (n=47). The trimodal distribution justifies segmentation for subsequent analyses.}
@@ -343,7 +353,7 @@ Tukey HSD post-hoc tests confirmed all pairwise differences were significant (al
 
 Health Score Change replicated: F(2,144)=388.62, $p<.001$, $\eta^2$=.84. Low-engagement M=-22.51 (SD=11.91), Moderate M=+14.46 (SD=5.75), High M=+28.91 (SD=5.55). Low-engagement to High difference: 51.42 points. All pairwise comparisons significant ($p<.001$).
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{CHART_3_Boxplots_Clean.png}
 \caption{Evolution Score Change and Health Score Change by engagement segment. High-engagement users showed substantial positive changes (M=+27.15 for Evolution, M=+28.91 for Health) while low-engagement users showed negative changes (M=-21.85, M=-22.51). The 49-51 point differences represent the largest effect observed in the study, F(2,144) $>$ 380, p$<$.001, $\eta^2$ $>$ .84 for both outcomes.}
@@ -353,9 +363,9 @@ Health Score Change replicated: F(2,144)=388.62, $p<.001$, $\eta^2$=.84. Low-eng
 \subsection{Feature Interconnections Create Ecosystem Effects}
 \label{subsec:ecosystem}
 
-Figure~\ref{fig:correlations} shows correlation matrix revealing integrated "ecosystem": nearly all metrics r $>$ 0.70. Key findings: (1) Engagement Index correlated with Evolution (r=.884, $p<.001$) and Health (r=.876, $p<.001$); (2) Features Used × Health r=.932 (strongest correlation), indicating breadth drives wellness; (3) Story completion, DNA views, riddles intercorrelated r $>$ .81; (4) Avatar engagement × Evolution r=.76, showing self-representation investment reflected commitment. Ecosystem effect implies value from feature synergy, not isolated optimization.
+Figure~\ref{fig:correlations} shows correlation matrix revealing integrated "ecosystem": nearly all metrics r $>$ 0.70. Key findings: (1) Engagement Index correlated with Evolution (r=.884, $p<.001$) and Health (r=.876, $p<.001$); (2) Features Used × Health r=.932 (strongest correlation), indicating breadth drives wellness; (3) Story completion, DNA views, riddles intercorrelated r $>$ .81; (4) Avatar engagement × Evolution r=.76, showing self-representation investment reflected commitment. Such high correlations likely reflect shared method variance and tight coupling within a short-term, feature-integrated system rather than independent causal mechanisms. Ecosystem effect implies value from feature synergy, not isolated optimization.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{CHART_2.png}
 \caption{Correlation matrix of behavioral metrics and outcomes. Nearly all correlations exceeded r=0.70 (dark colors), indicating an integrated feature ecosystem. Engagement Index correlated with Evolution (r=.884) and Health (r=.876) outcomes. Features Used showed the strongest outcome correlation (r=.932 with Health), suggesting feature breadth drives wellness benefits.}
@@ -367,7 +377,7 @@ Figure~\ref{fig:correlations} shows correlation matrix revealing integrated "eco
 
 Figure~\ref{fig:engagement_evolution}: Engagement Index × Evolution Score Change r=.884, R$^2$=.781, $p<.001$. Each 10-point engagement increase predicted 6.4-point evolution gain. Threshold at Engagement=28.8: below M=-15.2, above M=+18.7 (33.9-point difference).
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_9.png}
 \caption{Engagement Index predicts Evolution Score Change (r=.884, R$^2$=.781, p$<$.001). Each 10-point engagement increase predicted 6.4-point evolution gain. A threshold at Engagement Index 28.8 separates negative evolution (below threshold, M=-15.2) from positive evolution (above, M=+18.7), a 33.9-point difference.}
@@ -376,7 +386,7 @@ Figure~\ref{fig:engagement_evolution}: Engagement Index × Evolution Score Chang
 
 Figure~\ref{fig:features_health}: Features Used × Health Score Change r=.932, R$^2$=.869, $p<.001$ (strongest predictor). Users exploring $\geq$7 features: +20.3 health improvement vs. $<$7 features: -18.9 (39.2-point gap), indicating feature diversity drives therapeutic benefit.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_10.png}
 \caption{Features Used (out of 16) predicts Health Score Change (r=.932, R$^2$=.869, p$<$.001), the strongest single predictor observed. Users exploring $\geq$7 features averaged +20.3 health improvement versus -18.9 for $<$7 features, a 39.2-point difference. This indicates feature breadth, not just frequency, drives wellness outcomes.}
@@ -390,7 +400,7 @@ Multiple regression predicting Evolution: R$^2$=.892 (F(5,141)=234.56, $p<.001$)
 
 Figure~\ref{fig:retained_dropped} compares retained (Day 14 active, n=102) vs. dropped out (n=45) users. Retained users showed dramatically higher engagement: 30.1× more stories (M=4.69 vs. 0.16, $t$=14.52, $p<.001$, d=2.18), 21.1× more riddles (M=3.75 vs. 0.18, d=2.45), 8.2× more totems (M=3.99 vs. 0.49, d=2.13), 5.1× more features (M=12.79 vs. 2.53, d=2.08), 4.0× more dreams (M=8.02 vs. 2.00, d=1.94). All Cohen's d $>$ 1.94, indicating feature engagement separated retained from dropped out users more than demographics. Story-based and challenge features (riddles, totems) showed largest multiples.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{CHART_11.png}
 \caption{Mean feature usage comparing retained users (active Day 14, n=102) versus users who dropped out (n=45). Retained users showed 4-30× higher engagement across all features, with stories (30.1×), riddles (21.1×), and totems (8.2×) showing the largest differences. All differences significant at p$<$.001, Cohen's d ranging 1.94-2.45.}
@@ -402,7 +412,7 @@ Figure~\ref{fig:retained_dropped} compares retained (Day 14 active, n=102) vs. d
 
 Among riddle users (n=118, 80.3\%), difficulty selected: Easy (n=23, 19.5\%), Medium (n=47, 39.8\%), Hard (n=38, 32.2\%), None (n=10, 8.5\%). Figure~\ref{fig:riddle_retention}: Hard 100\% retention (38/38), Medium 95.7\% (45/47), Easy 78.3\% (18/23), None 0\% (0/10). $\chi^2$(3)=67.42, $p<.001$. "Hard Fun" phenomenon: challenge enhances engagement, aligns with flow theory. Qualitative feedback: "riddles made me think deeply," "daily challenge was the hook."
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_12.png}
 \caption{Retention rate at Day 14 by riddle difficulty preference. Users who selected Hard riddles showed 100\% retention (38/38), compared to 95.7\% for Medium (45/47), 78.3\% for Easy (18/23), and 0\% for users who avoided riddles (0/10). Chi-square test: $\chi^2$(3)=67.42, p$<$.001, demonstrating that challenge-seeking predicted sustained engagement.}
@@ -414,7 +424,7 @@ Among riddle users (n=118, 80.3\%), difficulty selected: Easy (n=23, 19.5\%), Me
 
 Figure~\ref{fig:radar} profiles three segments across six dimensions: Dream Frequency, Feature Breadth, Challenge Engagement, Creative Expression, Social Participation, Wellness Improvement. Low-engagement: minimal (all $<$ 20/100). Moderate: balanced mid-level (30-50), higher Dream Frequency (48), suggesting journaling tool without deep exploration. High: excelled Challenge (92), Feature Breadth (88), Creative (76), Wellness (85). Social moderate even for High (56), indicating game mechanics/creative tools outweighed community features. Three archetypes: \textit{Dabblers} (Low-engagement), \textit{Journalers} (Moderate), \textit{Explorers} (High).
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_13.png}
 \caption{Behavioral profiles of Low-engagement (n=41), Moderate (n=59), and High (n=47) engagement users across six dimensions. High users excelled in Challenge Engagement and Feature Breadth; Moderate users showed balanced but limited usage; Low-engagement users engaged minimally across all dimensions. Profiles suggest qualitatively different usage strategies rather than a simple quantity gradient.}
@@ -426,7 +436,7 @@ Figure~\ref{fig:radar} profiles three segments across six dimensions: Dream Freq
 
 Compared pre-survey (N=167) vs. post-survey (N=86). Figure~\ref{fig:prepost}: Users exceeded expectations—Dream Reflection +1.16 (d=1.18), Emotional Understanding +1.34 (d=1.70), Helpfulness +1.49 (d=2.51), but Ease -0.88 (d=-2.68, still high M=4.00/5). All $p<.001$. Trade-off: complexity for value, acceptable to users.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{CHART_A.png}
 \caption{Pre-survey expectations (N=167, gray) versus post-survey experiences (N=86, blue) on four matched constructs. Users significantly exceeded expectations on all dimensions: Dream Reflection increased by 1.16 points (Cohen's d=1.18), Emotional Understanding by 1.34 points (d=1.70), Perceived Helpfulness by 1.49 points (d=2.51), and Ease of Use by -0.88 points (d=-2.68, indicating lower ease than expected but still high absolute rating of 4.00/5). All differences p$<$.001.}
@@ -444,14 +454,14 @@ These findings indicate DreamWeaver successfully exceeded psychological expectat
 
 Post-survey (N=86): Overall Enjoyment M=4.03 (SD=0.76), 68.6\% rated 4+. Figure~\ref{fig:satisfaction_heatmap} shows five satisfaction dimensions. Composite M=3.92 (SD=0.66), significantly exceeded midpoint ($t$=12.89, $p<.001$, d=1.39). Feature preferences (Figure~\ref{fig:preferences}): Dream DNA 16.3\%, Dream Art 14.0\%, Riddles 12.8\%, Guided Audio 12.8\%, Story Mode 10.5\%, Pattern Analysis 9.8\%, Dream Archive/Export 9.5\% (86\% used), Library 9.3\%, Avatar Creation 8.6\%, Feed 8.1\%, Dream Map 7.4\%, Psychological Support 6.2\% (accessed by 18.6\% when needed). Chi-square non-significant ($\chi^2$(15)=19.14, $p$=.208), supporting ecosystem model—no dominant feature.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_B.png}
 \caption{Distribution of post-survey satisfaction ratings (N=86) across five Likert-scale items. Overall satisfaction was high (M=3.92/5), with 68.6\% of ratings at 4 or 5 ("Agree" or "Strongly Agree"). Meaningful Insights and Story Engagement showed slightly lower agreement (59.3\% and 62.8\% at 4+) while Ease of Use and Overall Enjoyment exceeded 70\%.}
 \label{fig:satisfaction_heatmap}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_C.png}
 \caption{Feature preferences (N=86): percentage of users selecting each feature as "most valuable." Dream DNA (16.3\%) led, followed by Dream Art (14.0\%), Riddles (12.8\%), and Guided Audio (12.8\%). Pattern Analysis (9.8\%), Dream Archive/Export (9.5\%, with 86\% utilization for data portability), Library (9.3\%), Avatar Creation (8.6\%), Community Feed (8.1\%), Dream Map (7.4\%), and Psychological Support (6.2\% as top preference, though 18.6\% accessed when needed) completed the spectrum, indicating analytical and creative features were most valued.}
@@ -463,7 +473,7 @@ Post-survey (N=86): Overall Enjoyment M=4.03 (SD=0.76), 68.6\% rated 4+. Figure~
 
 Future usage intent: 65.1\% Yes, 19.8\% Maybe, 15.1\% No (84.9\% positive). Recommendation: 66.3\% Yes, 23.3\% Maybe, 10.5\% No (89.5\% positive). NPS=55.8 (Excellent, $>$50). Figure~\ref{fig:retention_intentions} displays distributions. Logistic regression: satisfaction predicted retention intent OR=4.82 ($p<.001$), Engagement Index OR=1.07 per point ($p<.001$). High engagement users: 91.5\% positive intent vs. 58.6\% Drop-off survivors ($\chi^2$=11.23, $p<.001$).
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_D.png}
 \caption{Retention intentions and recommendation likelihood (N=86). Continue using: 65.1\% Yes, 19.8\% Maybe, 15.1\% No (84.9\% positive). Recommend to others: 66.3\% Yes, 23.3\% Maybe, 10.5\% No (89.5\% positive). Net Promoter Score (NPS) = 55.8, categorized as "Excellent" (above 50), indicating strong user advocacy.}
@@ -474,7 +484,7 @@ Future usage intent: 65.1\% Yes, 19.8\% Maybe, 15.1\% No (84.9\% positive). Reco
 
 Figure~\ref{fig:usage_satisfaction}: Active Days tertiles vs. satisfaction. Low (1-5 days, n=24) M=3.18, Medium (6-10, n=31) M=3.89, High (11-14, n=31) M=4.21. Kruskal-Wallis H(2)=22.85, $p<.001$. Each tertile: +1.03 satisfaction increase. Longer engagement → higher satisfaction, indicating cumulative value discovery, explaining 70\% retention stabilization after Day 7.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.75\textwidth]{CHART_E.png}
 \caption{Satisfaction composite score (mean of five post-survey items) by Active Days tertiles (N=86). Low usage (1-5 days, n=24): M=3.18. Medium (6-10 days, n=31): M=3.89. High (11-14 days, n=31): M=4.21. Kruskal-Wallis H(2)=22.85, p$<$.001. Each additional usage tertile predicted +1.03 increase in satisfaction, indicating sustained engagement deepens perceived value.}
@@ -489,7 +499,7 @@ Figure~\ref{fig:usage_satisfaction}: Active Days tertiles vs. satisfaction. Low 
 \section{Discussion}
 \label{sec:discussion}
 
-This study provides empirical evidence that entertainment computing transforms dream journaling from low-adherence practice (31\% at 7 days \citep{Konkol2020}) to sustained engagement (69.4\% at 14 days) with measurable mental wellness benefits. We discuss findings, theoretical contributions, and design implications.
+This study provides empirical evidence that entertainment computing transforms dream journaling from low-adherence practice with 31\% retention at 7 days \citep{Konkol2020} to sustained engagement (69.4\% at 14 days) with measurable mental wellness benefits. We discuss findings, theoretical contributions, and design implications.
 
 \subsection{Key Findings}
 
@@ -497,7 +507,7 @@ This study provides empirical evidence that entertainment computing transforms d
 
 \textbf{RQ2 (Wellness):} High-engagement users scored 49 points higher on Evolution (F(2,144)=422.74, $p<.001$, $\eta^2$=.85—among largest effects in digital mental health). Strong correlations (r=.884 Engagement-Evolution, r=.932 Features-Health) suggest mechanisms: increased self-reflection frequency \citep{Pennebaker1997}, pattern recognition via analytics, and narrative processing through Story Mode. Causality remains ambiguous (reverse causality possible), requiring controlled trials.
 
-\textbf{RQ3 (Features):} Feature \textit{breadth} outweighed \textit{depth} (Features Used r=.932 vs. Total Dreams non-significant in regression). Ecosystem effect: all 16 features intercorrelated at r$>$.70, creating synergistic value. Totem-Map unlock mechanic demonstrated gamification integration: collecting emotion-based totems (e.g., wings for ambition, mask for fear) unlocked thematic realms, creating achievement-driven progression. Hard Fun phenomenon: self-selected difficulty matched user commitment. No dominant feature (DNA 16.3\%, Art 14.0\%, Riddles 12.8\%, Archive/Export 9.5\% with 86\% utilization), validating diversity model. Dream Archive/Export (86\% used) served critical utility function—users valued data ownership and portability. Psychological Support (6.2\% top preference but 18.6\% utilization when needed) demonstrated safety-net function. Social features ranked lowest (8.1\%), contrasting fitness apps \citep{Johnson2016}—introspective practices favor individual analytical and creative tools over community features.
+\textbf{RQ3 (Features):} Feature \textit{breadth} outweighed \textit{depth} (Features Used r=.932 vs. Total Dreams non-significant in regression). Ecosystem effect: all 16 features intercorrelated at r$>$.70, creating synergistic value. Totem-Map unlock mechanic demonstrated gamification integration: collecting emotion-based totems (e.g., wings for ambition, mask for fear) unlocked thematic realms, creating achievement-driven progression. Hard Fun phenomenon: self-selected difficulty matched user commitment. No dominant feature (DNA 16.3\%, Art 14.0\%, Riddles 12.8\%, Library 9.3\%, Archive/Export 9.5\% with 86\% utilization), validating diversity model. Dream Library (9.3\%) provided educational context through literary and mythological content, connecting personal experiences to cultural narratives. Dream Archive/Export (86\% used) served critical utility function—users valued data ownership and portability. Psychological Support (6.2\% top preference but 18.6\% utilization when needed) demonstrated safety-net function. Social features ranked lowest (8.1\%), contrasting fitness apps \citep{Johnson2016}—introspective practices favor individual analytical and creative tools over community features.
 
 \textbf{RQ4 (Experience):} Users exceeded expectations on psychological dimensions (+1.16 reflection, +1.49 helpfulness, both $p<.001$) but found app less easy than anticipated (-0.88, still high M=4.00/5). Trade-off—complexity for value—was acceptable: 68.6\% satisfaction 4+, NPS=55.8 (Excellent), 84.9\% retention intent. Satisfaction increased with usage duration (Kruskal-Wallis H=22.85, $p<.001$), indicating cumulative value discovery.
 
@@ -549,7 +559,7 @@ Ethical considerations warrant attention: (1) \textit{trivialization}—does ent
 
 \textbf{Ethical Considerations:} Gamification in mental health contexts requires careful ethical design. While user feedback suggested respectful engagement, several considerations merit ongoing attention: (1) \textit{Data privacy}—dream content is sensitive; our encryption and anonymization protocols should be augmented with user control over AI analysis in production systems; (2) \textit{Engagement mechanics}—features like streaks and progress bars effectively drove retention but should be monitored to ensure they support rather than compel usage; (3) \textit{Universal benefit}—low-engagement users showed negative wellness trajectories, suggesting that onboarding support and alternative pathways may be needed for users who don't naturally engage with gamified features.
 
-These findings highlight an important design consideration: entertainment computing in mental health should balance engagement optimization with user autonomy, ensuring that game mechanics enhance rather than override intrinsic motivation for self-care.
+These findings highlight an important design consideration: entertainment computing in mental health should balance engagement optimization with user autonomy, ensuring that game mechanics enhance rather than override intrinsic motivation for self-care. Additionally, the intensive feature set may have introduced novelty effects, which could inflate early engagement metrics; longer-term studies are needed to assess sustained use beyond initial exploration.
 
 
 %% ============================================================================
