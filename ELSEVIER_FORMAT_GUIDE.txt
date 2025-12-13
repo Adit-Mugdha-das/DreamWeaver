@@ -1,0 +1,632 @@
+================================================================================
+ELSEVIER ENTERTAINMENT COMPUTING - OFFICIAL SUBMISSION FORMAT
+================================================================================
+Journal: Entertainment Computing (Elsevier)
+ISSN: 1875-9521
+Guide for Authors: https://www.elsevier.com/journals/entertainment-computing
+
+================================================================================
+MANUSCRIPT PREPARATION - ELSEVIER REQUIREMENTS
+================================================================================
+
+1. FILE FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Accepted formats:
+  • Microsoft Word (.doc or .docx) - RECOMMENDED
+  • LaTeX (use Elsevier LaTeX template)
+  • PDF (for review only, not final submission)
+
+Template Downloads:
+  • Word template: https://www.elsevier.com/author-schemas/elsevier-latex-instructions
+  • LaTeX template: https://www.elsevier.com/researcher/author/policies-and-guidelines/latex-instructions
+
+================================================================================
+2. ARTICLE STRUCTURE (IMRaD Format)
+================================================================================
+
+Required Sections (in this order):
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 1. Title Page                                                           │
+│    • Article title (concise, informative)                               │
+│    • Author names and affiliations                                      │
+│    • Corresponding author email                                         │
+│                                                                          │
+│ 2. Abstract (150-250 words)                                             │
+│    • Standalone summary                                                 │
+│    • Background, Methods, Results, Conclusions                          │
+│    • No citations in abstract                                           │
+│                                                                          │
+│ 3. Keywords (3-6 keywords)                                              │
+│    • Use semicolons to separate                                         │
+│    • Example: Dream journaling; Gamification; Mental wellness           │
+│                                                                          │
+│ 4. Introduction                                                         │
+│    • Background and context                                             │
+│    • Research gap                                                       │
+│    • Objectives and contributions                                       │
+│                                                                          │
+│ 5. Related Work / Literature Review                                     │
+│    • Can be combined with Introduction or separate section              │
+│                                                                          │
+│ 6. Methods / Methodology                                                │
+│    • Study design                                                       │
+│    • Participants                                                       │
+│    • Materials and procedures                                           │
+│    • Data analysis                                                      │
+│                                                                          │
+│ 7. Results                                                              │
+│    • Present findings objectively                                       │
+│    • Use figures and tables                                             │
+│    • Statistical reporting                                              │
+│                                                                          │
+│ 8. Discussion                                                           │
+│    • Interpretation of results                                          │
+│    • Comparison with prior work                                         │
+│    • Implications                                                       │
+│    • Can be combined with Results                                       │
+│                                                                          │
+│ 9. Conclusion                                                           │
+│    • Summary of key findings                                            │
+│    • Future work                                                        │
+│                                                                          │
+│ 10. Acknowledgments (optional)                                          │
+│     • Funding information                                               │
+│     • Thank contributors                                                │
+│                                                                          │
+│ 11. References                                                          │
+│     • Harvard or Vancouver style (check journal preference)             │
+│                                                                          │
+│ 12. Appendices (optional)                                               │
+│     • Supplementary materials                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+3. FORMATTING SPECIFICATIONS
+================================================================================
+
+Page Setup:
+┌────────────────────────────────────────────────────────────────────────┐
+│ • Paper size: A4 (210 × 297 mm) or US Letter (8.5 × 11 inches)        │
+│ • Margins: 2.5 cm (1 inch) all sides                                   │
+│ • Orientation: Portrait                                                 │
+│ • Line spacing: Double-spaced for review submission                    │
+│ • Page numbers: Bottom center                                          │
+│ • Line numbers: YES (for review version)                               │
+└────────────────────────────────────────────────────────────────────────┘
+
+Text Formatting:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Font:                                                                   │
+│   • Main text: 12pt Times New Roman or Arial                           │
+│   • Headings: Bold, same font                                          │
+│   • Figure captions: 10pt                                              │
+│   • Table captions: 10pt                                               │
+│                                                                         │
+│ Alignment:                                                              │
+│   • Main text: Justified (both left and right)                         │
+│   • Headings: Left-aligned                                             │
+│                                                                         │
+│ Paragraphs:                                                             │
+│   • First line indent: 0.5 cm (or no indent with space between paras)  │
+│   • No extra spacing between paragraphs (for double-spaced version)    │
+└────────────────────────────────────────────────────────────────────────┘
+
+Heading Hierarchy:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Level 1: 1. Introduction (Bold, 14pt)                                  │
+│ Level 2: 1.1 Background (Bold, 12pt)                                   │
+│ Level 3: 1.1.1 Dream Analysis (Italic, 12pt)                           │
+│ Level 4: 1.1.1.1 Subsection (Regular, 12pt, underlined)                │
+└────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+4. TITLE PAGE FORMAT
+================================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ DreamWeaver: A Gamified Dream Journaling Application for Mental        │
+│ Wellness Through Interactive Dream DNA Analysis                        │
+│                                                                         │
+│ [Leave 3-4 blank lines]                                                │
+│                                                                         │
+│ Author Name¹*, Co-Author Name²                                         │
+│                                                                         │
+│ ¹Department of Computer Science, University Name, City, Country        │
+│ ²Department of Psychology, University Name, City, Country              │
+│                                                                         │
+│ *Corresponding author: email@university.edu                            │
+│                                                                         │
+│ [Leave 2-3 blank lines]                                                │
+│                                                                         │
+│ Abstract                                                                │
+│ [150-250 words abstract text here...]                                  │
+│                                                                         │
+│ Keywords: Dream journaling; Gamification; Mental wellness;             │
+│ Interactive storytelling; User engagement; Entertainment computing      │
+└────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+5. ABSTRACT FORMAT (Specific Requirements)
+================================================================================
+
+Structure (150-250 words):
+┌────────────────────────────────────────────────────────────────────────┐
+│ Background: [1-2 sentences - problem context]                          │
+│ Dream journaling has therapeutic potential, but traditional methods    │
+│ lack engagement features that sustain user participation.              │
+│                                                                         │
+│ Objective: [1 sentence - what you studied]                             │
+│ We developed DreamWeaver, a gamified dream journaling app incorporating│
+│ Dream DNA analysis, interactive storytelling, and puzzle-solving.      │
+│                                                                         │
+│ Methods: [2-3 sentences - study design]                                │
+│ A 14-day user study with 147 participants tracked behavioral engagement│
+│ metrics, complemented by pre-survey (N=167) and post-survey (N=86).    │
+│                                                                         │
+│ Results: [3-4 sentences - key findings with numbers]                   │
+│ High-engagement users (n=47) showed significant improvements in        │
+│ Evolution scores (M=+27.15, SD=4.72) compared to drop-off users        │
+│ (M=-21.85, SD=13.20), F(2,144)=422.74, p<.001. Retention reached 69.4%,│
+│ with 84.9% expressing intent to continue. Post-survey satisfaction was │
+│ high (M=3.92/5), with overall enjoyment (M=4.03) exceeding pre-study   │
+│ expectations (M=2.30).                                                  │
+│                                                                         │
+│ Conclusion: [1-2 sentences - implications]                             │
+│ Gamification and interactive features significantly enhance dream       │
+│ journaling engagement and mental wellness outcomes, demonstrating       │
+│ entertainment computing's potential for therapeutic applications.       │
+└────────────────────────────────────────────────────────────────────────┘
+
+Requirements:
+  • NO citations in abstract
+  • NO abbreviations (spell out everything)
+  • Standalone (readable without main text)
+  • Include key quantitative results
+
+================================================================================
+6. FIGURES AND TABLES - ELSEVIER REQUIREMENTS
+================================================================================
+
+Figure Requirements:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Resolution:                                                             │
+│   • Minimum: 300 DPI (✅ Your charts already meet this!)              │
+│   • Preferred: 600 DPI for line art                                    │
+│   • 1200 DPI for combination art                                       │
+│                                                                         │
+│ File Formats (in order of preference):                                 │
+│   1. TIFF (preferred)                                                  │
+│   2. EPS (vector graphics)                                             │
+│   3. PDF (vector)                                                      │
+│   4. PNG (acceptable, what you have ✅)                                │
+│   5. JPEG (avoid, lossy compression)                                   │
+│                                                                         │
+│ Color:                                                                  │
+│   • RGB for online viewing                                             │
+│   • CMYK for print (Elsevier may convert)                              │
+│   • Use colorblind-friendly palettes ✅ (you already do this!)        │
+│                                                                         │
+│ Size:                                                                   │
+│   • Width: Maximum 17 cm (column width)                                │
+│   • Height: Maximum 23 cm                                              │
+│   • Font size in figures: Minimum 8pt, recommended 10-12pt             │
+│                                                                         │
+│ Naming Convention:                                                      │
+│   • fig1.png, fig2.png, fig3.png (sequential)                          │
+│   • OR: fig1_retention_funnel.png (descriptive)                        │
+└────────────────────────────────────────────────────────────────────────┘
+
+Figure Caption Format:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Figure 1. User retention funnel showing progression through DreamWeaver│
+│ features over 14 days (N=147). The largest drop-off (19.0%) occurred   │
+│ between first dream entry and DNA viewing, suggesting onboarding       │
+│ challenges at the dream interpretation stage. Values represent the     │
+│ number and percentage of users reaching each stage.                    │
+│                                                                         │
+│ [Figure placement: Can be embedded or at end of document for review]   │
+└────────────────────────────────────────────────────────────────────────┘
+
+Caption Rules:
+  • Below the figure
+  • Bold "Figure X." then regular text
+  • Complete sentence with period
+  • Explain all symbols, abbreviations, error bars
+  • Define statistical significance markers (*, **, ***)
+
+Table Format:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Table 1                                                                 │
+│ Descriptive Statistics of Behavioral Metrics (N=147)                   │
+│                                                                         │
+│ ┌─────────────────────────┬──────┬──────┬─────┬─────┬──────┐          │
+│ │ Metric                  │  M   │  SD  │ Min │ Max │ Mdn  │          │
+│ ├─────────────────────────┼──────┼──────┼─────┼─────┼──────┤          │
+│ │ Total Dreams            │ 6.18 │ 3.78 │  0  │ 13  │  6   │          │
+│ │ Active Days             │ 7.18 │ 4.38 │  1  │ 14  │  7   │          │
+│ │ Session Duration (min)  │33.43 │18.93 │  1  │ 70  │ 32   │          │
+│ └─────────────────────────┴──────┴──────┴─────┴─────┴──────┘          │
+│                                                                         │
+│ Note. M = Mean, SD = Standard Deviation, Min = Minimum,                │
+│ Max = Maximum, Mdn = Median.                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+Table Rules:
+  • Caption ABOVE the table
+  • Bold "Table X" then regular text
+  • Horizontal lines only (no vertical lines except as needed)
+  • Footnotes below table using superscript letters (ᵃ, ᵇ, ᶜ)
+  • Statistical significance: * p<.05, ** p<.01, *** p<.001
+
+================================================================================
+7. CITATION AND REFERENCE FORMAT
+================================================================================
+
+Elsevier Entertainment Computing uses: HARVARD STYLE (Author-Date)
+
+In-text Citations:
+┌────────────────────────────────────────────────────────────────────────┐
+│ One author:                                                             │
+│   • Deterding (2011) found that...                                     │
+│   • Gamification increases engagement (Deterding, 2011).               │
+│                                                                         │
+│ Two authors:                                                            │
+│   • Deterding and Nacke (2011) demonstrated...                         │
+│   • Research shows effectiveness (Deterding and Nacke, 2011).          │
+│                                                                         │
+│ Three or more authors:                                                  │
+│   • Deterding et al. (2011) argued...                                  │
+│   • Multiple studies confirm this (Deterding et al., 2011).            │
+│                                                                         │
+│ Multiple citations:                                                     │
+│   • (Smith, 2010; Jones, 2012; Lee et al., 2015)                       │
+│   • Chronological order, separated by semicolons                       │
+└────────────────────────────────────────────────────────────────────────┘
+
+Reference List Format (Alphabetical by author surname):
+
+Journal Article:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Author, A.A., Author, B.B., Year. Title of article. Journal Name       │
+│ Volume(Issue), pp. Page-range. https://doi.org/xxxxx                   │
+│                                                                         │
+│ Example:                                                                │
+│ Deterding, S., Dixon, D., Khaled, R., Nacke, L., 2011. From game       │
+│ design elements to gamefulness: defining gamification. Proceedings of  │
+│ the 15th International Academic MindTrek Conference, pp. 9-15.          │
+│ https://doi.org/10.1145/2181037.2181040                                │
+└────────────────────────────────────────────────────────────────────────┘
+
+Book:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Author, A.A., Year. Book Title. Edition. Publisher, City.              │
+│                                                                         │
+│ Example:                                                                │
+│ Csikszentmihalyi, M., 1990. Flow: The Psychology of Optimal            │
+│ Experience. Harper & Row, New York.                                    │
+└────────────────────────────────────────────────────────────────────────┘
+
+Book Chapter:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Author, A.A., Year. Chapter title. In: Editor, E.E. (Ed.), Book Title. │
+│ Publisher, City, pp. Page-range.                                       │
+└────────────────────────────────────────────────────────────────────────┘
+
+Website:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Author/Organization, Year. Title of webpage. URL (accessed Date).      │
+│                                                                         │
+│ Example:                                                                │
+│ World Health Organization, 2023. Mental Health. https://www.who.int/   │
+│ health-topics/mental-health (accessed 15 November 2024).               │
+└────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+8. STATISTICAL REPORTING - APA STYLE (Elsevier Preference)
+================================================================================
+
+Report statistics as:
+┌────────────────────────────────────────────────────────────────────────┐
+│ Means and Standard Deviations:                                         │
+│   • (M = 27.15, SD = 4.72)                                             │
+│   • Alternative: M = 27.15 (SD = 4.72)                                 │
+│                                                                         │
+│ Sample sizes:                                                           │
+│   • (N = 147) for total sample                                         │
+│   • (n = 47) for subgroups                                             │
+│                                                                         │
+│ Correlations:                                                           │
+│   • r = .884, p < .001                                                 │
+│   • r(145) = .884, p < .001 [with df]                                  │
+│                                                                         │
+│ t-tests:                                                                │
+│   • t(85) = 8.38, p < .001, d = 1.11                                   │
+│   • Include: test statistic, df, p-value, effect size                  │
+│                                                                         │
+│ ANOVA:                                                                  │
+│   • F(2, 144) = 422.74, p < .001, η² = .85                             │
+│   • Include: F-value, df between and within, p-value, effect size      │
+│                                                                         │
+│ Chi-square:                                                             │
+│   • χ²(2, N = 147) = 15.32, p < .001                                   │
+│                                                                         │
+│ Regression:                                                             │
+│   • R² = .781, F(1, 145) = 512.45, p < .001                            │
+│   • β = .884, t(145) = 22.64, p < .001                                 │
+│                                                                         │
+│ P-values:                                                               │
+│   • p < .001 (preferred over p = .000)                                 │
+│   • p = .023 (exact value when p ≥ .001)                               │
+│   • Never: p < 0.05 or p = NS                                          │
+│                                                                         │
+│ Percentages:                                                            │
+│   • 69.4% (always include decimal if needed)                           │
+│   • 65.1% (n = 56) [with absolute numbers]                             │
+└────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+9. WORD COUNT AND LENGTH
+================================================================================
+
+Typical Article Length:
+┌────────────────────────────────────────────────────────────────────────┐
+│ • Total: 6,000 - 10,000 words (excluding references)                   │
+│ • Abstract: 150-250 words                                              │
+│ • Introduction: 1,000-1,500 words                                      │
+│ • Methods: 1,500-2,000 words                                           │
+│ • Results: 2,000-3,000 words                                           │
+│ • Discussion: 1,500-2,500 words                                        │
+│ • Conclusion: 300-500 words                                            │
+│                                                                         │
+│ • Figures: 8-15 figures typical                                        │
+│ • Tables: 3-6 tables typical                                           │
+│ • References: 30-50 references                                         │
+│                                                                         │
+│ Note: Entertainment Computing allows longer empirical papers           │
+│ (up to 12,000 words) for comprehensive studies like yours!             │
+└────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+10. MANUSCRIPT CHECKLIST BEFORE SUBMISSION
+================================================================================
+
+Cover Letter:
+  ☐ Addressed to Editor-in-Chief
+  ☐ Brief description of paper (2-3 paragraphs)
+  ☐ Statement of originality (not published elsewhere)
+  ☐ Suggested reviewers (3-5 names with emails)
+  ☐ Conflict of interest statement
+
+Title Page:
+  ☐ Informative title (< 20 words ideal)
+  ☐ All author names and affiliations
+  ☐ Corresponding author marked with *
+  ☐ Email address provided
+  ☐ ORCID iDs (recommended)
+
+Abstract:
+  ☐ 150-250 words
+  ☐ Background, Methods, Results, Conclusion structure
+  ☐ No citations
+  ☐ No abbreviations
+  ☐ Includes key quantitative results
+
+Keywords:
+  ☐ 3-6 keywords
+  ☐ Separated by semicolons
+  ☐ Not already in title
+
+Main Text:
+  ☐ Double-spaced for review
+  ☐ Line numbers enabled
+  ☐ Page numbers at bottom
+  ☐ All sections present (IMRaD)
+  ☐ Clear heading hierarchy
+
+Figures:
+  ☐ High resolution (300+ DPI) ✅ You have this!
+  ☐ Numbered sequentially (Fig 1, Fig 2...)
+  ☐ Referenced in text
+  ☐ Captions below figures
+  ☐ Color-blind friendly ✅ You have this!
+  ☐ Readable when printed in grayscale
+
+Tables:
+  ☐ Numbered sequentially (Table 1, Table 2...)
+  ☐ Referenced in text
+  ☐ Captions above tables
+  ☐ Self-explanatory
+  ☐ Footnotes for abbreviations
+
+References:
+  ☐ Harvard style (Author, Year)
+  ☐ Alphabetically ordered
+  ☐ All cited in text
+  ☐ DOIs included where available
+  ☐ Consistent formatting
+
+Ethics and Declarations:
+  ☐ Ethics approval statement (if human subjects)
+  ☐ Informed consent obtained
+  ☐ Data availability statement
+  ☐ Funding acknowledgment
+  ☐ Conflict of interest disclosure
+  ☐ Author contributions (CRediT taxonomy)
+
+Supplementary Materials (if any):
+  ☐ Referenced in main text
+  ☐ Clearly labeled (S1, S2, S3...)
+  ☐ File formats acceptable
+
+================================================================================
+11. ETHICAL REQUIREMENTS FOR HUMAN SUBJECTS RESEARCH
+================================================================================
+
+Required Statements (add to Methods section):
+
+Ethics Approval:
+┌────────────────────────────────────────────────────────────────────────┐
+│ "This study was approved by the [Institution] Institutional Review     │
+│ Board (IRB approval number: XXXXX, dated DD/MM/YYYY). All procedures   │
+│ performed in studies involving human participants were in accordance    │
+│ with the ethical standards of the institutional research committee and  │
+│ with the 1964 Helsinki declaration and its later amendments."          │
+└────────────────────────────────────────────────────────────────────────┘
+
+Informed Consent:
+┌────────────────────────────────────────────────────────────────────────┐
+│ "Informed consent was obtained from all individual participants         │
+│ included in the study. Participants were informed about the study's     │
+│ purpose, procedures, potential risks and benefits, and their right to   │
+│ withdraw at any time without penalty."                                  │
+└────────────────────────────────────────────────────────────────────────┘
+
+Data Privacy:
+┌────────────────────────────────────────────────────────────────────────┐
+│ "All data were collected anonymously and stored securely in compliance  │
+│ with GDPR regulations. No personally identifiable information was       │
+│ collected. Participants were assigned unique numerical IDs."            │
+└────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+12. ONLINE SUBMISSION PROCESS (Elsevier Editorial System)
+================================================================================
+
+Steps:
+  1. Create account at: https://www.editorialmanager.com/entcom/
+  2. Start new submission
+  3. Upload files:
+     - Main manuscript (Word or LaTeX)
+     - Figures (separate files, high resolution)
+     - Cover letter
+     - Supplementary materials (if any)
+  4. Enter metadata:
+     - Authors and affiliations
+     - Abstract
+     - Keywords
+     - Suggested reviewers
+  5. Review PDF proof
+  6. Submit!
+
+Timeline:
+  • Initial editorial check: 1-2 weeks
+  • Peer review: 6-12 weeks
+  • Revision (if needed): 4-6 weeks
+  • Final decision: 2-4 weeks after revision
+  • Publication: 4-8 weeks after acceptance
+
+Total: ~4-8 months from submission to publication
+
+================================================================================
+13. SAMPLE FIRST PAGE LAYOUT (Elsevier Format)
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│ DreamWeaver: A Gamified Dream Journaling Application for Mental         │
+│ Wellness Through Interactive Dream DNA Analysis                         │
+│                                                                          │
+│                                                                          │
+│ Your Name¹*, Co-Author Name²                                            │
+│                                                                          │
+│ ¹Department of Computer Science, Your University, City, Country         │
+│ ²Department Name, University Name, City, Country                        │
+│                                                                          │
+│ *Corresponding author: yourname@university.edu                          │
+│                                                                          │
+│                                                                          │
+│ ABSTRACT                                                                 │
+│                                                                          │
+│ Dream journaling has therapeutic potential, but traditional methods     │
+│ lack engagement features that sustain user participation. We developed  │
+│ DreamWeaver, a gamified dream journaling app incorporating Dream DNA    │
+│ analysis, interactive storytelling, and puzzle-solving to enhance       │
+│ mental wellness outcomes. A 14-day user study with 147 participants     │
+│ tracked behavioral engagement metrics, complemented by pre-survey       │
+│ (N=167) and post-survey (N=86) data measuring satisfaction and          │
+│ psychological outcomes. High-engagement users (n=47) showed significant │
+│ improvements in Evolution scores (M=+27.15, SD=4.72) compared to        │
+│ drop-off users (M=-21.85, SD=13.20), F(2,144)=422.74, p<.001.           │
+│ Retention reached 69.4%, with 84.9% expressing intent to continue       │
+│ using the app. Post-survey satisfaction was high (M=3.92/5), with       │
+│ meaningful insights (M=3.79) and overall enjoyment (M=4.03) exceeding   │
+│ pre-study expectations. Gamification and interactive features            │
+│ significantly enhance dream journaling engagement and mental wellness    │
+│ outcomes, demonstrating entertainment computing's potential for          │
+│ therapeutic applications.                                                │
+│                                                                          │
+│ Keywords: Dream journaling; Gamification; Mental wellness; Interactive  │
+│ storytelling; User engagement; Entertainment computing                   │
+│                                                                          │
+│ ─────────────────────────────────────────────────────────────────────── │
+│                                                                          │
+│ 1. Introduction                                                          │
+│                                                                          │
+│     Mental health challenges affect millions globally, with anxiety     │
+│ and depression rates increasing annually (World Health Organization,    │
+│ 2023). Dream analysis, practiced for centuries, offers a unique window  │
+│ into emotional processing...                                            │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+14. USEFUL ELSEVIER RESOURCES
+================================================================================
+
+Official Links:
+  • Journal homepage: https://www.journals.elsevier.com/entertainment-computing
+  • Guide for Authors: https://www.elsevier.com/journals/entertainment-computing/1875-9521/guide-for-authors
+  • LaTeX template: https://www.elsevier.com/author-schemas/latex-instructions
+  • Article templates: https://www.elsevier.com/researcher/author/policies-and-guidelines/latex-instructions
+  • Editorial Manager: https://www.editorialmanager.com/entcom/
+  • Author Hub: https://www.elsevier.com/authors
+
+Reference Management:
+  • Mendeley (Elsevier's tool): https://www.mendeley.com
+  • Zotero (free alternative)
+  • EndNote
+
+Language Editing Services (if English not first language):
+  • Elsevier Language Services: https://webshop.elsevier.com/language-editing-services/
+
+================================================================================
+QUICK START TEMPLATE - COPY THIS INTO WORD
+================================================================================
+
+[Title - Bold, 16pt, Centered]
+DreamWeaver: A Gamified Dream Journaling Application for Mental 
+Wellness Through Interactive Dream DNA Analysis
+
+[Authors - 12pt, Centered]
+Your Name¹*, Co-Author²
+
+[Affiliations - 10pt, Centered]
+¹Department, University, City, Country
+²Department, University, City, Country
+*yourname@email.com
+
+[Abstract - Bold heading, 12pt]
+ABSTRACT
+
+[Abstract text - 12pt, justified, 150-250 words]
+Dream journaling has therapeutic potential...
+
+[Keywords - Italic, 12pt]
+Keywords: Dream journaling; Gamification; Mental wellness; Interactive 
+storytelling; User engagement; Entertainment computing
+
+[Main body starts - 12pt, double-spaced, justified]
+1. Introduction
+
+    Mental health challenges affect millions...
+
+================================================================================
+YOU'RE READY TO START WRITING! 📝
+================================================================================
+
+Follow this format exactly and Elsevier will accept your manuscript without
+formatting issues. Your charts are already perfect (300 DPI, publication-ready)!
+
+Good luck with your Entertainment Computing submission! 🚀
+
