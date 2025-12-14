@@ -1,25 +1,10 @@
-%% 
-%% Copyright 2007-2025 Elsevier Ltd
-%% 
-%% This file is part of the 'Elsarticle Bundle'.
-%% ---------------------------------------------
-%% 
-%% Template article for Elsevier's document class `elsarticle'
-%% with harvard style bibliographic references
-
 \documentclass[preprint,12pt,authoryear]{elsarticle}
 
-%% The amssymb package provides various useful mathematical symbols
 \usepackage{amssymb}
-%% The amsmath package provides various useful equation environments.
 \usepackage{amsmath}
-%% For including figures
 \usepackage{graphicx}
-%% The float package for precise figure placement
 \usepackage{float}
-%% The lineno package adds line numbers
 \usepackage{lineno}
-%% TikZ for diagrams
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows.blur, fit, calc}
 
@@ -70,27 +55,19 @@ Dream journaling and analysis \sep Gamification \sep Mental wellness \sep AI-pow
     arrow/.style={-{Stealth[length=2.5mm]}, thick, draw=black!70}
 ]
 
-% Problem
 \node[problem] (problem) {\textbf{PROBLEM}\\Dream journaling:\\31\% retention};
-
-% Solution
 \node[box, right=2.2cm of problem] (solution) {\textbf{DREAMWEAVER}\\Gamified AI\\Dream Analysis};
 
-% Features (arranged vertically)
 \node[feature, above right=0.5cm and 2cm of solution] (f1) {Dream DNA};
 \node[feature, below=0.2cm of f1] (f2) {Story Mode};
 \node[feature, below=0.2cm of f2] (f3) {Riddles};
 \node[feature, below=0.2cm of f3] (f4) {Dream Art};
 
-% Outcomes
 \node[outcome, right=2.5cm of f1.east] (outcome1) {\textbf{69.4\%}\\Retention};
 \node[outcome, below=0.4cm of outcome1] (outcome2) {\textbf{49-point}\\Wellness};
 \node[outcome, below=0.4cm of outcome2] (outcome3) {\textbf{84.9\%}\\Continue};
 
-% Impact
 \node[box, below=1.2cm of solution] (impact) {\textbf{IMPACT}\\Entertainment + Health};
-
-% Arrows
 \draw[arrow] (problem) -- (solution);
 \draw[arrow] (solution.east) -- ++(0.4,0) |- (f2.west);
 \draw[arrow] (f1.east) -- (outcome1.west);
@@ -100,7 +77,6 @@ Dream journaling and analysis \sep Gamification \sep Mental wellness \sep AI-pow
 \draw[arrow] (solution) -- (impact);
 \draw[arrow] (outcome2.east) -- ++(0.4,0) |- (impact.east);
 
-% Box around features
 \node[draw=green!50, thick, dashed, rounded corners, fit=(f1)(f2)(f3)(f4), 
       inner sep=0.3cm, label=above:\small\textbf{16 Features}] (featurebox) {};
 
@@ -511,6 +487,10 @@ This study provides empirical evidence that entertainment computing transforms d
 \textbf{RQ3 (Features):} Feature \textit{breadth} outweighed \textit{depth} (Features Used r=.932 vs. Total Dreams non-significant in regression). Ecosystem effect: all 16 features intercorrelated at r$>$.70, creating synergistic value. Totem-Map unlock mechanic demonstrated gamification integration: collecting emotion-based totems (e.g., wings for ambition, mask for fear) unlocked thematic realms, creating achievement-driven progression. Hard Fun phenomenon: self-selected difficulty matched user commitment. No dominant feature (DNA 16.3\%, Art 14.0\%, Riddles 12.8\%, Library 9.3\%, Archive/Export 9.5\% with 86\% utilization), validating diversity model. Dream Library (9.3\%) provided educational context through literary and mythological content, connecting personal experiences to cultural narratives. Dream Archive/Export (86\% used) served critical utility function—users valued data ownership and portability. Psychological Support (6.2\% top preference but 18.6\% utilization when needed) demonstrated safety-net function. Social features ranked lowest (8.1\%), contrasting fitness apps \citep{Johnson2016}—introspective practices favor individual analytical and creative tools over community features.
 
 \textbf{RQ4 (Experience):} Users exceeded expectations on psychological dimensions (+1.16 reflection, +1.49 helpfulness, both $p<.001$) but found app less easy than anticipated (-0.88, still high M=4.00/5). Trade-off—complexity for value—was acceptable: 68.6\% satisfaction 4+, NPS=55.8 (Excellent), 84.9\% retention intent. Satisfaction increased with usage duration (Kruskal-Wallis H=22.85, $p<.001$), indicating cumulative value discovery.
+
+\subsection{Interpretation of Large Effect Sizes}
+
+The exceptionally large effect sizes observed in this study ($\eta^2 \approx .85$, $r \approx .93$) reflect the tightly coupled nature of engagement behaviors and experiential outcome measures within a short-term, feature-integrated system. Unlike clinical interventions comparing independent treatment and control conditions, DreamWeaver's engagement metrics and outcome scores are embedded within the same reflective ecosystem, designed to reinforce self-awareness, narrative processing, and emotional tracking. Consequently, variance explained reflects within-system sensitivity rather than population-level treatment efficacy. These effect sizes should therefore be interpreted as indicators of internal system coherence and engagement–experience alignment, not as generalizable clinical effect magnitudes.
 
 \subsection{Theoretical Contributions}
 
