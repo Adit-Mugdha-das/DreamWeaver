@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{lineno}
+\usepackage{microtype}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows.blur, fit, calc}
 
@@ -126,7 +127,7 @@ Our study addresses this gap by introducing DreamWeaver, which combines AI-drive
 Traditional Dream Apps & No & No & None & 31\% (7d) & Not mea-sured \\
 SPARX \citep{Merry2012} & No & Yes & Fantasy game & 60\% (com-ple-tion) & De-pression reduc-tion \\
 Fitness Apps \citep{Johnson2016} & No & Yes & Points, badges & ~40\% (14d) & Phys-ical ac-tivity \\
-\textbf{DreamWeaver} & \textbf{Yes (Ge-mini)} & \textbf{Yes} & \textbf{16 fea-tures, Story Mode, Rid-dles, Art} & \textbf{69.4\% (14d)} & \textbf{49-point im-prove-ment} \\
+\textbf{Dream-Weaver} & \textbf{Yes (Ge-mini)} & \textbf{Yes} & \textbf{16 fea-tures, Story Mode, Rid-dles, Art} & \textbf{69.4\% (14d)} & \textbf{49-point im-prove-ment} \\
 \hline
 \end{tabular}
 \end{table}
@@ -182,7 +183,7 @@ DreamWeaver was implemented as a web application using Laravel 11 (PHP 8.2) for 
 
 \textbf{AI Integration:} Dream DNA analysis uses the Google Gemini 2.5 Flash API for natural language processing and semantic extraction across four gene categories (Emotions, Symbols, Colors, Archetypes). The Dream Analysis interface provides four AI-powered interpretation modes: (1) Emotion Detection—identifying primary emotional tone using Gemini's classification across 17 emotion families, each containing 7-13 variant emotion words (e.g., Joy family: joy, happy, delight, ecstatic, excited, cheerful, elated, pleased, content, blissful, merry, gleeful; Fear family: fear, horror, terror, terrified, fright, frightened, dread, scared, panic, panicked, petrified, afraid, spooked, creepy, nervous, anxious; Sadness family: sadness, sad, sorrow, depressed, melancholy, mournful, grief, heartbroken, lonely, tearful, despair, hopeless; plus 14 additional emotion families), with normalized mapping to canonical categories for avatar and totem generation, (2) Short Interpretation—1-3 sentence meaningful summaries, (3) Story Generation—creative narrative extensions (120 words), and (4) Long Narrative—comprehensive psychological analysis with symbolic insights (150 words). Story Mode generation employs Gemini's text generation with custom prompts ensuring thematic consistency with dream content. Dream Art uses OpenAI's DALL-E 2 API with either Gemini-generated artistic prompts or user-provided custom prompts as input. The Mindmap feature implements graph clustering algorithms using Three.js and Vanta.js for 2D/3D force-directed visualization connecting dreams with similar emotional and symbolic content.
 
-\textbf{Architecture \& Routing:} The application follows Laravel's MVC architecture with 19 controllers handling feature-specific logic (DreamController, DreamDNAController, DreamArtController, AvatarController, RiddleController, ChatController, MindMapController, SupportController, ProfileController, UserController for authentication, etc.). Authentication middleware protects 150+ routes, with route groups organizing features by functionality (dreams, avatars, story realms, social features, export). The totem-emotion mapping system uses pattern matching to award 17 emotion-specific tokens (wings$\rightarrow$joy/ambition, mask$\rightarrow$fear, cloud$\rightarrow$calm, fire$\rightarrow$anger, heart$\rightarrow$love, tear$\rightarrow$sadness, star$\rightarrow$awe, compass$\rightarrow$curiosity, quill$\rightarrow$gratitude, crest$\rightarrow$pride, key$\rightarrow$relief, moon$\rightarrow$nostalgia, bolt$\rightarrow$surprise, leaf$\rightarrow$hope, shield$\rightarrow$courage, anchor$\rightarrow$trust, mirror$\rightarrow$other) which unlock corresponding thematic realms in Dream Map with multi-chapter branching narratives (Sky Temple of Light: 10 chapters including arrival, awakening, transcendence, rebirth; Forest of Forgotten Thoughts: 10 chapters with progressive narrative depth; Cloud of Lucid Realms: 10 chapters exploring thematic atmospheres).
+\textbf{Architecture \& Routing:} The application follows Laravel's MVC architecture with 19 controllers handling feature-specific logic (DreamController, DreamDNAController, DreamArtController, AvatarController, RiddleController, ChatController, MindMapController, SupportController, ProfileController, UserController for authentication, etc.). Authentication middleware protects 150+ routes, with route groups organizing features by functionality (dreams, avatars, story realms, social features, export). The totem-emotion mapping system uses pattern matching to award 17 emotion-specific tokens (wings$\rightarrow$joy/\allowbreak ambition, mask$\rightarrow$fear, cloud$\rightarrow$calm, fire$\rightarrow$anger, heart$\rightarrow$love, tear$\rightarrow$sadness, star$\rightarrow$awe, compass$\rightarrow$curiosity, quill$\rightarrow$gratitude, crest$\rightarrow$pride, key$\rightarrow$relief, moon$\rightarrow$nostalgia, bolt$\rightarrow$surprise, leaf$\rightarrow$hope, shield$\rightarrow$courage, anchor$\rightarrow$trust, mirror$\rightarrow$other) which unlock corresponding thematic realms in Dream Map with multi-chapter branching narratives (Sky Temple of Light: 10 chapters including arrival, awakening, transcendence, rebirth; Forest of Forgotten Thoughts: 10 chapters with progressive narrative depth; Cloud of Lucid Realms: 10 chapters exploring thematic atmospheres).
 
 \textbf{Data Layer \& Storage:} MySQL database stores structured data including user profiles, dreams with four interpretation fields (short, emotion, story, long), engagement metrics (feature usage, login streaks, Evolution/Health scores), Dream DNA profiles (genes, personality types, mutation tracking), avatars (17 emotion-based configurations with color+item combinations), totems, riddle attempts with difficulty tracking, chat conversations, comments, likes, and notifications. AWS S3 provides scalable media storage for AI-generated artwork (DALL-E images) and guided audio files. All user data is encrypted at rest (AES-256-CBC) and in transit (HTTPS), with compliance to GDPR privacy standards.
 
@@ -261,7 +262,8 @@ All statistical analyses were conducted using Python (version 3.11) with pandas 
 
 \textbf{Retention Analysis:} Chi-square tests examined associations between categorical predictors (riddle difficulty selection, feature preferences) and retention outcomes (active on Day 14 or not). Risk ratios quantified effect magnitudes.
 
-\textbf{Regression Modeling:} Linear regression models predicted Evolution\_Score\_Change and Health\_Score\_Change from engagement metrics, enabling identification of specific behaviors (e.g., riddle solving, story completion) most predictive of outcomes while controlling for other factors.
+\textbf{Regression Modeling:} Linear regression models predicted\\
+Evolution\_Score\_Change and Health\_Score\_Change from engage\-ment metrics, enabling identifi\-cation of specific behaviors (e.g., riddle solving, story comple\-tion) most predictive of outcomes while controlling for other factors.
 
 Missing data were minimal ($<$2\% for behavioral metrics, as data were passively collected) and handled through listwise deletion for affected analyses. Post-survey non-response (41.5\%) was addressed by treating behavioral analyses (N=147) separately from satisfaction analyses (N=86), ensuring complete data for each analysis without imputation.
 
@@ -273,7 +275,7 @@ Missing data were minimal ($<$2\% for behavioral metrics, as data were passively
 \section{Results}
 \label{sec:results}
 
-Results organized by research question: overall engagement (RQ1), engagement-wellness relationship (RQ2), feature effectiveness (RQ3), user experience (RQ4). All tests report exact p-values with effect sizes.
+Results organized by research question: overall engage\-ment (RQ1), engage\-ment-wellness relation\-ship (RQ2), feature effective\-ness (RQ3), user experience (RQ4). All tests report exact p-values with effect sizes.
 
 \subsection{Overall Engagement Patterns}
 \label{subsec:engagement}
@@ -421,7 +423,8 @@ Compared pre-survey (N=167) vs. post-survey (N=86). Figure~\ref{fig:prepost}: Us
 \label{fig:prepost}
 \end{figure}
 
-Users exceeded expectations on three of four dimensions. Reflect\_on\_Dreams increased from M=2.63 (SD=1.09) pre-survey to M=3.79 (SD=0.93) post-survey (inferred from Meaningful\_Insights construct), a +1.16 point increase, t(251)=8.94, p$<$.001, Cohen's d=1.18. Understand\_Emotions (pre M=2.45, SD=0.80) mapped to post-survey construct, showing +1.34 increase (t(251)=13.21, p$<$.001, d=1.70). Dreams\_Helpful (pre M=2.30, SD=0.65) showed the largest gain: +1.49 points (t(251)=19.67, p$<$.001, d=2.51), indicating users found DreamWeaver far more helpful than anticipated.
+Users exceeded expectations on three of four dimensions. Reflect\_on\_\\
+Dreams increased from M=2.63 (SD=1.09) pre-survey to M=3.79 (SD=0.93) post-survey (inferred from Meaningful\_Insights construct), a +1.16 point increase, t(251)=8.94, p$<$.001, Cohen's d=1.18. Understand\_Emotions (pre M=2.45, SD=0.80) mapped to post-survey construct, showing +1.34 increase (t(251)=13.21, p$<$.001, d=1.70). Dreams\_Helpful (pre M=2.30, SD=0.65) showed the largest gain: +1.49 points (t(251)=19.67, p$<$.001, d=2.51), indicating users found DreamWeaver far more helpful than anticipated.
 
 However, Ease of Use showed a \textit{decrease}: pre-survey Expect\_Easy (M=4.88, SD=0.33) exceeded post-survey Easy\_to\_Use (M=4.00, SD=0.77), a -0.88 decrease, t(251)=-10.53, p$<$.001, d=-2.68. This suggests users anticipated effortless interaction but encountered meaningful complexity. Importantly, the absolute post-survey rating remained high (4.00/5), indicating the app was still considered easy overall, just less trivial than expected. Qualitative feedback clarified: "More features than I expected—took a few days to explore everything" and "Learning curve was fine, but not as instant as I thought."
 
