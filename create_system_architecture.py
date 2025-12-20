@@ -60,7 +60,7 @@ for x, y, label in ui_components:
                          edgecolor=color_frontend, facecolor='white', 
                          linewidth=1.5)
     ax.add_patch(box)
-    ax.text(x, y, label, fontsize=7, ha='center', va='center', fontname='Arial')
+    ax.text(x, y, label, fontsize=8.5, fontweight='bold', ha='center', va='center', fontname='Arial')
 
 # ============================================================================
 # LAYER 2: API GATEWAY / BACKEND (Middle-Top)
@@ -92,7 +92,7 @@ for x, y, label in api_services:
                          edgecolor=color_backend, facecolor='white', 
                          linewidth=1.5)
     ax.add_patch(box)
-    ax.text(x, y, label, fontsize=7.5, ha='center', va='center', fontname='Arial')
+    ax.text(x, y, label, fontsize=9, fontweight='bold', ha='center', va='center', fontname='Arial')
 
 # ============================================================================
 # LAYER 3: AI/ML SERVICES (Middle)
@@ -122,7 +122,7 @@ for x, y, label in ai_components:
                          edgecolor=color_ai, facecolor='white', 
                          linewidth=1.5)
     ax.add_patch(box)
-    ax.text(x, y, label, fontsize=7.5, ha='center', va='center', fontname='Arial')
+    ax.text(x, y, label, fontsize=9, fontweight='bold', ha='center', va='center', fontname='Arial')
 
 # ============================================================================
 # LAYER 4: DATA LAYER (Middle-Bottom)
@@ -152,7 +152,7 @@ for x, y, label in db_components:
                          edgecolor=color_database, facecolor='white', 
                          linewidth=1.5)
     ax.add_patch(box)
-    ax.text(x, y, label, fontsize=7.5, ha='center', va='center', fontname='Arial')
+    ax.text(x, y, label, fontsize=9, fontweight='bold', ha='center', va='center', fontname='Arial')
 
 # ============================================================================
 # LAYER 5: EXTERNAL SERVICES (Bottom)
@@ -175,7 +175,7 @@ for x in [2.0, 4.0, 6.0, 8.0]:
     ax.add_patch(box)
 
 for x, y, label in ext_services:
-    ax.text(x, y, label, fontsize=7.5, ha='center', va='center', 
+    ax.text(x, y, label, fontsize=9, fontweight='bold', ha='center', va='center', 
             fontname='Arial', style='italic')
 
 # ============================================================================
