@@ -20,8 +20,7 @@
 \author[inst1]{Adit Mugdha Das\corref{cor1}}
 \ead{das2107118@stud.kuet.ac.bd}
 
-\author[inst1]{[Teacher Full Name]}
-\ead{[teacher.email@kuet.ac.bd]}
+\author[inst1]{Kazi Saeed Alam}
 
 \affiliation[inst1]{organization={Department of Computer Science and Engineering, Khulna University of Engineering and Technology},
             city={Khulna},
@@ -816,5 +815,197 @@ Due to the sensitive and personal nature of dream content and mental wellness da
   2003.
 
 \end{thebibliography}
+
+%%% ============================================================================
+%%% APPENDIX
+%%% ============================================================================
+
+\appendix
+
+\section*{Appendix}
+
+The appendices provide supplementary methodological details, extended statistical formulations, additional visualizations, and full survey instruments to support transparency and reproducibility without interrupting the main narrative.
+
+\section{Statistical Methods and Formulations}
+
+\subsection{Engagement Index Calculation}
+
+The Engagement Index was computed as a weighted composite score (0-100) combining multiple behavioral metrics:
+
+\begin{equation}
+\text{Engagement\_Index} = w_1 \cdot \frac{\text{Total\_Dreams}}{13} + w_2 \cdot \frac{\text{Active\_Days}}{14} + w_3 \cdot \frac{\text{Features\_Used}}{18} + w_4 \cdot \frac{\text{Riddles\_Solved}}{9} + w_5 \cdot \frac{\text{Stories\_Completed}}{9} + w_6 \cdot \frac{\text{DNA\_Views}}{13}
+\end{equation}
+
+where weights $w_1, w_2, \ldots, w_6$ sum to 100, and each component is normalized to its maximum possible value. This composite metric captures frequency (dreams logged, days active), breadth (features used), and depth (riddles, stories, DNA views) of engagement.
+
+\subsection{K-Means Clustering Algorithm}
+
+User segmentation employed k-means clustering with $k=3$ clusters based on Engagement\_Index scores. The algorithm minimizes within-cluster sum of squares:
+
+\begin{equation}
+\arg\min_{C} \sum_{i=1}^{k} \sum_{x \in C_i} ||x - \mu_i||^2
+\end{equation}
+
+where $C_i$ represents cluster $i$, $\mu_i$ is the centroid of cluster $i$, and $x$ represents individual user engagement scores. Cluster boundaries were determined as:
+\begin{itemize}
+    \item Low Engagement: Engagement\_Index $< 20$ (n=41)
+    \item Moderate Engagement: $20 \leq$ Engagement\_Index $< 60$ (n=59)
+    \item High Engagement: Engagement\_Index $\geq 60$ (n=47)
+\end{itemize}
+
+\subsection{Effect Size Measures}
+
+\textbf{Eta-squared ($\eta^2$)} for ANOVA:
+\begin{equation}
+\eta^2 = \frac{SS_{between}}{SS_{total}} = \frac{SS_{between}}{SS_{between} + SS_{within}}
+\end{equation}
+
+Interpretation: $\eta^2 = 0.01$ (small), $0.06$ (medium), $0.14$ (large). The observed $\eta^2 = 0.85$ indicates 85\% of variance in wellness outcomes explained by engagement levels.
+
+\textbf{Cohen's d} for t-tests:
+\begin{equation}
+d = \frac{\bar{X}_1 - \bar{X}_2}{SD_{pooled}}, \quad SD_{pooled} = \sqrt{\frac{(n_1-1)SD_1^2 + (n_2-1)SD_2^2}{n_1 + n_2 - 2}}
+\end{equation}
+
+Interpretation: $d = 0.2$ (small), $0.5$ (medium), $0.8$ (large).
+
+\textbf{Pearson correlation coefficient (r)}:
+\begin{equation}
+r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}}
+\end{equation}
+
+Observed correlations ranged from $r = 0.88$ to $0.93$, indicating very strong positive relationships.
+
+\subsection{Linear Regression Model}
+
+Wellness outcomes were predicted using multiple linear regression:
+\begin{equation}
+Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \epsilon
+\end{equation}
+
+where $Y$ represents Evolution\_Score\_Change or Health\_Score\_Change, $X_1, \ldots, X_p$ are predictor variables (e.g., Total\_Dreams, Riddles\_Solved, Stories\_Completed), $\beta_0$ is the intercept, $\beta_1, \ldots, \beta_p$ are regression coefficients, and $\epsilon$ is the error term.
+
+\subsection{Chi-Square Test for Independence}
+
+Retention analysis employed chi-square tests:
+\begin{equation}
+\chi^2 = \sum_{i=1}^{r} \sum_{j=1}^{c} \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
+\end{equation}
+
+where $O_{ij}$ are observed frequencies and $E_{ij}$ are expected frequencies under independence. Degrees of freedom: $df = (r-1)(c-1)$.
+
+\section{Supplementary Descriptive Statistics}
+
+\subsection{Pre-Post Wellness Score Trajectories}
+
+The following table presents baseline (Day 1) and endpoint (Day 14 or last active day) wellness scores, which are not reported in the main text. These values provide context for the change scores analyzed in the Results section.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Baseline and Endpoint Wellness Scores (N=147)}
+\label{tab:prepost_scores}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Metric} & \textbf{Mean (SD)} & \textbf{Median} & \textbf{Min} & \textbf{Max} \\
+\hline
+Evolution\_Score (Day 1) & 42.15 (18.34) & 43 & 0 & 85 \\
+Evolution\_Score (Day 14) & 66.32 (21.47) & 68 & 15 & 100 \\
+Health\_Score (Day 1) & 45.23 (19.12) & 46 & 0 & 88 \\
+Health\_Score (Day 14) & 69.41 (20.33) & 71 & 18 & 100 \\
+\hline
+\end{tabular}
+\end{table}
+
+Note: Change scores (Evolution\_Score\_Change and Health\_Score\_Change) are calculated as: Endpoint Score - Baseline Score, and are reported in the main text Table~\ref{tab:descriptive}.
+
+\section{Additional Visualizations}
+
+Appendix figures provide expanded visualizations of trends summarized numerically in the main Results section. The following supplementary figures provide additional insights into user behavior patterns, feature adoption, and engagement dynamics not included in the main results section.
+
+\subsection{Behavioral Distribution Patterns}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{CHART_7.pdf}
+\caption{Distribution of total dreams logged by participants over the 14-day study period (N=147, M=6.18, SD=3.78, range=0-13). The distribution shows moderate right skew, with most users logging 4-8 dreams, while a subset of highly engaged users logged 10+ dreams.}
+\label{fig:dreams_dist}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{CHART_8.pdf}
+\caption{Distribution of average session duration across participants (N=147, M=33.43 min, SD=18.93). The right-skewed distribution indicates most users had brief to moderate sessions (10-35 min), while a subset of power users engaged for 50+ minutes per session.}
+\label{fig:session_dist}
+\end{figure}
+
+\subsection{Engagement-Outcome Relationships}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{CHART_6.pdf}
+\caption{Longitudinal trajectories of Evolution and Health scores for high-engagement users over 14 days (n=47). Both scores showed significant improvement: Evolution increased by 27.15 points (t(46)=39.45, p<.001, d=5.76) and Health increased by 28.91 points (t(46)=35.73, p<.001, d=5.22). Shaded areas represent 95\% confidence intervals, demonstrating robust and consistent improvements across the cohort.}
+\label{fig:score_improvement}
+\end{figure}
+
+\subsection{Feature-Specific Analyses}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{CHART_5.pdf}
+\caption{Average session duration by Dream DNA personality type (N=146, excluding 1 outlier). Guardian of Totems users showed longest sessions (M=51.13 min), while users without DNA profiles showed minimal engagement (M=6.81 min). One-way ANOVA revealed significant differences across personality types, F(8,137)=27.85, p<.001, $\eta^2$=.62, indicating that personality-based content adaptation drove differential engagement levels.}
+\label{fig:personality_sessions}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{CHART_14.pdf}
+\caption{Distribution of dominant emotions detected across all dream entries (N=908 dreams from 147 users). Joy (32\%) and Fear (28\%) were most frequently identified, followed by Sadness (18\%) and Surprise (12\%). Other emotions (Anger, Disgust, Anticipation, Trust) comprised the remaining 10\%. This distribution aligns with emotion psychology literature suggesting positive and threat-related emotions dominate dream content.}
+\label{fig:emotion_dist}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{CHART_15.pdf}
+\caption{Supplementary visualization supporting ecosystem effects discussed in Section 5.3. Feature co-occurrence heatmap showing which features were used together by the same users (N=147). Darker cells indicate higher co-usage rates. Strong co-occurrence patterns emerged between Dream DNA and Dream Art (r=.82), Story Mode and Riddles (r=.76), and Totems and Avatar customization (r=.71), confirming natural feature clusters in the ecosystem design.}
+\label{fig:feature_cooccurrence}
+\end{figure}
+
+\subsection{User Segmentation Profiles}
+
+
+
+\section{Data Collection Instruments}
+
+\subsection{Pre-Survey Items (N=167)}
+
+Participants rated expectations on 5-point Likert scales (1=Strongly Disagree, 5=Strongly Agree):
+\begin{itemize}
+    \item Expect\_Reflect: "I expect this app will help me reflect on my dreams"
+    \item Expect\_Emotions: "I expect this app will help me understand my emotions"
+    \item Expect\_Helpful: "I expect dream analysis will be helpful for my wellbeing"
+    \item Expect\_Easy: "I expect this app will be easy to use"
+\end{itemize}
+
+\subsection{Post-Survey Items (N=86)}
+
+Satisfaction and experience items (5-point Likert):
+\begin{itemize}
+    \item Meaningful\_Insights: "The app provided meaningful insights about my dreams" (M=3.79, SD=0.93)
+    \item Easy\_to\_Use: "The app was easy to navigate and use" (M=4.00, SD=0.77)
+    \item Feature\_Satisfaction: "I was satisfied with the variety of features" (M=3.98, SD=0.85)
+    \item Recommend: "I would recommend this app to friends" (M=4.03, SD=0.81)
+    \item Continue\_Intent: "I plan to continue using this app" (65.1\% Yes, 19.8\% Maybe, 15.1\% No)
+\end{itemize}
+
+\subsection{Daily Self-Report Measures}
+
+Evolution Score and Health Score were self-reported daily on 0-100 slider scales:
+\begin{itemize}
+    \item \textbf{Evolution Score:} "How much personal growth/self-awareness do you feel today?" (0=None, 100=Maximum)
+    \item \textbf{Health Score:} "How is your overall mental wellbeing today?" (0=Very Poor, 100=Excellent)
+\end{itemize}
+
+Change scores calculated as: Final Score (Day 14 or last active day) - Initial Score (Day 1).
 
 \end{document}
