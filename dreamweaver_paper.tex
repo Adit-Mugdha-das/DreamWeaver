@@ -251,6 +251,13 @@ Engagement\_Index: weighted composite (0-100) of dreams, days, features, riddles
 
 k-means clustering yielded three segments: Low-engagement (n=41, $<$20), Moderate (n=59, 20-60), High (n=47, $\geq$60). Statistical tests: ANOVA (segment differences), Pearson correlations (engagement-outcomes), t-tests (pre-post), $\chi^2$ (retention), regression (predictors). Significance: $\alpha$=.05.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{CHART_CLUSTERING.pdf}
+\caption{K-means clustering segmentation showing three engagement groups based on Engagement Index scores. Low-engagement users (n=41) scored below 20, moderate-engagement users (n=59) scored between 20-60, and high-engagement users (n=47) scored 60 or above. Cluster boundaries at 20 and 60 were determined through k-means optimization.}
+\label{fig:clustering}
+\end{figure}
+
 \subsection{Statistical Analysis}
 
 All statistical analyses were conducted using Python (version 3.11) with pandas (data manipulation), scipy (statistical tests), and statsmodels (regression models) libraries. Significance level was set at $\alpha = .05$ for all tests, with exact p-values reported where p $\geq$ .001 and p $<$ .001 for smaller values. Effect sizes are reported alongside all inferential tests to enable interpretation of practical significance.
