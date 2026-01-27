@@ -248,14 +248,16 @@ Engagement\_Index: weighted composite (0-100) of dreams, days, features, riddles
 
 \subsection{Segmentation and Analysis}
 
-k-means clustering yielded three segments: Low-engagement (n=41, $<$20), Moderate (n=59, 20-60), High (n=47, $\geq$60). Statistical tests: ANOVA (segment differences), Pearson correlations (engagement-outcomes), t-tests (pre-post), $\chi^2$ (retention), regression (predictors). Significance: $\alpha$=.05.
+K-means clustering (k=3) segmented users based on Engagement Index scores, yielding three distinct groups: Low-engagement (n=41, Engagement Index $<$20), Moderate (n=59, 20--60), and High (n=47, $\geq$60). Cluster boundaries were determined through k-means optimization to minimize within-cluster variance while maximizing between-cluster separation (Figure~\ref{fig:clustering}).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_CLUSTERING.pdf}
-\caption{K-means clustering segmentation showing three engagement groups based on Engagement Index scores. Low-engagement users (n=41) scored below 20, moderate-engagement users (n=59) scored between 20-60, and high-engagement users (n=47) scored 60 or above. Cluster boundaries at 20 and 60 were determined through k-means optimization.}
+\caption{K-means clustering segmentation showing three engagement groups based on Engagement Index scores. Low-engagement users (n=41) scored below 20, moderate-engagement users (n=59) scored between 20--60, and high-engagement users (n=47) scored 60 or above. Cluster boundaries at 20 and 60 were determined through k-means optimization.}
 \label{fig:clustering}
 \end{figure}
+
+Statistical tests employed: ANOVA (segment differences), Pearson correlations (engagement-outcome relationships), independent samples t-tests (pre-post comparisons), chi-square tests (retention patterns), and multiple regression (outcome predictors). Significance threshold: $\alpha$=.05.
 
 \subsection{Statistical Analysis}
 
@@ -284,9 +286,9 @@ Missing data were minimal ($<$2\% for behavioral metrics, as data were passively
 \section{Results}
 \label{sec:results}
 
-Results organized by research question: overall engage\-ment (RQ1), engage\-ment-wellness relation\-ship (RQ2), feature effective\-ness (RQ3), user experience (RQ4). All tests report exact p-values with effect sizes.
+We present results in three tiers: First, we establish that user engagement is measurable and exhibits meaningful variation (Engagement Structure). Second, we demonstrate that engagement levels systematically predict psychological outcomes---the core scientific contribution (Engagement-Outcome Relationship). Third, we explore behavioral mechanisms explaining why engagement drives these effects (Behavioral Mechanisms). All tests report exact p-values with effect sizes.
 
-\subsection{Overall Engagement Patterns}
+\subsection{Tier 1: Engagement Structure and Validation}
 \label{subsec:engagement}
 
 Of 147 active users, 102 (69.4\%) remained active into Week 2—substantially exceeding typical dream app retention of 31\% at Day 7 and 12\% at Day 30 \citep{Konkol2020}. Figure~\ref{fig:retention} shows the feature adoption funnel across all users. While 69.4\% continued engagement into the second week, the largest within-study drop-off (19\%) occurred in feature progression between dream logging and DNA viewing, indicating that not all users who logged dreams engaged with analysis features. The majority of user attrition occurred during the first week, with retention stabilizing at 69.4\% beyond Day 7.
@@ -324,17 +326,12 @@ Health Score Change & 8.77 & 21.91 & 9.00 & -39 to +37 \\
 \end{tabular}
 \end{table}
 
-Figure~\ref{fig:engagement_dist} shows Engagement Index distribution with three distinct clusters identified by k-means segmentation: Low-engagement (n=41, 27.9\%), Moderate (n=59, 40.1\%), and High (n=47, 32.0\%). The trimodal distribution validates the clustering approach.
+Based on the k-means clustering described in Methods (see Figure~\ref{fig:clustering}), subsequent analyses compared outcomes across the three engagement segments. Table~\ref{tab:descriptive} confirms wide variability in the Engagement Index (M=39.84, SD=27.56, range 0--100), validating the need for segmentation to capture distinct usage patterns.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{CHART_4.pdf}
-\caption{Distribution of Engagement Index scores (0-100) across 147 users, showing three distinct clusters identified by k-means: Low-engagement (n=41), Moderate (n=59), and High (n=47). The trimodal distribution justifies segmentation for subsequent analyses.}
-\label{fig:engagement_dist}
-\end{figure}
+\subsection{Tier 2: Engagement Predicts Psychological Outcomes}
+\label{subsec:main_results}
 
-\subsection{Engagement Predicts Mental Wellness Outcomes}
-\label{subsec:anova}
+\subsubsection{Group Differences in Wellness Outcomes}
 
 One-way ANOVA comparing Evolution Score Change across segments: F(2,144)=422.74, $p<.001$, $\eta^2$=.85—indicating 85\% of variance explained by engagement (exceptionally large effect). While effect sizes are unusually large, this likely reflects tight coupling between engagement behaviors and experiential outcomes within a short intervention window, rather than population-level treatment effects. It is important to note that this magnitude reflects variance within a tightly coupled engagement–experience system over a short duration, and should not be interpreted as population-level treatment efficacy. Figure~\ref{fig:boxplots}: Low-engagement M=-21.85 (SD=13.20, negative change), Moderate M=+12.25 (SD=6.63, modest gain), High M=+27.15 (SD=4.72, substantial gain). Low-engagement to High difference: 49.00 points—nearly half the scale range.
 
@@ -349,43 +346,36 @@ Health Score Change replicated: F(2,144)=388.62, $p<.001$, $\eta^2$=.84. Low-eng
 \label{fig:boxplots}
 \end{figure}
 
-\subsection{Feature Interconnections Create Ecosystem Effects}
-\label{subsec:ecosystem}
+\subsubsection{Correlational Evidence for Engagement-Outcome Linkage}
 
-Figure~\ref{fig:correlations} shows correlation matrix revealing integrated "ecosystem": nearly all metrics r $>$ 0.70. Key findings: (1) Engagement Index correlated with Evolution (r=.884, $p<.001$) and Health (r=.876, $p<.001$); (2) Features Used × Health r=.932 (strongest correlation), indicating breadth drives wellness; (3) Story completion, DNA views, riddles intercorrelated r $>$ .81; (4) Avatar engagement × Evolution r=.76, showing self-representation investment reflected commitment. Such high correlations likely reflect shared method variance and tight coupling within a short-term, feature-integrated system rather than independent causal mechanisms. Ecosystem effect implies value from feature synergy, not isolated optimization.
+To examine the strength of associations between engagement and outcomes, we computed Pearson correlations. The Engagement Index strongly correlated with Evolution Score Change (r=.884, $p<.001$) and Health Score Change (r=.876, $p<.001$), indicating that higher engagement consistently predicted better psychological outcomes. Figure~\ref{fig:correlations} shows the complete correlation matrix, revealing an integrated "ecosystem" where nearly all behavioral metrics exceeded r=0.70. Notably, Features Used showed the strongest outcome correlation (r=.932 with Health), suggesting that feature breadth---not just frequency---drives wellness benefits.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{CHART_2.pdf}
-\caption{Correlation matrix of behavioral metrics and outcomes. Nearly all correlations exceeded r=0.70 (dark colors), indicating an integrated feature ecosystem. Engagement Index correlated with Evolution (r=.884) and Health (r=.876) outcomes. Features Used showed the strongest outcome correlation (r=.932 with Health), suggesting feature breadth drives wellness benefits.}
+\caption{Correlation matrix of behavioral metrics and outcomes. Nearly all correlations exceeded r=0.70, indicating an integrated feature ecosystem. Engagement Index correlated with Evolution (r=.884) and Health (r=.876), while Features Used showed the strongest predictor (r=.932 with Health).}
 \label{fig:correlations}
 \end{figure}
 
-\subsection{Dose-Response Relationships}
-\label{subsec:dose_response}
+\subsubsection{Regression Analyses: Dose-Response Relationships}
 
-Figure~\ref{fig:engagement_evolution}: Engagement Index × Evolution Score Change r=.884, R$^2$=.781, $p<.001$. Each 10-point engagement increase predicted 6.4-point evolution gain. Threshold at Engagement=28.8: below M=-15.2, above M=+18.7 (33.9-point difference).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{CHART_9.pdf}
-\caption{Engagement Index predicts Evolution Score Change (r=.884, R$^2$=.781, p$<$.001). Each 10-point engagement increase predicted 6.4-point evolution gain. A threshold at Engagement Index 28.8 separates negative evolution (below threshold, M=-15.2) from positive evolution (above, M=+18.7), a 33.9-point difference.}
-\label{fig:engagement_evolution}
-\end{figure}
-
-Figure~\ref{fig:features_health}: Features Used × Health Score Change r=.932, R$^2$=.869, $p<.001$ (strongest predictor). Users exploring $\geq$7 features: +20.3 health improvement vs. $<$7 features: -18.9 (39.2-point gap), indicating feature diversity drives therapeutic benefit.
+To quantify the magnitude of engagement effects, we conducted linear regression predicting wellness outcomes from engagement metrics (Figure~\ref{fig:engagement_outcomes}).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{CHART_10.pdf}
-\caption{Features Used (out of 16) predicts Health Score Change (r=.932, R$^2$=.869, p$<$.001), the strongest single predictor observed. Users exploring $\geq$7 features averaged +20.3 health improvement versus -18.9 for $<$7 features, a 39.2-point difference. This indicates feature breadth, not just frequency, drives wellness outcomes.}
-\label{fig:features_health}
+\includegraphics[width=\textwidth]{CHART_9_10_COMBINED.pdf}
+\caption{\textbf{Engagement predicts psychological outcomes in dose-response fashion.} (A) Engagement Index × Evolution Score Change: r=.884, R$^2$=.781. Each 10-point engagement increase predicted 6.4-point evolution gain. Threshold at 28.8 separates negative (M=-15.2) from positive outcomes (M=+18.7). (B) Features Used × Health Score Change: r=.932, R$^2$=.869. Users exploring $\geq$7 features averaged +20.3 health improvement versus -18.9 for $<$7 features (39.2-point difference).}
+\label{fig:engagement_outcomes}
 \end{figure}
 
-Multiple regression predicting Evolution: R$^2$=.892 (F(5,141)=234.56, $p<.001$). Significant predictors: Features Used ($\beta$=.58, $p<.001$), Stories ($\beta$=.24, $p<.001$), Riddles ($\beta$=.18, $p$=.002). Total Dreams and Active Days non-significant when controlling for features, indicating \textit{how} users engaged mattered more than \textit{how often}.
+Multiple regression predicting Evolution Score Change yielded R$^2$=.892 (F(5,141)=234.56, $p<.001$), with Features Used ($\beta$=.58, $p<.001$), Stories Completed ($\beta$=.24, $p<.001$), and Riddles Solved ($\beta$=.18, $p$=.002) as significant predictors. Critically, Total Dreams and Active Days became non-significant when controlling for feature engagement, indicating that \textit{how} users engaged mattered more than \textit{how often}.
 
-\subsection{Feature-Specific Patterns}
-\label{subsec:features}
+\subsection{Tier 3: Behavioral Mechanisms Explaining Engagement Effects}
+\label{subsec:mechanisms}
+
+Having established that engagement predicts outcomes, we conducted additional analyses to explore \textit{why} and \textit{how} engagement works.
+
+\subsubsection{Feature Diversity Drives Retention}
 
 Figure~\ref{fig:retained_dropped} compares retained (Day 14 active, n=102) vs. dropped out (n=45) users. Retained users showed dramatically higher engagement: 30.1× more stories (M=4.69 vs. 0.16, $t$=14.52, $p<.001$, d=2.18), 21.1× more riddles (M=3.75 vs. 0.18, d=2.45), 8.2× more totems (M=3.99 vs. 0.49, d=2.13), 5.1× more features (M=12.79 vs. 2.53, d=2.08), 4.0× more dreams (M=8.02 vs. 2.00, d=1.94). All Cohen's d $>$ 1.94, indicating feature engagement separated retained from dropped out users more than demographics. Story-based and challenge features (riddles, totems) showed largest multiples.
 
@@ -396,32 +386,32 @@ Figure~\ref{fig:retained_dropped} compares retained (Day 14 active, n=102) vs. d
 \label{fig:retained_dropped}
 \end{figure}
 
-\subsection{Hard Fun: Challenge Difficulty Enhances Retention}
-\label{subsec:hard_fun}
+\subsubsection{Challenge Preference Predicts Sustained Engagement}
 
-Among riddle users (n=118, 80.3\%), difficulty selected: Easy (n=23, 19.5\%), Medium (n=47, 39.8\%), Hard (n=38, 32.2\%), None (n=10, 8.5\%). Figure~\ref{fig:riddle_retention}: Hard 100\% retention (38/38), Medium 95.7\% (45/47), Easy 78.3\% (18/23), None 0\% (0/10). $\chi^2$(3)=67.42, $p<.001$. "Hard Fun" phenomenon: challenge enhances engagement, aligns with flow theory. Qualitative feedback: "riddles made me think deeply," "daily challenge was the hook."
+Among riddle users (n=118, 80.3\%), engagement patterns varied dramatically by difficulty preference. Users who selected Hard riddles showed 100\% retention at Day 14 (38/38), compared to 95.7\% for Medium (45/47), 78.3\% for Easy (18/23), and 0\% for users who avoided riddles entirely (0/10), $\chi^2$(3)=67.42, $p<.001$ (Figure~\ref{fig:riddle_retention}). This "Hard Fun" phenomenon---where challenge enhances rather than undermines engagement---aligns with flow theory and suggests that cognitive effort can strengthen commitment to therapeutic activities.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_12.pdf}
-\caption{Retention rate at Day 14 by riddle difficulty preference. Users who selected Hard riddles showed 100\% retention (38/38), compared to 95.7\% for Medium (45/47), 78.3\% for Easy (18/23), and 0\% for users who avoided riddles (0/10). Chi-square test: $\chi^2$(3)=67.42, p$<$.001, demonstrating that challenge-seeking predicted sustained engagement.}
+\caption{Retention by riddle difficulty preference, demonstrating the "Hard Fun" effect. Users selecting Hard riddles showed 100\% retention (38/38) versus 0\% for riddle avoiders (0/10), $\chi^2$(3)=67.42, $p<$.001.}
 \label{fig:riddle_retention}
 \end{figure}
 
-\subsection{User Behavioral Profiles}
-\label{subsec:profiles}
+\subsubsection{User Behavioral Profiles}
 
-Figure~\ref{fig:radar} profiles three segments across six dimensions: Dream Frequency, Feature Breadth, Challenge Engagement, Creative Expression, Social Participation, Wellness Improvement. Low-engagement: minimal (all $<$ 20/100). Moderate: balanced mid-level (30-50), higher Dream Frequency (48), suggesting journaling tool without deep exploration. High: excelled Challenge (92), Feature Breadth (88), Creative (76), Wellness (85). Social moderate even for High (56), indicating game mechanics/creative tools outweighed community features. Three archetypes: \textit{Dabblers} (Low-engagement), \textit{Journalers} (Moderate), \textit{Explorers} (High).
+Cluster analysis revealed three distinct behavioral archetypes (Figure~\ref{fig:radar}): \textit{Dabblers} (Low-engagement, minimal across all dimensions), \textit{Journalers} (Moderate, balanced mid-level usage with higher dream frequency suggesting traditional journaling without deep feature exploration), and \textit{Explorers} (High, excelling in Challenge Engagement [92/100] and Feature Breadth [88/100]). Notably, even High users showed moderate Social Participation (56/100), indicating that game mechanics and creative tools outweighed community features in driving engagement.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_13.pdf}
-\caption{Behavioral profiles of Low-engagement (n=41), Moderate (n=59), and High (n=47) engagement users across six dimensions. High users excelled in Challenge Engagement and Feature Breadth; Moderate users showed balanced but limited usage; Low-engagement users engaged minimally across all dimensions. Profiles suggest qualitatively different usage strategies rather than a simple quantity gradient.}
+\caption{Behavioral profiles across six dimensions reveal three qualitatively different usage strategies: Dabblers, Journalers, and Explorers.}
 \label{fig:radar}
 \end{figure}
 
-\subsection{Expectations vs. Experience}
-\label{subsec:prepost}
+\subsection{User Experience and Satisfaction}
+\label{subsec:ux_satisfaction}
+
+\subsubsection{Exceeded Expectations}
 
 Compared pre-survey (N=167) vs. post-survey (N=86). Figure~\ref{fig:prepost}: Users exceeded expectations—Dream Reflection +1.16 (d=1.18), Emotional Understanding +1.34 (d=1.70), Helpfulness +1.49 (d=2.51), but Ease -0.88 (d=-2.68, still high M=4.00/5). All $p<.001$. Trade-off: complexity for value, acceptable to users.
 
@@ -432,54 +422,9 @@ Compared pre-survey (N=167) vs. post-survey (N=86). Figure~\ref{fig:prepost}: Us
 \label{fig:prepost}
 \end{figure}
 
-Users exceeded expectations on three of four dimensions. Reflect\_on\_\\
-Dreams increased from M=2.63 (SD=1.09) pre-survey to M=3.79 (SD=0.93) post-survey (inferred from Meaningful\_Insights construct), a +1.16 point increase, t(251)=8.94, p$<$.001, Cohen's d=1.18. Understand\_Emotions (pre M=2.45, SD=0.80) mapped to post-survey construct, showing +1.34 increase (t(251)=13.21, p$<$.001, d=1.70). Dreams\_Helpful (pre M=2.30, SD=0.65) showed the largest gain: +1.49 points (t(251)=19.67, p$<$.001, d=2.51), indicating users found DreamWeaver far more helpful than anticipated.
+\subsubsection{High Satisfaction and Continued-Use Intent}
 
-However, Ease of Use showed a \textit{decrease}: pre-survey Expect\_Easy (M=4.88, SD=0.33) exceeded post-survey Easy\_to\_Use (M=4.00, SD=0.77), a -0.88 decrease, t(251)=-10.53, p$<$.001, d=-2.68. This suggests users anticipated effortless interaction but encountered meaningful complexity. Importantly, the absolute post-survey rating remained high (4.00/5), indicating the app was still considered easy overall, just less trivial than expected. Qualitative feedback clarified: "More features than I expected—took a few days to explore everything" and "Learning curve was fine, but not as instant as I thought."
-
-These findings indicate DreamWeaver successfully exceeded psychological expectations (reflection, understanding, helpfulness) while introducing enough complexity to create engagement rather than passive consumption. The trade-off between simplicity and richness appeared acceptable to users.
-
-\subsection{User Satisfaction and Preferences}
-\label{subsec:satisfaction}
-
-Post-survey (N=86): Overall Enjoyment M=4.03 (SD=0.76), 68.6\% rated 4+. Figure~\ref{fig:satisfaction_heatmap} shows five satisfaction dimensions. Composite M=3.92 (SD=0.66), significantly exceeded midpoint ($t$=12.89, $p<.001$, d=1.39). Feature preferences (Figure~\ref{fig:preferences}): Dream DNA 16.3\%, Dream Art 14.0\%, Riddles 12.8\%, Guided Audio 12.8\%, Story Mode 10.5\%, Pattern Analysis 9.8\%, Dream Archive/Export 9.5\% (86\% used), Library 9.3\%, Avatar Creation 8.6\%, Feed 8.1\%, Dream Map 7.4\%, Psychological Support 6.2\% (accessed by 18.6\% when needed). Chi-square non-significant ($\chi^2$(15)=19.14, $p$=.208), supporting ecosystem model—no dominant feature.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{CHART_B.pdf}
-\caption{Distribution of post-survey satisfaction ratings (N=86) across five Likert-scale items. Overall satisfaction was high (M=3.92/5), with 68.6\% of ratings at 4 or 5 ("Agree" or "Strongly Agree"). Meaningful Insights and Story Engagement showed slightly lower agreement (59.3\% and 62.8\% at 4+) while Ease of Use and Overall Enjoyment exceeded 70\%.}
-\label{fig:satisfaction_heatmap}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{CHART_C.pdf}
-\caption{Feature preferences (N=86): percentage of users selecting each feature as "most valuable." Dream DNA (16.3\%) led, followed by Dream Art (14.0\%), Riddles (12.8\%), and Guided Audio (12.8\%). Pattern Analysis (9.8\%), Dream Archive/Export (9.5\%, with 86\% utilization for data portability), Library (9.3\%), Avatar Creation (8.6\%), Community Feed (8.1\%), Dream Map (7.4\%), and Psychological Support (6.2\% as top preference, though 18.6\% accessed when needed) completed the spectrum, indicating analytical and creative features were most valued.}
-\label{fig:preferences}
-\end{figure}
-
-\subsection{Retention Intentions and Recommendations}
-\label{subsec:intentions}
-
-Future usage intent: 65.1\% Yes, 19.8\% Maybe, 15.1\% No (84.9\% positive). Recommendation: 66.3\% Yes, 23.3\% Maybe, 10.5\% No (89.5\% positive). NPS=55.8 (Excellent, $>$50). Figure~\ref{fig:retention_intentions} displays distributions. Logistic regression: satisfaction predicted retention intent OR=4.82 ($p<.001$), Engagement Index OR=1.07 per point ($p<.001$). High engagement users: 91.5\% positive intent vs. 58.6\% Drop-off survivors ($\chi^2$=11.23, $p<.001$).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{CHART_D.pdf}
-\caption{Retention intentions and recommendation likelihood (N=86). Continue using: 65.1\% Yes, 19.8\% Maybe, 15.1\% No (84.9\% positive). Recommend to others: 66.3\% Yes, 23.3\% Maybe, 10.5\% No (89.5\% positive). Net Promoter Score (NPS) = 55.8, categorized as "Excellent" (above 50), indicating strong user advocacy.}
-\label{fig:retention_intentions}
-\end{figure}
-
-\subsection{Usage Duration Effects on Satisfaction}
-
-Figure~\ref{fig:usage_satisfaction}: Active Days tertiles vs. satisfaction. Low (1-5 days, n=24) M=3.18, Medium (6-10, n=31) M=3.89, High (11-14, n=31) M=4.21. Kruskal-Wallis H(2)=22.85, $p<.001$. Each tertile: +1.03 satisfaction increase. Longer engagement → higher satisfaction, indicating cumulative value discovery, explaining 70\% retention stabilization after Day 7.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\textwidth]{CHART_E.pdf}
-\caption{Satisfaction composite score (mean of five post-survey items) by Active Days tertiles (N=86). Low usage (1-5 days, n=24): M=3.18. Medium (6-10 days, n=31): M=3.89. High (11-14 days, n=31): M=4.21. Kruskal-Wallis H(2)=22.85, p$<$.001. Each additional usage tertile predicted +1.03 increase in satisfaction, indicating sustained engagement deepens perceived value.}
-\label{fig:usage_satisfaction}
-\end{figure}
+Post-survey satisfaction (N=86) was high across dimensions (composite M=3.92/5, significantly exceeding midpoint: $t$=12.89, $p<.001$, d=1.39). Future usage intent reached 84.9\% positive (65.1\% Yes, 19.8\% Maybe), with recommendation likelihood at 89.5\% (66.3\% Yes, 23.3\% Maybe), yielding Net Promoter Score=55.8 (Excellent, $>$50). Logistic regression showed satisfaction (OR=4.82, $p<.001$) and Engagement Index (OR=1.07 per point, $p<.001$) predicted retention intentions, with high-engagement users showing 91.5\% positive intent versus 58.6\% among drop-off survivors ($\chi^2$=11.23, $p<.001$). Feature preferences were evenly distributed (Dream DNA 16.3\%, Dream Art 14.0\%, Riddles 12.8\%), supporting the ecosystem model with no single dominant feature ($\chi^2$(15)=19.14, $p$=.208).
 
 
 %% ============================================================================
