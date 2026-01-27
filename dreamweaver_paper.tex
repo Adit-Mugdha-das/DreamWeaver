@@ -6,6 +6,10 @@
 \usepackage{float}
 \usepackage{lineno}
 \usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\renewcommand{\arraystretch}{1.15}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows.blur, fit, calc}
 
@@ -117,21 +121,21 @@ Recent advances in AI-based text analysis have enabled automated interpretation 
 
 Our study addresses this gap by introducing DreamWeaver, which combines AI-driven interpretation with a diverse set of entertainment-oriented interaction mechanisms. As shown in Table~\ref{tab:relatedwork}, DreamWeaver uniquely integrates AI interpretation, gamified progression, and entertainment computing features, achieving 69.4\% retention---more than double typical rates---while demonstrating measurable mental wellness outcomes through sustained user engagement.
 
-\begin{table}[h]
+\begin{table}[t]
 \centering
-\small
+\footnotesize
 \caption{Comparison of DreamWeaver with Related Systems}
 \label{tab:relatedwork}
-\begin{tabular}{p{2.0cm}p{1.3cm}p{1.5cm}p{2.5cm}p{1.9cm}p{1.8cm}}
-\hline
-\textbf{System} & \textbf{AI Anal-ysis} & \textbf{Gami-fica-tion} & \textbf{Enter-tainment Features} & \textbf{Reten-tion (7-14 days)} & \textbf{Well-ness Out-comes} \\
-\hline
-Traditional Dream Apps \citep{Konkol2020} & No & No & None & 31\% (7d) & Not mea-sured \\
-SPARX \citep{Merry2012} & No & Yes & Fantasy game & 60\% (com-ple-tion) & De-pression reduc-tion \\
-Fitness Apps \citep{Johnson2016} & No & Yes & Points, badges & ~40\% (14d) & Phys-ical ac-tivity \\
-\textbf{Dream-Weaver} & \textbf{Yes (Ge-mini)} & \textbf{Yes} & \textbf{16 fea-tures, Story Mode, Rid-dles, Art} & \textbf{69.4\% (14d)} & \textbf{49-point im-prove-ment} \\
-\hline
-\end{tabular}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.3cm} >{\centering\arraybackslash}p{1.2cm} >{\centering\arraybackslash}p{1.3cm} >{\raggedright\arraybackslash}X >{\centering\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{2.1cm}}
+\toprule
+\textbf{System} & \textbf{AI Analysis} & \textbf{Gamifi-cation} & \textbf{Entertainment Features} & \textbf{Retention (7--14d)} & \textbf{Wellness Outcomes} \\
+\midrule
+Traditional Dream Apps \citep{Konkol2020} & No & No & None & 31\% (7d) & Not measured \\[0.2cm]
+SPARX \citep{Merry2012} & No & Yes & Fantasy game & 60\% (comp.) & Depression reduction \\[0.2cm]
+Fitness Apps \citep{Johnson2016} & No & Yes & Points, badges & $\sim$40\% (14d) & Physical activity \\[0.2cm]
+\textbf{DreamWeaver} & \textbf{Yes (Gemini)} & \textbf{Yes} & \textbf{16 features: Story, Riddles, Art, DNA} & \textbf{69.4\% (14d)} & \textbf{49-point improvement} \\
+\bottomrule
+\end{tabularx}
 \end{table}
 
 
