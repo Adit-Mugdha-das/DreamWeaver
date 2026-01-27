@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 import matplotlib.lines as mlines
+from matplotlib.path import Path
+import matplotlib.patches as patches
 
 # Create figure
 fig, ax = plt.subplots(1, 1, figsize=(14, 10))
@@ -23,7 +25,7 @@ color_external = '#F39C12'  # Orange
 
 # Title
 ax.text(5, 9.5, 'DreamWeaver System Architecture', 
-        fontsize=18, fontweight='bold', ha='center', fontname='Arial')
+        fontsize=24, fontweight='bold', ha='center', fontname='Arial')
 
 # ============================================================================
 # LAYER 1: USER INTERFACE / MOBILE APP (Top)
@@ -37,7 +39,7 @@ ui_box = FancyBboxPatch((0.5, y_ui-0.6), 9, 1.2,
                         alpha=0.2, linewidth=2)
 ax.add_patch(ui_box)
 ax.text(5, y_ui+0.4, 'Mobile Application Layer (React Native)', 
-        fontsize=12, fontweight='bold', ha='center', color=color_frontend)
+        fontsize=14, fontweight='bold', ha='center', color=color_frontend)
 
 # UI Components (11 features)
 ui_components = [
@@ -60,7 +62,7 @@ for x, y, label in ui_components:
                          edgecolor=color_frontend, facecolor='white', 
                          linewidth=1.5)
     ax.add_patch(box)
-    ax.text(x, y, label, fontsize=8.5, fontweight='bold', ha='center', va='center', fontname='Arial')
+    ax.text(x, y, label, fontsize=11, fontweight='bold', ha='center', va='center', fontname='Arial')
 
 # ============================================================================
 # LAYER 2: API GATEWAY / BACKEND (Middle-Top)
@@ -74,15 +76,15 @@ api_box = FancyBboxPatch((0.5, y_api-0.6), 9, 1.2,
                          alpha=0.2, linewidth=2)
 ax.add_patch(api_box)
 ax.text(5, y_api+0.4, 'Backend API Layer (Node.js / Express)', 
-        fontsize=12, fontweight='bold', ha='center', color=color_backend)
+        fontsize=14, fontweight='bold', ha='center', color=color_backend)
 
 # API Services
 api_services = [
     (1.5, y_api-0.2, 'User Auth &\nSession Mgmt'),
     (3.0, y_api-0.2, 'Dream\nProcessing'),
     (4.5, y_api-0.2, 'Analytics &\nTracking'),
-    (6.0, y_api-0.2, 'Gamification\nEngine'),
-    (7.5, y_api-0.2, 'Content\nGeneration'),
+    (6.0, y_api-0.2, 'Content\nGeneration'),
+    (7.5, y_api-0.2, 'Gamification\nEngine'),
     (9.0, y_api-0.2, 'Community\nFeed')
 ]
 
@@ -92,7 +94,7 @@ for x, y, label in api_services:
                          edgecolor=color_backend, facecolor='white', 
                          linewidth=1.5)
     ax.add_patch(box)
-    ax.text(x, y, label, fontsize=9, fontweight='bold', ha='center', va='center', fontname='Arial')
+    ax.text(x, y, label, fontsize=11, fontweight='bold', ha='center', va='center', fontname='Arial')
 
 # ============================================================================
 # LAYER 3: AI/ML SERVICES (Middle)
@@ -106,7 +108,7 @@ ai_box = FancyBboxPatch((0.5, y_ai-0.6), 9, 1.2,
                         alpha=0.2, linewidth=2)
 ax.add_patch(ai_box)
 ax.text(5, y_ai+0.4, 'AI/ML Services Layer', 
-        fontsize=12, fontweight='bold', ha='center', color=color_ai)
+        fontsize=14, fontweight='bold', ha='center', color=color_ai)
 
 # AI Components
 ai_components = [
@@ -122,7 +124,7 @@ for x, y, label in ai_components:
                          edgecolor=color_ai, facecolor='white', 
                          linewidth=1.5)
     ax.add_patch(box)
-    ax.text(x, y, label, fontsize=9, fontweight='bold', ha='center', va='center', fontname='Arial')
+    ax.text(x, y, label, fontsize=11, fontweight='bold', ha='center', va='center', fontname='Arial')
 
 # ============================================================================
 # LAYER 4: DATA LAYER (Middle-Bottom)
@@ -136,7 +138,7 @@ db_box = FancyBboxPatch((0.5, y_data-0.6), 9, 1.2,
                         alpha=0.2, linewidth=2)
 ax.add_patch(db_box)
 ax.text(5, y_data+0.4, 'Data Storage Layer', 
-        fontsize=12, fontweight='bold', ha='center', color=color_database)
+        fontsize=14, fontweight='bold', ha='center', color=color_database)
 
 # Database Components
 db_components = [
@@ -152,7 +154,7 @@ for x, y, label in db_components:
                          edgecolor=color_database, facecolor='white', 
                          linewidth=1.5)
     ax.add_patch(box)
-    ax.text(x, y, label, fontsize=9, fontweight='bold', ha='center', va='center', fontname='Arial')
+    ax.text(x, y, label, fontsize=11, fontweight='bold', ha='center', va='center', fontname='Arial')
 
 # ============================================================================
 # LAYER 5: EXTERNAL SERVICES (Bottom)
@@ -175,7 +177,7 @@ for x in [2.0, 4.0, 6.0, 8.0]:
     ax.add_patch(box)
 
 for x, y, label in ext_services:
-    ax.text(x, y, label, fontsize=9, fontweight='bold', ha='center', va='center', 
+    ax.text(x, y, label, fontsize=11, fontweight='bold', ha='center', va='center', 
             fontname='Arial', style='italic')
 
 # ============================================================================
@@ -195,17 +197,53 @@ arrow1 = FancyArrowPatch((3.0, y_api-0.6), (2.0, y_ai+0.6),
                         linewidth=2, color=color_ai, alpha=0.7)
 ax.add_patch(arrow1)
 
-arrow2 = FancyArrowPatch((7.5, y_api-0.6), (6.0, y_ai+0.6),
+arrow2 = FancyArrowPatch((6.0, y_api-0.6), (6.0, y_ai+0.6),
                         arrowstyle='<->', mutation_scale=15, 
                         linewidth=2, color=color_ai, alpha=0.7)
 ax.add_patch(arrow2)
 
 # Backend API -> Database
-for x in [1.5, 3.0, 6.0]:
+# First two arrows go straight down
+for x in [1.5, 3.0]:
     arrow = FancyArrowPatch((x, y_api-0.6), (x+0.5, y_data+0.6),
                            arrowstyle='<->', mutation_scale=15, 
                            linewidth=1.5, color=color_database, alpha=0.7)
     ax.add_patch(arrow)
+
+# Gamification Engine (7.5) -> Engagement Metrics (6.0) - SINGLE continuous line routed between boxes
+# Define path vertices for the routed connection
+# Engagement Metrics box is at (6.0, y_data-0.2) with height 0.5, so top edge is at y_data-0.2+0.25 = y_data+0.05
+verts = [
+    (7.5, y_api-0.6),      # Start at Gamification Engine
+    (7.5, y_ai+0.65),      # Go down
+    (7.0, y_ai+0.65),      # Move to corridor
+    (7.0, y_ai-0.7),       # Go down through corridor
+    (6.0, y_data+0.1)      # End slightly above Engagement Metrics box
+]
+
+codes = [
+    Path.MOVETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO
+]
+
+path = Path(verts, codes)
+patch = patches.PathPatch(path, facecolor='none', edgecolor=color_database, 
+                          linewidth=1.5, alpha=0.7)
+ax.add_patch(patch)
+
+# Add arrowheads at both ends for bidirectional connection
+arrow_start = patches.FancyArrowPatch((7.5, y_api-0.58), (7.5, y_api-0.6),
+                             arrowstyle='<-', mutation_scale=15,
+                             color=color_database, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_start)
+
+arrow_end = patches.FancyArrowPatch((6.02, y_data+0.1), (6.02, y_data+0.05),
+                           arrowstyle='->', mutation_scale=15,
+                           color=color_database, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_end)
 
 # AI Services -> External APIs
 arrow3 = FancyArrowPatch((2.0, y_ai-0.7), (2.0, y_ext+0.5),
@@ -243,7 +281,7 @@ legend_elements = [
                   markeredgecolor=color_external, linewidth=2)
 ]
 
-ax.legend(handles=legend_elements, loc='lower right', fontsize=9, 
+ax.legend(handles=legend_elements, loc='lower right', fontsize=11, 
           framealpha=0.9, edgecolor='gray')
 
 # Save figure
