@@ -192,23 +192,87 @@ for x in [2.0, 4.4, 6.8, 9.0]:
     ax.add_patch(arrow)
 
 # Backend API -> AI Services
-arrow1 = FancyArrowPatch((3.0, y_api-0.6), (2.0, y_ai+0.6),
+# Dream Processing -> Dream DNA 4 Gene Analysis (box top is at y_ai-0.2+0.3 = y_ai+0.1)
+arrow1 = FancyArrowPatch((3.0, y_api-0.6), (2.0, y_ai+0.1),
                         arrowstyle='<->', mutation_scale=15, 
                         linewidth=2, color=color_ai, alpha=0.7)
 ax.add_patch(arrow1)
 
-arrow2 = FancyArrowPatch((6.0, y_api-0.6), (6.0, y_ai+0.6),
+# Content Generation -> Story Generation (box top is at y_ai+0.1)
+arrow2 = FancyArrowPatch((6.0, y_api-0.6), (6.0, y_ai+0.1),
                         arrowstyle='<->', mutation_scale=15, 
                         linewidth=2, color=color_ai, alpha=0.7)
 ax.add_patch(arrow2)
 
 # Backend API -> Database
-# First two arrows go straight down
-for x in [1.5, 3.0]:
-    arrow = FancyArrowPatch((x, y_api-0.6), (x+0.5, y_data+0.6),
-                           arrowstyle='<->', mutation_scale=15, 
-                           linewidth=1.5, color=color_database, alpha=0.7)
-    ax.add_patch(arrow)
+# Dream Processing -> Dreams & DNA (routed to avoid Story Generation box at x=4.0)
+# Dreams & DNA box center is at (4.0, y_data-0.2) with height 0.5, so top edge is at y_data+0.05
+verts_dream = [
+    (3.0, y_api-0.6),      # Start at Dream Processing
+    (3.0, y_ai+0.65),      # Go straight down
+    (3.0, y_ai-0.7),       # Continue down through left side
+    (3.9, y_data+0.15)     # Move right at bottom to Dreams & DNA box
+]
+
+codes_dream = [
+    Path.MOVETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO
+]
+
+path_dream = Path(verts_dream, codes_dream)
+patch_dream = patches.PathPatch(path_dream, facecolor='none', edgecolor=color_database, 
+                          linewidth=1.5, alpha=0.7)
+ax.add_patch(patch_dream)
+
+# Add arrowheads at both ends
+arrow_dream_start = patches.FancyArrowPatch((3.0, y_api-0.58), (3.0, y_api-0.6),
+                             arrowstyle='<-', mutation_scale=15,
+                             color=color_database, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_dream_start)
+
+# Arrow from line end (3.9, y_data+0.15) to box top edge (4.0, y_data+0.05)
+arrow_dream_end = patches.FancyArrowPatch((3.9, y_data+0.15), (4.0, y_data+0.05),
+                           arrowstyle='->', mutation_scale=15,
+                           color=color_database, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_dream_end)
+
+# User Auth -> User Data (routed to avoid Dream DNA box)
+# Route to the left to avoid passing through Dream DNA box at x=2.0
+# User Data box center is at (2.0, y_data-0.2) with height 0.5, so top edge is at y_data+0.05
+verts_auth = [
+    (1.5, y_api-0.6),      # Start at User Auth
+    (1.5, y_ai+0.65),      # Go down
+    (1.0, y_ai+0.65),      # Move left to corridor
+    (1.0, y_ai-0.7),       # Go down through corridor
+    (1.9, y_data+0.15)     # End before the box, leaving room for arrowhead
+]
+
+codes_auth = [
+    Path.MOVETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO
+]
+
+path_auth = Path(verts_auth, codes_auth)
+patch_auth = patches.PathPatch(path_auth, facecolor='none', edgecolor=color_database, 
+                          linewidth=1.5, alpha=0.7)
+ax.add_patch(patch_auth)
+
+# Add arrowheads at both ends
+arrow_auth_start = patches.FancyArrowPatch((1.5, y_api-0.58), (1.5, y_api-0.6),
+                             arrowstyle='<-', mutation_scale=15,
+                             color=color_database, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_auth_start)
+
+# Arrow from line end (1.9, y_data+0.15) to box top edge (2.0, y_data+0.05)
+arrow_auth_end = patches.FancyArrowPatch((1.9, y_data+0.15), (2.0, y_data+0.05),
+                           arrowstyle='->', mutation_scale=15,
+                           color=color_database, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_auth_end)
 
 # Gamification Engine (7.5) -> Engagement Metrics (6.0) - SINGLE continuous line routed between boxes
 # Define path vertices for the routed connection
@@ -218,7 +282,7 @@ verts = [
     (7.5, y_ai+0.65),      # Go down
     (7.0, y_ai+0.65),      # Move to corridor
     (7.0, y_ai-0.7),       # Go down through corridor
-    (6.0, y_data+0.1)      # End slightly above Engagement Metrics box
+    (6.1, y_data+0.15)     # End before the box, leaving room for arrowhead
 ]
 
 codes = [
@@ -240,29 +304,116 @@ arrow_start = patches.FancyArrowPatch((7.5, y_api-0.58), (7.5, y_api-0.6),
                              color=color_database, alpha=0.7, linewidth=1.5)
 ax.add_patch(arrow_start)
 
-arrow_end = patches.FancyArrowPatch((6.02, y_data+0.1), (6.02, y_data+0.05),
+# Arrow from line end (6.1, y_data+0.15) to box top edge (6.0, y_data+0.05) at correct angle
+arrow_end = patches.FancyArrowPatch((6.1, y_data+0.15), (6.0, y_data+0.05),
                            arrowstyle='->', mutation_scale=15,
                            color=color_database, alpha=0.7, linewidth=1.5)
 ax.add_patch(arrow_end)
 
 # AI Services -> External APIs
-arrow3 = FancyArrowPatch((2.0, y_ai-0.7), (2.0, y_ext+0.5),
-                        arrowstyle='<->', mutation_scale=15, 
-                        linewidth=1.5, color=color_external, 
-                        alpha=0.7, linestyle='--')
-ax.add_patch(arrow3)
+# Dream DNA -> Google Gemini (routed to avoid User Data box at x=2.0)
+# Google Gemini box is at (2.0, y_ext) with height 0.5, so top edge is at y_ext+0.25
+# Route to the left to avoid User Data box
+verts_ai1 = [
+    (2.0, y_ai-0.7),       # Start at Dream DNA
+    (2.0, y_data+0.65),    # Go down
+    (1.2, y_data+0.65),    # Move more left to corridor
+    (1.2, y_data-0.7),     # Go down through corridor
+    (1.9, y_ext+0.35)      # End before box, leaving room for arrowhead
+]
 
-arrow4 = FancyArrowPatch((4.0, y_ai-0.7), (2.0, y_ext+0.5),
-                        arrowstyle='<->', mutation_scale=15, 
-                        linewidth=1.5, color=color_external, 
-                        alpha=0.7, linestyle='--')
-ax.add_patch(arrow4)
+codes_ai1 = [
+    Path.MOVETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO
+]
 
-arrow5 = FancyArrowPatch((6.0, y_ai-0.7), (4.0, y_ext+0.5),
-                        arrowstyle='<->', mutation_scale=15, 
-                        linewidth=1.5, color=color_external, 
-                        alpha=0.7, linestyle='--')
-ax.add_patch(arrow5)
+path_ai1 = Path(verts_ai1, codes_ai1)
+patch_ai1 = patches.PathPatch(path_ai1, facecolor='none', edgecolor=color_external, 
+                          linewidth=1.5, alpha=0.7, linestyle='--')
+ax.add_patch(patch_ai1)
+
+# Add arrowheads
+arrow_ai1_start = patches.FancyArrowPatch((2.0, y_ai-0.68), (2.0, y_ai-0.7),
+                             arrowstyle='<-', mutation_scale=15,
+                             color=color_external, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_ai1_start)
+
+# Arrow from line end (1.9, y_ext+0.35) to box top edge (2.0, y_ext+0.25)
+arrow_ai1_end = patches.FancyArrowPatch((1.9, y_ext+0.35), (2.0, y_ext+0.25),
+                           arrowstyle='->', mutation_scale=15,
+                           color=color_external, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_ai1_end)
+
+# Story Generation -> Google Gemini (routed to avoid User Data box)
+# Route slightly to the right to avoid User Data box at x=2.0
+verts_ai4 = [
+    (4.0, y_ai-0.7),       # Start at Story Generation
+    (4.0, y_data+0.65),    # Go down
+    (2.85, y_data+0.65),   # Move left but stay right of User Data box
+    (2.85, y_data-0.7),    # Go down through corridor
+    (2.1, y_ext+0.35)      # End before Google Gemini box
+]
+
+codes_ai4 = [
+    Path.MOVETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO
+]
+
+path_ai4 = Path(verts_ai4, codes_ai4)
+patch_ai4 = patches.PathPatch(path_ai4, facecolor='none', edgecolor=color_external, 
+                          linewidth=1.5, alpha=0.7, linestyle='--')
+ax.add_patch(patch_ai4)
+
+# Add arrowheads
+arrow_ai4_start = patches.FancyArrowPatch((4.0, y_ai-0.68), (4.0, y_ai-0.7),
+                             arrowstyle='<-', mutation_scale=15,
+                             color=color_external, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_ai4_start)
+
+arrow_ai4_end = patches.FancyArrowPatch((2.1, y_ext+0.35), (2.0, y_ext+0.25),
+                           arrowstyle='->', mutation_scale=15,
+                           color=color_external, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_ai4_end)
+
+# Dream Art Generation -> OpenAI DALL-E (routed to avoid Engagement Metrics box)
+# Route slightly to the right to avoid Engagement Metrics box at x=6.0
+verts_ai5 = [
+    (6.0, y_ai-0.7),       # Start at Dream Art Generation
+    (6.0, y_data+0.65),    # Go down
+    (4.85, y_data+0.65),   # Move left but stay right of Engagement Metrics box
+    (4.85, y_data-0.7),    # Go down through corridor
+    (4.1, y_ext+0.35)      # End before DALL-E box
+]
+
+codes_ai5 = [
+    Path.MOVETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO,
+    Path.LINETO
+]
+
+path_ai5 = Path(verts_ai5, codes_ai5)
+patch_ai5 = patches.PathPatch(path_ai5, facecolor='none', edgecolor=color_external, 
+                          linewidth=1.5, alpha=0.7, linestyle='--')
+ax.add_patch(patch_ai5)
+
+# Add arrowheads
+arrow_ai5_start = patches.FancyArrowPatch((6.0, y_ai-0.68), (6.0, y_ai-0.7),
+                             arrowstyle='<-', mutation_scale=15,
+                             color=color_external, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_ai5_start)
+
+arrow_ai5_end = patches.FancyArrowPatch((4.1, y_ext+0.35), (4.0, y_ext+0.25),
+                           arrowstyle='->', mutation_scale=15,
+                           color=color_external, alpha=0.7, linewidth=1.5)
+ax.add_patch(arrow_ai5_end)
 
 # ============================================================================
 # LEGEND
