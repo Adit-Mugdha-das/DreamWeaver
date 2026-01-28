@@ -282,6 +282,8 @@ Evolution\_Score\_Change and Health\_Score\_Change from engage\-ment metrics, en
 
 Missing data were minimal ($<$2\% for behavioral metrics, as data were passively collected) and handled through listwise deletion for affected analyses. Post-survey non-response (41.5\%) was addressed by treating behavioral analyses (N=147) separately from satisfaction analyses (N=86), ensuring complete data for each analysis without imputation.
 
+\textbf{Note on Multicollinearity:} High intercorrelations among engagement variables (r = .90--.99) reflect the integrated design of DreamWeaver's feature ecosystem, where usage of one feature promotes interaction with others. While this introduces multicollinearity in regression models, the goal was to capture overall engagement patterns rather than isolate independent feature effects. Accordingly, we emphasize bivariate relationships and composite engagement indices alongside regression analyses.
+
 
 %% ============================================================================
 %% SECTION 5: RESULTS
@@ -870,7 +872,7 @@ Note: Change scores (Evolution\_Score\_Change and Health\_Score\_Change) are cal
 
 \section{Additional Visualizations}
 
-Appendix figures provide expanded visualizations of trends summarized numerically in the main Results section. The following supplementary figures provide additional insights into user behavior patterns, feature adoption, and engagement dynamics not included in the main results section.
+Appendix figures provide expanded visualizations of trends summarized numerically in the main Results section.
 
 \subsection{Behavioral Distribution Patterns}
 
@@ -879,13 +881,6 @@ Appendix figures provide expanded visualizations of trends summarized numericall
 \includegraphics[width=0.75\textwidth]{CHART_7.pdf}
 \caption{Distribution of total dreams logged by participants over the 14-day study period (N=147, M=6.18, SD=3.78, range=0-13). The distribution shows moderate right skew, with most users logging 4-8 dreams, while a subset of highly engaged users logged 10+ dreams.}
 \label{fig:dreams_dist}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\textwidth]{CHART_8.pdf}
-\caption{Distribution of average session duration across participants (N=147, M=33.43 min, SD=18.93). The right-skewed distribution indicates most users had brief to moderate sessions (10-35 min), while a subset of power users engaged for 50+ minutes per session.}
-\label{fig:session_dist}
 \end{figure}
 
 \subsection{Engagement-Outcome Relationships}
@@ -901,28 +896,10 @@ Appendix figures provide expanded visualizations of trends summarized numericall
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{CHART_5.pdf}
-\caption{Average session duration by Dream DNA personality type (N=146, excluding 1 outlier). Guardian of Totems users showed longest sessions (M=51.13 min), while users without DNA profiles showed minimal engagement (M=6.81 min). One-way ANOVA revealed significant differences across personality types, F(8,137)=27.85, p<.001, $\eta^2$=.62, indicating that personality-based content adaptation drove differential engagement levels.}
-\label{fig:personality_sessions}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\textwidth]{CHART_14.pdf}
-\caption{Distribution of dominant emotions detected across all dream entries (N=908 dreams from 147 users). Joy (32\%) and Fear (28\%) were most frequently identified, followed by Sadness (18\%) and Surprise (12\%). Other emotions (Anger, Disgust, Anticipation, Trust) comprised the remaining 10\%. This distribution aligns with emotion psychology literature suggesting positive and threat-related emotions dominate dream content.}
-\label{fig:emotion_dist}
-\end{figure}
-
-\begin{figure}[H]
-\centering
 \includegraphics[width=0.85\textwidth]{CHART_15.pdf}
 \caption{Supplementary visualization supporting ecosystem effects discussed in Section 5.3. Feature co-occurrence heatmap showing which features were used together by the same users (N=147). Darker cells indicate higher co-usage rates. Strong co-occurrence patterns emerged between Dream DNA and Dream Art (r=.82), Story Mode and Riddles (r=.76), and Totems and Avatar customization (r=.71), confirming natural feature clusters in the ecosystem design.}
 \label{fig:feature_cooccurrence}
 \end{figure}
-
-\subsection{User Segmentation Profiles}
-
-
 
 \section{Data Collection Instruments}
 
