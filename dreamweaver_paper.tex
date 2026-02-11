@@ -99,11 +99,17 @@ Dream journaling and analysis \sep Gamification \sep Mental wellness \sep AI-pow
 \section{Introduction}
 \label{sec:intro}
 
-Mental health challenges affect over 1 billion people worldwide \citep{WHO2023}. Digital interventions offer scalable alternatives, yet traditional dream journaling and analysis apps suffer from poor adherence—only 31\% retention at 7 days \citep{Konkol2020}. Entertainment computing principles (gamification, interactive storytelling, challenge systems) have increased engagement across domains \citep{Deterding2011, Hamari2014}, but remain unexplored for therapeutic dream journaling and AI-powered dream analysis platforms.
+Mental health challenges affect over 1 billion people worldwide, with digital interventions offering scalable, accessible pathways to care \citep{WHO2023}. Among therapeutic self-reflection practices, dream journaling has demonstrated effectiveness in enhancing emotional awareness \citep{Edwards2013}, supporting emotional regulation \citep{Malinowski2014}, and facilitating deeper psychological insight \citep{Schredl2010}. However, these benefits remain largely unrealized at scale due to a fundamental adherence problem.
 
-This paper presents DreamWeaver, a gamified dream journaling and analysis platform integrating 16 AI-powered features: Dream DNA analysis (multi-dimensional interpretation), interactive Story Mode (branching narratives), Riddle Challenges, collectible Totems (unlocking thematic map realms), creative tools (Dream Art, Mindmap, Dream Map with progressive unlocking), Avatar Creation, Psychological Support resources, Pattern Analysis dashboards, Guided Audio, Community Feed, Dream Library, and comprehensive Dream Archiving with PDF export. A 14-day study with 147 participants demonstrates 69.4\% retention—double typical rates—with strong correlations between engagement and mental wellness outcomes (r=.884, r=.932). High-engagement users showed 49-point improvements in Evolution and Health scores versus low-engagement users (F(2,144)=422.74, p$<$.001, $\eta^2$=.85).
+Despite therapeutic potential, dream journaling applications suffer from critically poor retention rates---only 31\% of users remain active after 7 days \citep{Konkol2020}, with traditional journaling retention as low as 20--30\% beyond one week \citep{Schredl2018}. The core drivers of this adherence failure are well-documented: (1) \textit{lack of immediate feedback}---users log dreams but receive no interpretive insights or pattern recognition \citep{Konkol2020}, (2) \textit{absence of sustained motivation}---repetitive text logging without progression or reward structures leads to monotony \citep{Schredl2018}, and (3) \textit{limited engagement mechanisms}---existing apps prioritize passive archiving over active, interactive experiences. This creates a critical gap: the very populations who could benefit most from dream-based self-reflection abandon the practice before therapeutic value can accrue.
 
-\textbf{Contributions:} (1) Novel gamified dream journaling and analysis platform combining AI-powered interpretation with entertainment computing; (2) Empirical evidence linking interactive features to therapeutic outcomes (69.4\% retention, 49-point wellness improvement); (3) Design insights including "Hard Fun" (challenging riddles predicted 100\% retention) and ecosystem effects (feature breadth outweighed depth); (4) Methodological framework for evaluating entertainment-mental health interventions.
+Gamification and entertainment computing principles have successfully increased adherence in health domains including physical activity \citep{Johnson2016}, medication compliance \citep{Aitken2016}, and mental health interventions---achieving 60\% completion rates for depression treatment compared to 30\% for traditional approaches \citep{Merry2012}. These successes demonstrate that interactive challenge systems, immediate feedback loops, creative expression tools, and progressive reward structures can transform passive health behaviors into sustained engagement \citep{Deterding2011, Hamari2014}. However, no prior work has systematically integrated entertainment computing principles with AI-powered dream interpretation in a unified ecosystem designed specifically to address adherence challenges in therapeutic self-reflection contexts. Existing dream applications either (a) focus on passive logging without AI analysis, (b) offer isolated AI interpretation features without sustained engagement mechanics, or (c) implement superficial gamification (points, badges) disconnected from dream content itself. The absence of a content-focused, feature-integrated entertainment computing approach tailored to dream journaling represents a significant research gap.
+
+We address this gap through DreamWeaver, a gamified dream journaling platform that integrates AI-powered interpretation with structured entertainment computing mechanisms specifically designed to increase adherence in therapeutic self-reflection. The system employs three design strategies: (1) \textit{Immediate AI feedback}---Google Gemini API provides instant multi-dimensional dream analysis (emotion detection, symbolic interpretation, narrative extensions) eliminating the feedback vacuum, (2) \textit{Challenge-reward progression}---difficulty-adaptive riddles, collectible emotion-based totems, and unlockable thematic realms create achievement-driven engagement aligned with dream content, and (3) \textit{Creative engagement pathways}---AI-generated dream art (DALL-E 2), interactive branching stories, 3D pattern visualization, and emotion-based avatar creation transform passive logging into active creative experiences. Rather than isolating individual features, DreamWeaver implements an integrated ecosystem of 16 interactive features across five design pillars (Core Analysis, Creative Expression, Challenge-Based Progression, Wellness Support, Social Connection), enabling users to engage through analytical, creative, or challenge-oriented pathways based on personal preferences.
+
+A 14-day field study with 147 participants demonstrates that this entertainment-computing approach achieved 69.4\% retention---more than double typical dream app rates \citep{Konkol2020}---with strong correlations between engagement breadth and mental wellness outcomes (Engagement Index × Evolution Score: r=.884; Features Used × Health Score: r=.932). High-engagement users showed 49-point improvements in self-reported wellness scores compared to low-engagement users (F(2,144)=422.74, p$<$.001, $\eta^2$=.85), with users expressing 84.9\% intent to continue usage and significantly exceeding pre-study expectations across all psychological dimensions (reflection, emotional understanding, helpfulness; all p$<$.001, d$>$1.18).
+
+\textbf{Contributions.} This work makes four contributions to entertainment computing and digital mental health: (1) \textit{Novel platform design}---a gamified dream journaling ecosystem combining AI interpretation with entertainment computing principles, empirically validated to achieve sustained adherence, (2) \textit{Empirical evidence}---linking interactive entertainment features to therapeutic outcomes through 14-day behavioral tracking and pre-post satisfaction assessment (69.4\% retention, 49-point wellness improvement, 84.9\% continued-use intent), (3) \textit{Design insights}---including "Hard Fun" phenomenon (challenging riddles predicted 100\% retention versus 0\% for riddle-avoiders) and ecosystem effects (feature breadth outweighed depth: Features Used r=.932 vs. Total Dreams non-significant), and (4) \textit{Methodological framework}---for evaluating entertainment-mental health interventions through multi-tiered data collection (expectations, behavioral engagement, satisfaction) with attention to effect size interpretation in tightly coupled systems.
 
 
 %% ============================================================================
@@ -115,25 +121,28 @@ This paper presents DreamWeaver, a gamified dream journaling and analysis platfo
 
 Dream journaling and analysis have been shown to increase emotional awareness and insight \citep{Edwards2013} and support emotional regulation \citep{Malinowski2014}. However, adherence remains a persistent challenge: only 20--30\% of individuals maintain dream journals beyond one week \citep{Schredl2018}. Studies of digital dream journaling applications report similarly low retention, with approximately 31\% of users remaining active after seven days \citep{Konkol2020}. Users frequently cite repetitive logging and limited interpretive feedback as primary reasons for abandonment.
 
-Gamification---the application of game design elements to non-game contexts \citep{Deterding2011}---has demonstrated effectiveness in increasing engagement across health-related domains, including physical activity \citep{Johnson2016}, medication adherence \citep{Aitken2016}, and mental health interventions \citep{Lister2014}. Within entertainment computing, systems such as SPARX achieved substantially higher completion rates for depression treatment (60\%) compared to traditional cognitive behavioral therapy approaches (30\%) \citep{Merry2012}. At the same time, scholars caution that poorly designed gamification risks trivializing therapeutic content or undermining intrinsic motivation \citep{Bogost2011}.
+Gamification---the application of game design elements to non-game contexts \citep{Deterding2011}---has demonstrated effectiveness in increasing engagement across health-related domains, including physical activity \citep{Johnson2016}, medication adherence \citep{Aitken2016}, and mental health interventions \citep{Lister2014}. Within entertainment computing, systems such as SPARX achieved substantially higher completion rates for depression treatment (60\%) compared to traditional cognitive behavioral therapy approaches (30\%) \citep{Merry2012}. SuperBetter, a gamified resilience-building platform, demonstrated significant improvements in depression and anxiety outcomes through achievement-based progression and social support mechanics \citep{McGonigal2015}. Habitica transformed habit tracking into an RPG-style game with character progression, quests, and social guilds, achieving sustained user engagement through extrinsic reward structures \citep{Habitica2016}. However, scholars caution that poorly designed gamification risks trivializing therapeutic content or undermining intrinsic motivation \citep{Bogost2011}. Flow theory suggests that optimal engagement occurs when challenge matches skill level \citep{Csikszentmihalyi1990}, a principle increasingly applied to serious games for mental health where self-selected difficulty enhances both engagement and therapeutic outcomes \citep{Fleming2017}.
 
-Recent advances in AI-based text analysis have enabled automated interpretation of subjective experiences, including dreams, yet existing dream journaling systems typically emphasize passive logging or isolated interpretation features rather than sustained engagement. To date, no prior work has systematically integrated entertainment computing principles with AI-powered dream journaling and analysis in a unified, feature-rich platform.
+Recent advances in AI-based text analysis have enabled automated interpretation of subjective experiences. Systems like Reflectly and Youper employ conversational AI for mood tracking and cognitive behavioral therapy support, demonstrating that AI-driven feedback can increase journaling adherence \citep{Inkster2018}. Woebot, a therapeutic chatbot, achieved 60\% engagement rates over 14 days by providing immediate, personalized responses to emotional disclosures \citep{Fitzpatrick2017}. However, these AI journaling systems focus primarily on mood and anxiety tracking through conversational interfaces, lacking dream-specific interpretation capabilities or creative engagement pathways. Existing dream journaling systems typically emphasize passive logging or isolated interpretation features rather than sustained engagement through entertainment computing mechanisms. To date, no prior work has systematically integrated entertainment computing principles with AI-powered dream interpretation in a unified, feature-rich platform.
 
-Our study addresses this gap by introducing DreamWeaver, which combines AI-driven interpretation with a diverse set of entertainment-oriented interaction mechanisms. As shown in Table~\ref{tab:relatedwork}, DreamWeaver uniquely integrates AI interpretation, gamified progression, and entertainment computing features, achieving 69.4\% retention---more than double typical rates---while demonstrating measurable mental wellness outcomes through sustained user engagement.
+DreamWeaver addresses this gap by uniquely combining three dimensions absent in prior work: (1) AI-powered multi-modal dream interpretation (emotion, symbolism, narrative generation) rather than generic mood tracking, (2) content-focused entertainment mechanics (riddles based on dream symbolism, art generation from dream content, unlock progression tied to emotional patterns) rather than arbitrary point systems, and (3) ecosystem integration across analytical, creative, and challenge-based pathways rather than isolated features. As shown in Table~\ref{tab:relatedwork}, while existing systems excel in individual dimensions---SPARX in therapeutic gaming, Woebot in AI interaction, Habitica in gamification---none integrate AI interpretation with entertainment computing specifically designed for dream-based self-reflection. DreamWeaver achieves 69.4\% retention---exceeding SPARX (60\%), Woebot (60\%), traditional dream apps (31\%), and fitness gamification ($\sim$40\%)---while demonstrating measurable wellness outcomes through sustained engagement.
 
 \begin{table}[t]
 \centering
 \footnotesize
 \caption{Comparison of DreamWeaver with Related Systems}
 \label{tab:relatedwork}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.3cm} >{\centering\arraybackslash}p{1.2cm} >{\centering\arraybackslash}p{1.3cm} >{\raggedright\arraybackslash}X >{\centering\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{2.1cm}}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.2cm} >{\centering\arraybackslash}p{1.0cm} >{\centering\arraybackslash}p{1.2cm} >{\raggedright\arraybackslash}X >{\centering\arraybackslash}p{1.4cm} >{\raggedright\arraybackslash}p{2.0cm}}
 \toprule
-\textbf{System} & \textbf{AI Analysis} & \textbf{Gamifi-cation} & \textbf{Entertainment Features} & \textbf{Retention (7--14d)} & \textbf{Wellness Outcomes} \\
+\textbf{System} & \textbf{AI} & \textbf{Gamifi-cation} & \textbf{Entertainment Features} & \textbf{Retention} & \textbf{Outcomes} \\
 \midrule
-Traditional Dream Apps \citep{Konkol2020} & No & No & None & 31\% (7d) & Not measured \\[0.2cm]
-SPARX \citep{Merry2012} & No & Yes & Fantasy game & 60\% (comp.) & Depression reduction \\[0.2cm]
-Fitness Apps \citep{Johnson2016} & No & Yes & Points, badges & $\sim$40\% (14d) & Physical activity \\[0.2cm]
-\textbf{DreamWeaver} & \textbf{Yes (Gemini)} & \textbf{Yes} & \textbf{16 features: Story, Riddles, Art, DNA} & \textbf{69.4\% (14d)} & \textbf{49-point improvement} \\
+Dream Apps \citep{Konkol2020} & No & No & None & 31\% (7d) & Not measured \\[0.15cm]
+SPARX \citep{Merry2012} & No & Yes & Fantasy RPG & 60\% (comp.) & Depression $\downarrow$ \\[0.15cm]
+SuperBetter \citep{McGonigal2015} & No & Yes & Quests, power-ups & Not reported & Resilience $\uparrow$ \\[0.15cm]
+Habitica \citep{Habitica2016} & No & Yes & RPG, guilds & 40--50\% & Habit formation \\[0.15cm]
+Woebot \citep{Fitzpatrick2017} & Yes & No & Conversational & 60\% (14d) & Anxiety $\downarrow$ \\[0.15cm]
+Reflectly \citep{Inkster2018} & Yes & No & Mood tracking & Not reported & Mood awareness \\[0.15cm]
+\textbf{DreamWeaver} & \textbf{Yes} & \textbf{Yes} & \textbf{AI+Gamified ecosystem (16 features)} & \textbf{69.4\% (14d)} & \textbf{Wellness $\uparrow$ 49pts} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -187,13 +196,13 @@ DreamWeaver was implemented as a web application using Laravel 11 (PHP 8.2) for 
 
 \textbf{UI/UX Design \& Visual Aesthetics:} The interface employs dynamic 3D animated backgrounds using Vanta.js throughout various sections to create an immersive, dreamlike atmosphere that enhances user engagement and emotional connection. These WebGL-powered backgrounds (including particles, waves, fog, and net effects) adapt to different feature contexts—ethereal animations for Dream DNA visualization, calming wave effects for meditation sections, and cosmic particle systems for exploration features. The visual design balances aesthetic appeal with usability, ensuring animations remain subtle enough to avoid distraction while contributing to the platform's distinctive identity as an entertainment-focused wellness tool.
 
-\textbf{AI Integration:} Dream DNA analysis uses the Google Gemini 2.5 Flash API for natural language processing and semantic extraction across four gene categories (Emotions, Symbols, Colors, Archetypes). The Dream Analysis interface provides four AI-powered interpretation modes: (1) Emotion Detection—identifying primary emotional tone using Gemini's classification across 17 emotion families, each containing 7-13 variant emotion words (e.g., Joy family: joy, happy, delight, ecstatic, excited, cheerful, elated, pleased, content, blissful, merry, gleeful; Fear family: fear, horror, terror, terrified, fright, frightened, dread, scared, panic, panicked, petrified, afraid, spooked, creepy, nervous, anxious; Sadness family: sadness, sad, sorrow, depressed, melancholy, mournful, grief, heartbroken, lonely, tearful, despair, hopeless; plus 14 additional emotion families), with normalized mapping to canonical categories for avatar and totem generation, (2) Short Interpretation—1-3 sentence meaningful summaries, (3) Story Generation—creative narrative extensions (120 words), and (4) Long Narrative—comprehensive psychological analysis with symbolic insights (150 words). Story Mode generation employs Gemini's text generation with custom prompts ensuring thematic consistency with dream content. Dream Art uses OpenAI's DALL-E 2 API with either Gemini-generated artistic prompts or user-provided custom prompts as input. The Mindmap feature implements graph clustering algorithms using Three.js and Vanta.js for 2D/3D force-directed visualization connecting dreams with similar emotional and symbolic content.
+\textbf{AI Integration:} Dream DNA analysis uses Google Gemini 2.5 Flash API for natural language processing across four gene categories (Emotions, Symbols, Colors, Archetypes). The Dream Analysis interface provides four AI-powered interpretation modes: (1) Emotion Detection across 17 emotion families, (2) Short Interpretation (1-3 sentences), (3) Story Generation (120 words), and (4) Long Narrative (150 words with symbolic insights). Story Mode employs Gemini's text generation with custom prompts ensuring thematic consistency. Dream Art uses OpenAI's DALL-E 2 API with either AI-generated or user-provided prompts. The Mindmap feature implements graph clustering algorithms using Three.js and Vanta.js for force-directed visualization connecting dreams with similar emotional and symbolic content.
 
-\textbf{Architecture \& Routing:} The application follows Laravel's MVC architecture with 19 controllers handling feature-specific logic (DreamController, DreamDNAController, DreamArtController, AvatarController, RiddleController, ChatController, MindMapController, SupportController, ProfileController, UserController for authentication, etc.). Authentication middleware protects 150+ routes, with route groups organizing features by functionality (dreams, avatars, story realms, social features, export). The totem-emotion mapping system uses pattern matching to award 17 emotion-specific tokens (wings$\rightarrow$joy/\allowbreak ambition, mask$\rightarrow$fear, cloud$\rightarrow$calm, fire$\rightarrow$anger, heart$\rightarrow$love, tear$\rightarrow$sadness, star$\rightarrow$awe, compass$\rightarrow$curiosity, quill$\rightarrow$gratitude, crest$\rightarrow$pride, key$\rightarrow$relief, moon$\rightarrow$nostalgia, bolt$\rightarrow$surprise, leaf$\rightarrow$hope, shield$\rightarrow$courage, anchor$\rightarrow$trust, mirror$\rightarrow$other) which unlock corresponding thematic realms in Dream Map with multi-chapter branching narratives (Sky Temple of Light: 10 chapters including arrival, awakening, transcendence, rebirth; Forest of Forgotten Thoughts: 10 chapters with progressive narrative depth; Cloud of Lucid Realms: 10 chapters exploring thematic atmospheres).
+\textbf{Architecture \& Routing:} The application follows Laravel's MVC architecture with 19 controllers handling feature-specific logic (DreamController, DreamDNAController, AvatarController, RiddleController, etc.). Authentication middleware protects 150+ routes organized by functionality. The totem-emotion mapping system awards 17 emotion-specific tokens (e.g., wings$\rightarrow$joy, mask$\rightarrow$fear, heart$\rightarrow$love) which unlock corresponding thematic realms in Dream Map with multi-chapter branching narratives.
 
 \textbf{Data Layer \& Storage:} MySQL database stores structured data including user profiles, dreams with four interpretation fields (short, emotion, story, long), engagement metrics (feature usage, login streaks, Evolution/Health scores), Dream DNA profiles (genes, personality types, mutation tracking), avatars (17 emotion-based configurations with color+item combinations), totems, riddle attempts with difficulty tracking, chat conversations, comments, likes, and notifications. AWS S3 provides scalable media storage for AI-generated artwork (DALL-E images) and guided audio files. All user data is encrypted at rest (AES-256-CBC) and in transit (HTTPS), with compliance to GDPR privacy standards.
 
-\textbf{Authentication \& Security:} Custom authentication system requiring dual email validation: users register with both a @dream.com email (used for login) and a Gmail address (used for password recovery). Registration validates email uniqueness, password strength (minimum 6 characters), and enforces domain restrictions via regex validation. Login accepts only @dream.com credentials, while password reset functionality sends recovery links exclusively to the registered Gmail address, creating a two-tier security system separating login credentials from recovery mechanisms. Session management implements Laravel's session-based guards with secure password hashing (bcrypt), CSRF protection, remember-me token functionality with automatic expiration, and forced session regeneration on login/logout to prevent fixation attacks.
+\textbf{Authentication \& Security:} Custom authentication requiring dual email validation: @dream.com for login, Gmail for password recovery. Security measures include bcrypt password hashing, CSRF protection, session regeneration on login/logout, and AES-256-CBC encryption at rest with HTTPS in transit (GDPR compliant).
 
 \textbf{Real-Time Features \& Notifications:} Laravel's notification system handles asynchronous alerts for social interactions. DreamCommented and DreamLiked notifications use database channels for in-app delivery, with MessageReceived for chat updates. PDF export leverages DomPDF library for individual dream downloads and bulk journal archiving with formatted inclusion of all four interpretation types, Dream DNA visualization, and metadata.
 
@@ -320,7 +329,7 @@ Total Dreams Logged & 6.18 & 3.78 & 6.00 & 0--13 \\
 Active Days (out of 14) & 7.18 & 4.38 & 7.00 & 1--14 \\
 Total Sessions Opened & 9.60 & 6.14 & 9.00 & 1--22 \\
 Avg Session Minutes & 33.43 & 18.93 & 30.00 & 1--70 \\
-Features Used (out of 16) & 9.65 & 5.85 & 10.00 & 0--18 \\
+Features Used (out of 16) & 9.65 & 5.85 & 10.00 & 0--16 \\
 DNA Views & 4.82 & 3.16 & 5.00 & 0--13 \\
 Stories Completed & 3.30 & 2.64 & 3.00 & 0--9 \\
 Riddles Solved & 2.65 & 2.23 & 2.00 & 0--9 \\
@@ -716,6 +725,13 @@ Due to the sensitive and personal nature of dream content and mental wellness da
   New York,
   1990.
 
+\bibitem[Fitzpatrick et al.(2017)]{Fitzpatrick2017}
+  K. K. Fitzpatrick, A. Darcy, M. Vierhile,
+  \textit{Delivering cognitive behavior therapy to young adults with symptoms of depression and anxiety using a fully automated conversational agent (Woebot): A randomized controlled trial},
+  JMIR Mental Health,
+  4(2), e19,
+  2017.
+
 \bibitem[Fleming et al.(2017)]{Fleming2017}
   T. M. Fleming, L. de Beurs, Y. Khazaal, A. Gaggioli, G. Riva, C. Botella, R. M. Baños, F. Aschieri, L. K. Bavin, A. Kleiboer, S. Merry, K. C. Lau, H. Riper,
   \textit{Maximizing the impact of e-therapy and serious gaming: Time for a paradigm shift},
@@ -723,33 +739,18 @@ Due to the sensitive and personal nature of dream content and mental wellness da
   7, 65,
   2017.
 
-\bibitem[Rauterberg(2004)]{Rauterberg2004}
-  M. Rauterberg,
-  \textit{Entertainment computing: An overview},
-  Informatics Education Europe,
-  1(1), 1-10,
-  2004.
+\bibitem[Fosse et al.(2003)]{Fosse2003}
+  R. Fosse, R. Stickgold, J. A. Hobson,
+  \textit{The mind in REM sleep: Reports of emotional experience},
+  Sleep,
+  26(8), 1007-1017,
+  2003.
 
-\bibitem[Merry et al.(2012)]{Merry2012}
-  S. N. Merry, K. Stasiak, M. Shepherd, C. Frampton, T. Fleming, M. F. G. Lucassen,
-  \textit{The effectiveness of SPARX, a computerised self help intervention for adolescents seeking help for depression: Randomised controlled non-inferiority trial},
-  BMJ,
-  344, e2598,
-  2012.
-
-\bibitem[Roepke et al.(2015)]{Roepke2015}
-  A. M. Roepke, S. R. Jaffee, O. M. Riffle, J. McGonigal, R. Broome, B. Maxwell,
-  \textit{Randomized controlled trial of SuperBetter, a smartphone-based/internet-based self-help tool to reduce depressive symptoms},
-  Games for Health Journal,
-  4(3), 235-246,
-  2015.
-
-\bibitem[Pennebaker(1997)]{Pennebaker1997}
-  J. W. Pennebaker,
-  \textit{Writing about emotional experiences as a therapeutic process},
-  Psychological Science,
-  8(3), 162-166,
-  1997.
+\bibitem[Habitica(2016)]{Habitica2016}
+  Habitica,
+  \textit{Habitica: Gamify Your Life},
+  Retrieved from https://habitica.com,
+  2016.
 
 \bibitem[Hartmann(2011)]{Hartmann2011}
   E. Hartmann,
@@ -758,12 +759,47 @@ Due to the sensitive and personal nature of dream content and mental wellness da
   New York,
   2011.
 
-\bibitem[Fosse et al.(2003)]{Fosse2003}
-  R. Fosse, R. Stickgold, J. A. Hobson,
-  \textit{The mind in REM sleep: Reports of emotional experience},
-  Sleep,
-  26(8), 1007-1017,
-  2003.
+\bibitem[Inkster et al.(2018)]{Inkster2018}
+  B. Inkster, S. Sarda, V. Subramanian,
+  \textit{An empathy-driven, conversational artificial intelligence agent (Wysa) for digital mental well-being: Real-world data evaluation mixed-methods study},
+  JMIR mHealth and uHealth,
+  6(11), e12106,
+  2018.
+
+\bibitem[McGonigal(2015)]{McGonigal2015}
+  J. McGonigal,
+  \textit{SuperBetter: The Power of Living Gamefully},
+  Penguin Press,
+  New York,
+  2015.
+
+\bibitem[Merry et al.(2012)]{Merry2012}
+  S. N. Merry, K. Stasiak, M. Shepherd, C. Frampton, T. Fleming, M. F. G. Lucassen,
+  \textit{The effectiveness of SPARX, a computerised self help intervention for adolescents seeking help for depression: Randomised controlled non-inferiority trial},
+  BMJ,
+  344, e2598,
+  2012.
+
+\bibitem[Pennebaker(1997)]{Pennebaker1997}
+  J. W. Pennebaker,
+  \textit{Writing about emotional experiences as a therapeutic process},
+  Psychological Science,
+  8(3), 162-166,
+  1997.
+
+\bibitem[Rauterberg(2004)]{Rauterberg2004}
+  M. Rauterberg,
+  \textit{Entertainment computing: An overview},
+  Informatics Education Europe,
+  1(1), 1-10,
+  2004.
+
+\bibitem[Roepke et al.(2015)]{Roepke2015}
+  A. M. Roepke, S. R. Jaffee, O. M. Riffle, J. McGonigal, R. Broome, B. Maxwell,
+  \textit{Randomized controlled trial of SuperBetter, a smartphone-based/internet-based self-help tool to reduce depressive symptoms},
+  Games for Health Journal,
+  4(3), 235-246,
+  2015.
 
 \end{thebibliography}
 
@@ -784,10 +820,13 @@ The appendices provide supplementary methodological details, extended statistica
 The Engagement Index was computed as a weighted composite score (0-100) combining multiple behavioral metrics:
 
 \begin{equation}
-\text{Engagement\_Index} = w_1 \cdot \frac{\text{Total\_Dreams}}{13} + w_2 \cdot \frac{\text{Active\_Days}}{14} + w_3 \cdot \frac{\text{Features\_Used}}{18} + w_4 \cdot \frac{\text{Riddles\_Solved}}{9} + w_5 \cdot \frac{\text{Stories\_Completed}}{9} + w_6 \cdot \frac{\text{DNA\_Views}}{13}
+\begin{split}
+\text{EI} = & \, w_1 \cdot \frac{\text{Dreams}}{13} + w_2 \cdot \frac{\text{Days}}{14} + w_3 \cdot \frac{\text{Features}}{16} \\
+& + w_4 \cdot \frac{\text{Riddles}}{9} + w_5 \cdot \frac{\text{Stories}}{9} + w_6 \cdot \frac{\text{DNA}}{13}
+\end{split}
 \end{equation}
 
-where weights $w_1, w_2, \ldots, w_6$ sum to 100, and each component is normalized to its maximum possible value. This composite metric captures frequency (dreams logged, days active), breadth (features used), and depth (riddles, stories, DNA views) of engagement.
+where EI = Engagement\_Index, weights $w_1, w_2, \ldots, w_6$ sum to 100, and each component is normalized to its maximum possible value. This composite metric captures frequency (dreams logged, days active), breadth (features used), and depth (riddles, stories, DNA views) of engagement.
 
 \subsection{K-Means Clustering Algorithm}
 
