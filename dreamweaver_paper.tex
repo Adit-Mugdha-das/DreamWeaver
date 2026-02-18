@@ -168,7 +168,7 @@ DreamWeaver is a web application designed to transform dream journaling from a s
 
 \subsection{Core Features}
 
-\textbf{Dream DNA Analysis:} AI extracts patterns across four gene categories (Emotions, Symbols, Colors, Archetypes) visualized as a 3D helix. Gemini AI performs semantic analysis, computing an Evolution Score (0-100) from gene diversity and dream frequency. 78.9\% of users viewed DNA, indicating high engagement.
+\textbf{Dream DNA Analysis:} Dream DNA is generated from each user's submitted dream text through AI-based semantic analysis that extracts emotional tone, recurring symbols, and narrative structure across four gene categories (Emotions, Symbols, Colors, Archetypes), visualized as a 3D helix. Gemini AI performs this analysis, computing an Evolution Score (0-100) from gene diversity and dream frequency. 78.9\% of users viewed DNA, indicating high engagement.
 
 \textbf{Pattern Analysis Dashboard:} Comprehensive visualization of dream patterns including emotion distribution pie charts, weekly dream frequency line graphs, and temporal trend analysis. Enables users to identify recurring themes and emotional cycles across their dream journal history.
 
@@ -507,7 +507,7 @@ Ethical considerations warrant attention: (1) \textit{trivialization}—does ent
 
 \textbf{Sample:} Our volunteer sample, recruited through social media and universities, likely represents individuals with existing interest in dreams and technology. Future research should examine effectiveness across diverse populations, including older adults, individuals with lower technological familiarity, and clinical samples with diagnosed mental health conditions. Demographic data were limited to preserve anonymity in this small sample (N=147), though larger studies could explore individual differences in feature effectiveness.
 
-\textbf{Measurement:} Evolution and Health scores were developed as practical engagement metrics for this study. While they showed strong correlations with behavioral data and demonstrated sensitivity to engagement levels, future research would benefit from incorporating validated clinical instruments (e.g., PHQ-9, GAD-7) to complement these measures. The 58.5% post-survey response rate (N=86/147) is typical for online studies, though retention strategies could improve this in future work.
+\textbf{Measurement:} Evolution and Health scores were developed as practical engagement metrics for this study. While they showed strong correlations with behavioral data and demonstrated sensitivity to engagement levels, future research would benefit from incorporating validated clinical instruments (e.g., PHQ-9, GAD-7) to complement these measures. The 58.5\% post-survey response rate (N=86/147) is typical for online studies, though retention strategies could improve this in future work.
 
 \textbf{Technical:} Dream DNA interpretation relies on AI semantic extraction (Gemini 2.5 Flash), which occasionally produces generic feedback. Human-curated interpretation templates could enhance quality, though this reduces scalability. The study provided light technical support (email assistance), establishing feasibility; real-world deployment would benefit from refined onboarding and self-service support systems.
 
@@ -911,32 +911,10 @@ Note: Change scores (Evolution\_Score\_Change and Health\_Score\_Change) are cal
 
 \section{Additional Visualizations}
 
-Appendix figures provide expanded visualizations of trends summarized numerically in the main Results section.
-
-\subsection{Behavioral Distribution Patterns}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\textwidth]{CHART_7.pdf}
-\caption{Distribution of total dreams logged by participants over the 14-day study period (N=147, M=6.18, SD=3.78, range=0-13). The distribution shows moderate right skew, with most users logging 4-8 dreams, while a subset of highly engaged users logged 10+ dreams.}
-\label{fig:dreams_dist}
-\end{figure}
-
-\subsection{Engagement-Outcome Relationships}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{CHART_6.pdf}
-\caption{Longitudinal trajectories of Evolution and Health scores for high-engagement users over 14 days (n=47). Both scores showed significant improvement: Evolution increased by 27.15 points (t(46)=39.45, p<.001, d=5.76) and Health increased by 28.91 points (t(46)=35.73, p<.001, d=5.22). Shaded areas represent 95\% confidence intervals, demonstrating robust and consistent improvements across the cohort.}
-\label{fig:score_improvement}
-\end{figure}
-
-\subsection{Feature-Specific Analyses}
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{CHART_15.pdf}
-\caption{Supplementary visualization supporting ecosystem effects discussed in Section 5.3. Feature co-occurrence heatmap showing which features were used together by the same users (N=147). Darker cells indicate higher co-usage rates. Strong co-occurrence patterns emerged between Dream DNA and Dream Art (r=.82), Story Mode and Riddles (r=.76), and Totems and Avatar customization (r=.71), confirming natural feature clusters in the ecosystem design.}
+\caption{Feature co-occurrence heatmap showing which features were used together by the same users (N=147). Darker cells indicate higher co-usage rates. Strong co-occurrence patterns emerged between Dream DNA and Dream Art (r=.82), Story Mode and Riddles (r=.76), and Totems and Avatar customization (r=.71), confirming natural feature clusters in the ecosystem design and supporting the ecosystem effects discussed in Section 5.3.}
 \label{fig:feature_cooccurrence}
 \end{figure}
 
