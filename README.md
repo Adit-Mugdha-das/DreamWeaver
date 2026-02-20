@@ -19,7 +19,7 @@ This implementation accompanies the research paper:
 **Authors:** Adit Mugdha Das, Kazi Saeed Alam  
 **Affiliation:** Department of Computer Science and Engineering, Khulna University of Engineering and Technology, Bangladesh  
 **Journal:** Entertainment Computing  
-**Contact:** das2107118@stud.kuet.ac.bd
+**Contact:** aditmugdhadas@gmail.com
 
 ## Key Features
 
