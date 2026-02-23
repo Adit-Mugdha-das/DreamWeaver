@@ -12,15 +12,19 @@ This platform was developed as part of a research study demonstrating that enter
 
 ## Research Publication
 
-This implementation accompanies the research paper:
+This implementation accompanies the following research work:
 
-**Title:** DreamWeaver: A Gamified Dream Journaling and Analysis Platform for Mental Wellness Through Interactive AI-Powered Features
+**Title:** DreamWeaver: A Gamified Dream Journaling and Analysis Platform for Mental Wellness Through Interactive AI-Powered Features  
 
 **Authors:** Adit Mugdha Das, Kazi Saeed Alam  
-**Affiliation:** Department of Computer Science and Engineering, Khulna University of Engineering and Technology, Bangladesh  
-**Journal:** Entertainment Computing  
-**Contact:** aditmugdhadas@gmail.com
+**Affiliation:** Department of Computer Science and Engineering, Khulna University of Engineering and Technology (KUET), Bangladesh  
 
+**Status:** Under review at *Entertainment Computing* (Elsevier)  
+**Preprint:** SSRN  
+🔗 https://ssrn.com/abstract=6283643  
+🔗 DOI: https://doi.org/10.2139/ssrn.6283643  
+
+**Contact:** aditmugdhadas@gmail.com
 ## Key Features
 
 DreamWeaver implements 16 integrated features organized across five design pillars:
@@ -202,13 +206,11 @@ This project is released under a custom academic-use license in conjunction with
 
 ## Citation
 
-If you use this platform or reference this work, please cite:
 
-```
-Das, A. M., & Alam, K. S. (2026). DreamWeaver: A Gamified Dream Journaling 
-and Analysis Platform for Mental Wellness Through Interactive AI-Powered Features. 
-Entertainment Computing.
-```
+If you use this platform, codebase, or reference this research, please cite the preprint version:
+
+```text
+Das, A. M., & Alam, K. S. (2026). DreamWeaver: A gamified dream journaling and analysis platform for mental wellness through interactive AI-powered features. SSRN. https://doi.org/10.2139/ssrn.6283643
 
 ## Acknowledgments
 
